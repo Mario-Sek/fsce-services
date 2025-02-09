@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.fcseservices;
 
+import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,11 @@ public class FcseServicesApplication {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(5);
+    }
+
+    @Bean
+    public LayoutDialect layoutDialect() {
+        return new LayoutDialect();
     }
 
 }
