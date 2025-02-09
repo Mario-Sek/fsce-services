@@ -1,0 +1,33 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<meta charset="utf-8"/>
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<h4>
+    Нови студиски програми од
+    <span th:text="#{${cycle}}"></span>
+    на ФИНКИ од
+    <span th:text="${acc}"></span>
+</h4>
+<div class="view-content">
+    <div class="item-list">
+        <ul>
+            <li class="views-row views-row-1 views-row-odd views-row-first" th:each="sp: ${programs}">
+                <div class="views-field views-field-title">
+                    <a th:if="${!sp.onEnglish || sp.bilingual}" th:href="@{/program/{program}/mk(program=${sp.getId()})}">
+                       <span th:text="${sp.studyProgram.name}"/>
+                        (<span th:text="${sp.durationYears}"/> годишни)
+                    </a>
+                    <span th:if="${sp.bilingual}"> / </span>
+                    <a th:if="${sp.onEnglish || sp.bilingual}" th:href="@{/program/{program}/en(program=${sp.getId()})}">
+                        <span th:text="${sp.nameEn!=null? sp.nameEn: sp.studyProgram.name}"/>
+                        (<span th:text="${sp.durationYears}"/> years)
+                    </a>
+                </div>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

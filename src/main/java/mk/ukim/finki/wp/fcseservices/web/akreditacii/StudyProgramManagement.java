@@ -1,0 +1,128 @@
+package mk.ukim.finki.wp.fcseservices.web.akreditacii;
+
+import mk.ukim.finki.wp.fcseservices.model.StudyCycle;
+import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
+import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgramDetails;
+import mk.ukim.finki.wp.fcseservices.service.*;
+import mk.ukim.finki.wp.fcseservices.service.ProfessorService;
+import org.springframework.data.domain.Page;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+
+@RequestMapping("admin/study-programs")
+@Controller
+public class StudyProgramManagement {
+
+    private final StudyProgramDetailsService studyProgramDetailsService;
+    private final AccreditationService accreditationService;
+    private final ProfessorService professorService;
+
+
+    public StudyProgramManagement( StudyProgramDetailsService studyProgramDetailsService, AccreditationService accreditationService, ProfessorService professorService) {
+        this.studyProgramDetailsService = studyProgramDetailsService;
+        this.accreditationService = accreditationService;
+        this.professorService = professorService;
+
+    }
+
+    @GetMapping
+    public String pageableStudyProgramsWithFilters(Model model,
+                                                   @RequestParam(defaultValue = "1") Integer pageNum,
+                                                   @RequestParam(defaultValue = "10") Integer results,
+                                                   @RequestParam(required = false) String nameSearch,
+                                                   @RequestParam(required = false) String filteredAccreditation,
+                                                   @RequestParam(required = false) String filteredStudyCycle,
+                                                   @RequestParam(required = false) String filteredDurationInYears,
+                                                   @RequestParam(required = false) String filteredOnEnglish) {
+
+
+        Page<StudyProgramDetails> studyProgramDetailsPage;
+        if (nameSearch == null && filteredAccreditation == null && filteredStudyCycle == null &&
+                filteredDurationInYears == null && filteredOnEnglish == null) {
+            studyProgramDetailsPage = studyProgramDetailsService
+                    .findAllWithPagination(pageNum, results);
+        } else {
+            studyProgramDetailsPage = studyProgramDetailsService
+                    .findAllWithPaginationFiltered(pageNum, results,
+                            nameSearch, filteredAccreditation, filteredStudyCycle,
+                            filteredDurationInYears, filteredOnEnglish);
+
+            model.addAttribute("text", nameSearch);
+            model.addAttribute("accreditation", filteredAccreditation);
+            model.addAttribute("studyCycle", filteredStudyCycle);
+            model.addAttribute("durationInYears", filteredDurationInYears);
+            model.addAttribute("onEnglish", filteredOnEnglish != null);
+
+        }
+        model.addAttribute("studyProgramDetailsPage", studyProgramDetailsPage);
+        model.addAttribute("accreditations", accreditationService.findAll());
+        model.addAttribute("studyCycles", StudyCycle.values());
+
+        return "study_program/study_program_list";
+    }
+
+    @GetMapping("/add-form")
+    public String addStudyProgram(Model model) {
+        model.addAttribute("studyCycles", StudyCycle.values());
+        model.addAttribute("accreditations", accreditationService.findAll());
+        model.addAttribute("professors", professorService.findAll());
+        return "study_program/add_study_program.html";
+    }
+
+    @GetMapping("/edit-form/{id}")
+    public String editStudyProgram(Model model, @PathVariable String id) {
+        Optional<StudyProgramDetails> optionalStudyProgramDetails = studyProgramDetailsService.findById(id);
+        if (optionalStudyProgramDetails.isPresent()) {
+            StudyProgramDetails studyProgramDetails = optionalStudyProgramDetails.get();
+            model.addAttribute("studyProgramDetails", studyProgramDetails);
+            model.addAttribute("studyCycles", StudyCycle.values());
+            model.addAttribute("accreditations", accreditationService.findAll());
+            model.addAttribute("professors", professorService.findAll());
+            return "study_program/add_study_program.html";
+        }
+        return null;
+    }
+
+    @PostMapping("/add")
+    public String add(Model model,
+                      @RequestParam String code,
+                      @RequestParam String name,
+                      @RequestParam String nameEn,
+                      @RequestParam String accreditationId,
+                      @RequestParam StudyCycle studyCycle,
+                      @RequestParam(required = false) Float order,
+                      @RequestParam(required = false) Short durationYears,
+                      @RequestParam(required = false) Short durationSemesters,
+                      @RequestParam(required = false) String generalInformation,
+                      @RequestParam(required = false) String graduationTitle,
+                      @RequestParam(required = false) String graduationTitleEn,
+                      @RequestParam(required = false) String subjectRestrictions,
+                      @RequestParam(required = false) String onEnglish,
+                      @RequestParam(required = false) String bilingual,
+                      @RequestParam(required = false) String professor) {
+
+        Professor coordinator = null;
+        if (professor != null) {
+            coordinator = professorService.getProfessorById(professor);
+        }
+
+        studyProgramDetailsService.save(code, name, nameEn, order, durationYears, durationSemesters, generalInformation,
+                graduationTitle, graduationTitleEn, subjectRestrictions, onEnglish != null, studyCycle,
+                accreditationService.findById(accreditationId), bilingual != null,
+                coordinator);
+        return "redirect:/admin/study-programs";
+    }
+
+
+    @GetMapping("/delete/{id}")
+    public String deleteStudyProgram(@PathVariable String id) {
+        this.studyProgramDetailsService.deleteById(id);
+        return "redirect:/admin/study-programs";
+    }
+
+
+}
