@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
+<div layout:fragment="subheader" th:include="akreditacii/subheader"></div>
 <div class="container" layout:fragment="content">
     <form method="POST" th:action="@{/admin/professor/{professorId}/education(professorId=${professorId})}">
         <input name="educationId" th:value="${education?.getId()}" type="hidden"/>

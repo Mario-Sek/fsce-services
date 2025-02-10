@@ -12,6 +12,7 @@
             crossorigin="anonymous"></script>
 </head>
 <body class="bg-light">
+<div layout:fragment="subheader" th:include="akreditacii/subheader"></div>
 <div class="container" layout:fragment="content">
     <div class="p-3">
         <h5 th:text="${studyProgramDetails} ? #{CHANGE_PROGRAM} + ': '

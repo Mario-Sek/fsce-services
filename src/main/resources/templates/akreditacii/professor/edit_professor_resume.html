@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
 </head>
 <body>
+<div layout:fragment="subheader" th:include="akreditacii/subheader"></div>
 <div class="container mb-4" layout:fragment="content">
     <form method="POST" enctype="multipart/form-data"
           th:action="@{/admin/professor/{professorId}/resume/save (professorId=${professorId})}">
