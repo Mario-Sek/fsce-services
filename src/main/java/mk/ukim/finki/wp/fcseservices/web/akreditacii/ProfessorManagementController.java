@@ -56,7 +56,7 @@ public class ProfessorManagementController {
             model.addAttribute("academicTitle", professorAcademicTitles.getAcademicTitle());
         }
 
-        return "professor/professor_details";
+        return "akreditacii/professor/professor_details";
 
     }
 
@@ -85,7 +85,7 @@ public class ProfessorManagementController {
         model.addAttribute("professorPage", professorPage);
         model.addAttribute("professorTitles", ProfessorTitle.values());
 
-        return "professor/professor_list";
+        return "akreditacii/professor/professor_list";
     }
 
 
@@ -94,7 +94,7 @@ public class ProfessorManagementController {
         model.addAttribute("professorTitles", ProfessorTitle.values());
         model.addAttribute("educationDegrees", EducationDegree.values());
 
-        return "professor/add_professor";
+        return "akreditacii/professor/add_professor";
     }
 
     @GetMapping(value = {"/{id}/edit"})
@@ -107,7 +107,7 @@ public class ProfessorManagementController {
         model.addAttribute("professorTitles", ProfessorTitle.values());
         model.addAttribute("educationDegrees", EducationDegree.values());
 
-        return "professor/add_professor";
+        return "akreditacii/professor/add_professor";
     }
 
     @PostMapping("/add-professor")
@@ -146,7 +146,7 @@ public class ProfessorManagementController {
         model.addAttribute("professorId", professorId);
         model.addAttribute("educationDegrees", EducationDegree.values());
 
-        return "professor/add_education";
+        return "akreditacii/professor/add_education";
     }
 
     @GetMapping("/{professorId}/education/{educationId}/edit")
@@ -158,7 +158,7 @@ public class ProfessorManagementController {
         model.addAttribute("educationDegrees", EducationDegree.values());
         model.addAttribute("education", education);
 
-        return "professor/add_education";
+        return "akreditacii/professor/add_education";
     }
 
     @PostMapping("/{professorId}/education")
@@ -196,7 +196,7 @@ public class ProfessorManagementController {
 
         model.addAttribute("academicTitle", professorAcademicTitles.getAcademicTitle());
 
-        return "professor/add_academic_title";
+        return "akreditacii/professor/add_academic_title";
 
     }
 
@@ -235,7 +235,7 @@ public class ProfessorManagementController {
         }
         model.addAttribute("professorId", professorId);
 
-        return "professor/edit_professor_resume";
+        return "akreditacii/professor/edit_professor_resume";
     }
 
     @PostMapping("/{professorId}/resume/save")
@@ -256,7 +256,7 @@ public class ProfessorManagementController {
 
         model.addAttribute("professorResume", professorResume.get());
 
-        return "professor/preview_professor_resume";
+        return "akreditacii/professor/preview_professor_resume";
     }
 
 
@@ -297,6 +297,6 @@ public class ProfessorManagementController {
         model.addAttribute("emailSearch", emailSearch);
         model.addAttribute("titleFilter", titleFilter);
         model.addAttribute("semesterSearch", semesterSearch);
-        return "professor/professor_stats";
+        return "akreditacii/professor/professor_stats";
     }
 }

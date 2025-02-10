@@ -80,7 +80,7 @@
                     <td th:text="${s.subject.id}">
                     </td>
                     <td>
-                        <a th:if="${!s.subject.placeholder}" th:href="@{/subject/{id}(id=${s.subject.id})}" th:text="${s.subject.subject.name}"></a>
+                        <a th:if="${!s.subject.placeholder}" th:href="@{/templates/akreditacii/subject/{id}(id=${s.subject.id})}" th:text="${s.subject.subject.name}"></a>
                         <span th:if="${s.subject.placeholder}" th:text="${s.subject.subject.name}"></span>
                     </td>
                     <td th:text="${s.subject.credits}">
@@ -113,7 +113,7 @@
                     <td th:text="${s.subject.id}">
                     </td>
                     <td>
-                        <a th:href="@{/subject/{id}(id=${s.subject.id})}" th:text="${s.subject.subject.name}"></a>
+                        <a th:href="@{/templates/akreditacii/subject/{id}(id=${s.subject.id})}" th:text="${s.subject.subject.name}"></a>
                     </td>
                     <td th:text="${s.subject.credits}">
                         6.00

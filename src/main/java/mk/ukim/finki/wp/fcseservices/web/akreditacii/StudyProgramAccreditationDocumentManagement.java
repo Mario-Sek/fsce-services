@@ -36,7 +36,7 @@ public class StudyProgramAccreditationDocumentManagement {
         model.addAttribute("studyProgramId", studyProgramId);
         model.addAttribute("accreditationDocumentTypes", AccreditationDocumentTypes.values());
 
-        return "study_program/study_program_accreditation_document_list";
+        return "akreditacii/study_program/study_program_accreditation_document_list";
     }
 
     private String getFileExtension(String fileName) {

@@ -53,7 +53,7 @@ public class UserController {
         model.addAttribute("users", userService.findAll());
         model.addAttribute("userRoles", UserRole.values());
 
-        return "user/list";
+        return "akreditacii/user/list";
 
     }
 
@@ -61,7 +61,7 @@ public class UserController {
     @GetMapping(value = {"/add-user"})
     public String addProfessor(Model model) {
         model.addAttribute("userRoles", UserRole.values());
-        return "user/add_user";
+        return "akreditacii/user/add_user";
     }
 
     @PostMapping("/add-user")
@@ -76,7 +76,7 @@ public class UserController {
         User user = userService.getUserById(id);
         model.addAttribute("user", user);
         model.addAttribute("userRoles", UserRole.values());
-        return "user/add_user";
+        return "akreditacii/user/add_user";
     }
 
     @GetMapping("/{id}/delete")

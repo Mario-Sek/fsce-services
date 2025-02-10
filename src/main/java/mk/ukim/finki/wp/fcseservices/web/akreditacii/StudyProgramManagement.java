@@ -62,7 +62,7 @@ public class StudyProgramManagement {
         model.addAttribute("accreditations", accreditationService.findAll());
         model.addAttribute("studyCycles", StudyCycle.values());
 
-        return "study_program/study_program_list";
+        return "akreditacii/study_program/study_program_list";
     }
 
     @GetMapping("/add-form")
@@ -70,7 +70,7 @@ public class StudyProgramManagement {
         model.addAttribute("studyCycles", StudyCycle.values());
         model.addAttribute("accreditations", accreditationService.findAll());
         model.addAttribute("professors", professorService.findAll());
-        return "study_program/add_study_program.html";
+        return "akreditacii/study_program/add_study_program.html";
     }
 
     @GetMapping("/edit-form/{id}")
@@ -82,7 +82,7 @@ public class StudyProgramManagement {
             model.addAttribute("studyCycles", StudyCycle.values());
             model.addAttribute("accreditations", accreditationService.findAll());
             model.addAttribute("professors", professorService.findAll());
-            return "study_program/add_study_program.html";
+            return "akreditacii/study_program/add_study_program.html";
         }
         return null;
     }

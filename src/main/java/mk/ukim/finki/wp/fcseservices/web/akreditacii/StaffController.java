@@ -84,7 +84,7 @@ public class StaffController {
         model.addAttribute("roles", roles);
         model.addAttribute("roleNames", roleNames);
         model.addAttribute("staffPage", staffPage);
-        return "staff/list";
+        return "akreditacii/staff/list";
     }
 
     @GetMapping("/details/{id}")
@@ -118,6 +118,6 @@ public class StaffController {
             model.addAttribute("professorEducation", professorEducation);
         }
 
-        return "staff/details";
+        return "akreditacii/staff/details";
     }
 }

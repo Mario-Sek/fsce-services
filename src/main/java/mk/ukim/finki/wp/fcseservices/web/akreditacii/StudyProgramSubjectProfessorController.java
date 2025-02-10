@@ -57,7 +57,7 @@ public class StudyProgramSubjectProfessorController {
             model.addAttribute("programCode", studyProgramDetails.getStudyProgram().getCode());
             model.addAttribute("professorsNotAssigned", subjectNotAssignedProfessorsMap);
             model.addAttribute("subjectProfessorsMap", subjectProfessorsMap);
-            return "study_program_subject/edit-professors";
+            return "akreditacii/study_program_subject/edit-professors";
         }
         return null;
 

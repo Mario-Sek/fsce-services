@@ -36,7 +36,7 @@ public class StudyProgramSubjectManagement {
         model.addAttribute("studyProgramDetails", studyProgramDetails);
         model.addAttribute("subjects", subjects);
 
-        return "study_program_subject/study_program_edit_subjects";
+        return "akreditacii/study_program_subject/study_program_edit_subjects";
     }
     @PostMapping("/{id}/edit-subjects")
     public String saveEditedSubject(@PathVariable String id,
@@ -80,7 +80,7 @@ public class StudyProgramSubjectManagement {
         model.addAttribute("subjects", subjects);
 
 
-        return "study_program_subject/add_study_program_subject";
+        return "akreditacii/study_program_subject/add_study_program_subject";
     }
 
     @PostMapping("{id}/add-subject")

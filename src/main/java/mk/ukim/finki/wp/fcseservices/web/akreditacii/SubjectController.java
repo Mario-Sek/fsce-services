@@ -54,7 +54,7 @@ public class SubjectController {
 
         model.addAttribute("accreditations", accreditationService.findAll());
         model.addAttribute("subjectDetailsListPage", subjectDetailsListPage);
-        return "subject/subject_list.html";
+        return "akreditacii/subject/subject_list.html";
     }
 
     @GetMapping("/subject/{subjectId}/details")
@@ -86,7 +86,7 @@ public class SubjectController {
         // Get all electiveBooks for given subject
         model.addAttribute("electiveBooks", subjectDetails.getBibliography().getElectiveBooks());
 
-        return "subject/subject_details.html";
+        return "akreditacii/subject/subject_details.html";
     }
 
     @GetMapping("/subject/statistics")
@@ -123,7 +123,7 @@ public class SubjectController {
             model.addAttribute("emptyList", true);
         }
 
-        return "subject/subject_statistics.html";
+        return "akreditacii/subject/subject_statistics.html";
     }
 
     @GetMapping("/subject/{subjectId}/edit")
@@ -140,7 +140,7 @@ public class SubjectController {
         model.addAttribute("subjectProfessors", subjectProfessors);
         model.addAttribute("mandatoryBooks", mandatoryBooks);
         model.addAttribute("additionalBooks", additionalBooks);
-        return "subject/edit_subject";
+        return "akreditacii/subject/edit_subject";
     }
 
 
@@ -158,7 +158,7 @@ public class SubjectController {
         model.addAttribute("subjectProfessors", subjectProfessors);
         model.addAttribute("mandatoryBooks", mandatoryBooks);
         model.addAttribute("additionalBooks", additionalBooks);
-        return "subject/edit_subject";
+        return "akreditacii/subject/edit_subject";
     }
 
     @GetMapping("/subject/{subjectId}/edit/mandatory-books")
@@ -170,7 +170,7 @@ public class SubjectController {
         model.addAttribute("newBook", newBook);
         model.addAttribute("subjectId", sd.getId());
         model.addAttribute("books", mandatoryBooks);
-        return "subject/edit_mandatory_books";
+        return "akreditacii/subject/edit_mandatory_books";
     }
 
     @GetMapping("/subject/{subjectId}/edit/elective-books")
@@ -182,7 +182,7 @@ public class SubjectController {
         model.addAttribute("subjectId", sd.getId());
         model.addAttribute("books", additionalBooks);
         model.addAttribute("newBook", newBook);
-        return "subject/edit_elective_books";
+        return "akreditacii/subject/edit_elective_books";
     }
 
     @PostMapping("/remove-book/{subjectId}/{bookId}")

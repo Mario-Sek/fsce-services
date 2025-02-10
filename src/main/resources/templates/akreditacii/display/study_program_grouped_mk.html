@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title th:text="${studyProgram?.nameEn}"></title>
+    <title th:text="${studyProgram?.studyProgram?.name}"></title>
     <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"-->
     <!--          integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
@@ -26,17 +26,17 @@
 </div>
 <div>
     <h2>
-        <span th:text="${studyProgram?.nameEn!=null? studyProgram?.nameEn : studyProgram?.studyProgram?.name }"></span> (<span th:text="${studyProgram?.durationYears}"/>
-        years)
+        <span th:text="${studyProgram?.studyProgram?.name}"></span> (<span th:text="${studyProgram?.durationYears}"/>
+        годишни)
 
         <hr/>
     </h2>
     <div class="col-12">
-        <h3>General information</h3>
+        <h3>Општи информации</h3>
         <p class="ms-4" th:text="${studyProgram?.generalInformation}"></p>
     </div>
     <div class="col-12">
-        <h3>The title obtained after completion of the study program</h3>
+        <h3>Стекната титула по завршување на студиската програма</h3>
 
         <div class="col-12 ms-4">
             <h5 th:text="${studyProgram?.graduationTitle}"></h5>
@@ -46,22 +46,22 @@
         </div>
     </div>
     <div class="col-12" th:if="${studyProgram?.coordinator!=null}">
-        <h3>Coordinator</h3>
+        <h3>Координатор</h3>
 
         <div class="col-12 ms-4">
             <a th:text="${studyProgram?.coordinator.name}" th:href="${'mailto:'+studyProgram?.coordinator.email}"></a>
         </div>
     </div>
     <div class="col-12">
-        <h3>Study program</h3>
+        <h3>Наставна програма</h3>
         <p class="ms-4" th:text="${studyProgram?.subjectRestrictions}" style="white-space: pre-line"></p>
     </div>
     <div class="col-12">
-        <h4>Subjects</h4>
+        <h4>Предмети</h4>
         <a id="top"></a>
         <span th:each="sem: ${mandatoryBySemester}">
             <a th:href='${"#sem-"+sem.getKey()}'>
-                Semester: <span th:text="${sem.getKey()}"></span>
+                Семестар: <span th:text="${sem.getKey()}"></span>
             </a>
         </span>
     </div>
@@ -73,21 +73,21 @@
                 </i></a>
                 <h3>
                     <a th:id='${"sem-"+msem.getKey()}'></a>
-                    Semester: <span th:text="${msem.getKey()}"></span>
+                    Семестар: <span th:text="${msem.getKey()}"></span>
                 </h3>
 
                 <table class="table table-striped table table-bordered table-sm">
                     <tr>
                         <td colspan="4">
-                            <h4>Compulsory subjects</h4>
+                            <h4>Задолжителни предмети</h4>
                         </td>
                     </tr>
                     <tr>
                         <th width="10%">
-                            Code
+                            Код
                         </th>
                         <th width="40%">
-                            Subject
+                            Предмет
                         </th>
 
                     </tr>
@@ -96,9 +96,9 @@
                             <span th:if="${!s.subject.placeholder}" th:text="${s.subject.id}"></span>
                         </td>
                         <td>
-                            <a th:if="${!s.subject.placeholder}" th:href="@{/subject/{id}(id=${s.subject.id})}"
-                               th:text="${s.subject.nameEn}"></a>
-                            <span th:if="${s.subject.placeholder}" th:text="${s.subject.nameEn}"></span>
+                            <a th:if="${!s.subject.placeholder}" th:href="@{/templates/akreditacii/subject/{id}(id=${s.subject.id})}"
+                               th:text="${s.subject.subject.name}"></a>
+                            <span th:if="${s.subject.placeholder}" th:text="${s.subject.subject.name}"></span>
                             <span class="mr-3" th:if="${s.subject.placeholder}"
                                   th:each='g: ${s.subjectGroup?.split(";")}'>
                             <a th:text='${g}' th:href='${"#"+g}'></a>
@@ -117,22 +117,22 @@
             </i></a>
             <h3>
                 <a th:id='${gr.getKey()}'></a>
-                Elective subjects from group: <span th:text="${gr.getKey()}"></span>
+                Изборни предмети од група <span th:text="${gr.getKey()}"></span>
             </h3>
 
             <table class="table table-striped table table-bordered table-sm">
                 <tr>
                     <th width="10%">
-                        Code
+                        Код
                     </th>
                     <th width="40%">
                         Предмет
                     </th>
                     <th width="10%">
-                        Suggested semester
+                        Препорачан семстар
                     </th>
                     <th width="40%">
-                        Dependencies
+                        Зависности
                     </th>
 
                 </tr>
@@ -140,8 +140,8 @@
                     <td th:text="${s.subject.id}">
                     </td>
                     <td>
-                        <a th:href="@{/subject/{id}(id=${s.subject.id})}"
-                           th:text="${s.subject.nameEn}"></a>
+                        <a th:href="@{/templates/akreditacii/subject/{id}(id=${s.subject.id})}"
+                           th:text="${s.subject.subject.name}"></a>
                     </td>
                     <td th:text="${s.semester}">
                     </td>

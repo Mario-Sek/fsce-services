@@ -36,7 +36,7 @@ public class DisplayController {
         model.addAttribute("acc", accreditation);
         model.addAttribute("cycle", cycle);
         model.addAttribute("programs", programs);
-        return "display/accreditation";
+        return "akreditacii/display/accreditation";
     }
 
     @GetMapping("/sp/{program}")
@@ -51,7 +51,7 @@ public class DisplayController {
             model.addAttribute("studyProgram", studyProgramDetails);
         }
         model.addAttribute("bySemesterAndMandatory", bySemesterAndMandatory);
-        return "display/study_program";
+        return "akreditacii/display/study_program";
     }
 
 
@@ -86,9 +86,9 @@ public class DisplayController {
         model.addAttribute("mandatoryBySemester", mandatoryBySemester);
         model.addAttribute("electiveByGroup", electiveByGroup);
         if ("en".equals(lang)) {
-            return "display/study_program_grouped_en";
+            return "akreditacii/display/study_program_grouped_en";
         } else {
-            return "display/study_program_grouped_mk";
+            return "akreditacii/display/study_program_grouped_mk";
         }
     }
 
@@ -106,7 +106,7 @@ public class DisplayController {
         model.addAttribute("subjectProfessors", subjectProfessors);
         model.addAttribute("mandatoryBooks", mandatoryBooks);
         model.addAttribute("additionalBooks", additionalBooks);
-        return "display/subject";
+        return "akreditacii/display/subject";
 
     }
 }

@@ -26,20 +26,20 @@ public class AccreditationManagement {
         Page<Accreditation> accreditationsPage = accreditationService
                 .findAllWithPagination(pageNum, results);
         model.addAttribute("accreditationsPage", accreditationsPage);
-        return "accreditation/accreditation_list";
+        return "akreditacii/accreditation/accreditation_list";
 
     }
 
     @GetMapping("/add-form")
     public String addAccreditation(Model model) {
-        return "accreditation/add_accreditation";
+        return "akreditacii/accreditation/add_accreditation";
     }
 
     @GetMapping("/edit-form/{id}")
     public String addAccreditation(Model model, @PathVariable String id) {
         Accreditation accreditation = accreditationService.findById(id);
         model.addAttribute("accreditation", accreditation);
-        return "accreditation/add_accreditation";
+        return "akreditacii/accreditation/add_accreditation";
     }
 
     @PostMapping("/add")

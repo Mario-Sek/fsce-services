@@ -22,7 +22,7 @@
 <div class="view-content my-5" layout:fragment="content">
   <h3>Вработени на ФИНКИ</h3>
   <div id="filters">
-    <form method="GET" th:action="@{/staff}">
+    <form method="GET" th:action="@{/templates/akreditacii/staff}">
       <div class="d-flex flex-wrap mb-3">
         <div class="col-md-3 col-sm-6 p-1">
           <select class="form-control custom-select" id="role" name="role">
@@ -47,7 +47,7 @@
         <div class="d-flex flex-column align-items-center">
           <img th:src="@{/default.png}" alt="Слика на вработен" style="width: 70px; height: 100px; object-fit: cover;" />
           <h6 class="mt-2">
-            <a th:href="@{/staff/details/{id}(id=${staff.id})}" class="text-decoration-none text-dark" th:text="${staff.name}">Име</a>
+            <a th:href="@{/templates/akreditacii/staff/details/{id}(id=${staff.id})}" class="text-decoration-none text-dark" th:text="${staff.name}">Име</a>
           </h6>
         </div>
       </div>
