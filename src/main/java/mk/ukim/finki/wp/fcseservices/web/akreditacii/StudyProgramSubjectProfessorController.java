@@ -1,9 +1,9 @@
 package mk.ukim.finki.wp.fcseservices.web.akreditacii;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgramDetails;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubject;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubjectProfessor;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramDetails;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubject;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubjectProfessor;
 import mk.ukim.finki.wp.fcseservices.service.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;

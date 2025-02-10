@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.subject.Subject;
+import mk.ukim.finki.wp.fcseservices.model.base.Subject;
 import mk.ukim.finki.wp.fcseservices.repository.SubjectRepository;
 import mk.ukim.finki.wp.fcseservices.service.SubjectService;
 import org.springframework.stereotype.Service;

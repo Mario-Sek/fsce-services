@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 import jakarta.transaction.Transactional;
-import mk.ukim.finki.wp.fcseservices.model.accreditation.AccreditationDocumentTypes;
-import mk.ukim.finki.wp.fcseservices.model.accreditation.StudyProgramAccreditationDocument;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.AccreditationDocumentTypes;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramAccreditationDocument;
 import mk.ukim.finki.wp.fcseservices.repository.StudyProgramAccreditationDocumentRepository;
 import mk.ukim.finki.wp.fcseservices.repository.StudyProgramDetailsRepository;
 import mk.ukim.finki.wp.fcseservices.service.StudyProgramAccreditationDocumentService;

@@ -1,13 +1,13 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.StudyCycle;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyCycle;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidStudyProgram;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidSubjectId;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgramDetails;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubject;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubjectProfessor;
-import mk.ukim.finki.wp.fcseservices.model.subject.SubjectDetails;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramDetails;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubject;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubjectProfessor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.SubjectDetails;
 import mk.ukim.finki.wp.fcseservices.repository.StudyProgramDetailsRepository;
 import mk.ukim.finki.wp.fcseservices.repository.StudyProgramSubjectProfessorRepository;
 import mk.ukim.finki.wp.fcseservices.repository.StudyProgramSubjectRepository;

@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.repository;
 
-import mk.ukim.finki.wp.fcseservices.model.subject.SubjectDetails;
-import mk.ukim.finki.wp.fcseservices.model.subject.dto.SubjectAllocationStatsDTO;
-import mk.ukim.finki.wp.fcseservices.model.subject.dto.SubjectNameAndCodeDTO;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.SubjectDetails;
+import mk.ukim.finki.wp.fcseservices.model.dto.SubjectAllocationStatsDTO;
+import mk.ukim.finki.wp.fcseservices.model.dto.SubjectNameAndCodeDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
@@ -23,7 +23,7 @@ public interface SubjectDetailsRepository extends JpaSpecificationRepository<Sub
             Pageable pageable
     );
 
-    @Query("SELECT new mk.ukim.finki.wp.fcseservices.model.subject.dto.SubjectAllocationStatsDTO(" +
+    @Query("SELECT new mk.ukim.finki.wp.fcseservices.model.dto.SubjectAllocationStatsDTO(" +
             "sas.subject.mainSubject.id, " +
             "COUNT(sas.id), " +
             "AVG(sas.numberOfFirstTimeStudents), " +
@@ -32,7 +32,7 @@ public interface SubjectDetailsRepository extends JpaSpecificationRepository<Sub
             "GROUP BY sas.subject.mainSubject.id")
     List<SubjectAllocationStatsDTO> getSubjectAllocationStatsDTOList();
 
-    @Query("SELECT new mk.ukim.finki.wp.fcseservices.model.subject.dto.SubjectNameAndCodeDTO(" +
+    @Query("SELECT new mk.ukim.finki.wp.fcseservices.model.dto.SubjectNameAndCodeDTO(" +
             "s.id, " +
             "s.name) " +
             "FROM Subject s ")

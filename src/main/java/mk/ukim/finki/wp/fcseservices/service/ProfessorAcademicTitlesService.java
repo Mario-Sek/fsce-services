@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.AcademicTitle;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorAcademicTitles;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.AcademicTitle;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorAcademicTitles;
 
 public interface ProfessorAcademicTitlesService {
 

@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 import lombok.AllArgsConstructor;
-import mk.ukim.finki.wp.fcseservices.model.UserProfessorView;
-import mk.ukim.finki.wp.fcseservices.model.UserRole;
+import mk.ukim.finki.wp.fcseservices.model.base.UserProfessorView;
+import mk.ukim.finki.wp.fcseservices.model.base.UserRole;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.UserNotFoundException;
 import mk.ukim.finki.wp.fcseservices.repository.UserProfessorViewRepository;
 import mk.ukim.finki.wp.fcseservices.repository.UserRepository;

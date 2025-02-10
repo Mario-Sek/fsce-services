@@ -1,12 +1,12 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 import jakarta.transaction.Transactional;
-import mk.ukim.finki.wp.fcseservices.model.StudyCycle;
-import mk.ukim.finki.wp.fcseservices.model.accreditation.Accreditation;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyCycle;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.Accreditation;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.StudyProgramDetailsCannotBeDeletedException;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgram;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgramDetails;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.base.StudyProgram;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramDetails;
 import mk.ukim.finki.wp.fcseservices.repository.AccreditationRepository;
 import mk.ukim.finki.wp.fcseservices.repository.StudyProgramDetailsRepository;
 import mk.ukim.finki.wp.fcseservices.repository.StudyProgramRepository;

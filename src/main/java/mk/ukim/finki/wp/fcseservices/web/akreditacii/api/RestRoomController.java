@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.web.akreditacii.api;
 
 import jakarta.servlet.http.HttpServletResponse;
-import mk.ukim.finki.wp.fcseservices.model.room.Room;
+import mk.ukim.finki.wp.fcseservices.model.base.Room;
 import mk.ukim.finki.wp.fcseservices.repository.ImportRepository;
 import mk.ukim.finki.wp.fcseservices.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;

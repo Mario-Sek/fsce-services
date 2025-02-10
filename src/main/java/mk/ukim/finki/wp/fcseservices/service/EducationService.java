@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.Education;
-import mk.ukim.finki.wp.fcseservices.model.professor.EducationDegree;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.Education;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.EducationDegree;
 
 import java.util.List;
 

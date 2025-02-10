@@ -1,9 +1,9 @@
 package mk.ukim.finki.wp.fcseservices.web.akreditacii;
 
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidStudyProgram;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgramDetails;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubject;
-import mk.ukim.finki.wp.fcseservices.model.subject.Subject;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramDetails;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubject;
+import mk.ukim.finki.wp.fcseservices.model.base.Subject;
 import mk.ukim.finki.wp.fcseservices.service.StudyProgramDetailsService;
 import mk.ukim.finki.wp.fcseservices.service.StudyProgramSubjectService;
 import mk.ukim.finki.wp.fcseservices.service.SubjectService;

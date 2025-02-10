@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.web.akreditacii;
 
-import mk.ukim.finki.wp.fcseservices.model.accreditation.Accreditation;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.Accreditation;
 import mk.ukim.finki.wp.fcseservices.service.AccreditationService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;

@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidId;
-import mk.ukim.finki.wp.fcseservices.model.professor.Education;
-import mk.ukim.finki.wp.fcseservices.model.professor.EducationDegree;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.Education;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.EducationDegree;
 import mk.ukim.finki.wp.fcseservices.repository.professor.EducationRepository;
 import mk.ukim.finki.wp.fcseservices.service.EducationService;
 import org.springframework.stereotype.Service;

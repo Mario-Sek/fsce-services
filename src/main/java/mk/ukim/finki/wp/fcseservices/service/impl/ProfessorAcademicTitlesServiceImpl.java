@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.AcademicTitle;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorAcademicTitles;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.AcademicTitle;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorAcademicTitles;
 import mk.ukim.finki.wp.fcseservices.repository.professor.ProfessorAcademicTitlesRepository;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorAcademicTitlesService;
 import org.springframework.stereotype.Service;

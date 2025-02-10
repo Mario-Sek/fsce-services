@@ -1,9 +1,9 @@
 package mk.ukim.finki.wp.fcseservices.model.dto;
 
 import lombok.Data;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgram;
-import mk.ukim.finki.wp.fcseservices.model.subject.SubjectDetails;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.base.StudyProgram;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.SubjectDetails;
 
 import java.util.List;
 

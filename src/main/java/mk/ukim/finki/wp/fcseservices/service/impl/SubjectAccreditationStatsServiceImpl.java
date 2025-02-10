@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.subject.SubjectAccreditationStats;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.SubjectAccreditationStats;
 import mk.ukim.finki.wp.fcseservices.repository.SubjectAccreditationStatsRepository;
 import mk.ukim.finki.wp.fcseservices.service.SubjectAccreditationStatsService;
 import mk.ukim.finki.wp.fcseservices.service.specifications.FieldFilterSpecification;

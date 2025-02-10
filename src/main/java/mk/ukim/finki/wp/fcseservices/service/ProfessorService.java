@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorTitle;
-import mk.ukim.finki.wp.fcseservices.model.professor.dto.ProfessorNameAndCodeDTO;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
+import mk.ukim.finki.wp.fcseservices.model.dto.ProfessorNameAndCodeDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

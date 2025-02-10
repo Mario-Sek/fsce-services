@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.accreditation.Accreditation;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.Accreditation;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidAccreditation;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.NoActiveAccreditation;
 import mk.ukim.finki.wp.fcseservices.repository.AccreditationRepository;

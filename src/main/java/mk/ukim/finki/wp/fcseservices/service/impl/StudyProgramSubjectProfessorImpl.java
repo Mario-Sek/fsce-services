@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubject;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubjectProfessor;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubject;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubjectProfessor;
 import mk.ukim.finki.wp.fcseservices.repository.StudyProgramSubjectProfessorRepository;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorService;
 import mk.ukim.finki.wp.fcseservices.service.StudyProgramSubjectProfessorService;

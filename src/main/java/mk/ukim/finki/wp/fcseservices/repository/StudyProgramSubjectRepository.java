@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.repository;
 
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubject;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubject;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

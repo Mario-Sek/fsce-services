@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.User;
-import mk.ukim.finki.wp.fcseservices.model.UserDto;
-import mk.ukim.finki.wp.fcseservices.model.UserRole;
+import mk.ukim.finki.wp.fcseservices.model.base.User;
+import mk.ukim.finki.wp.fcseservices.model.dto.UserDto;
+import mk.ukim.finki.wp.fcseservices.model.base.UserRole;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidId;
 import mk.ukim.finki.wp.fcseservices.repository.UserRepository;
 import mk.ukim.finki.wp.fcseservices.service.UserService;

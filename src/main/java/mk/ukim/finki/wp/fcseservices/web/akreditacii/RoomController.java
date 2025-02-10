@@ -2,8 +2,8 @@ package mk.ukim.finki.wp.fcseservices.web.akreditacii;
 
 import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.wp.fcseservices.model.dto.RoomDto;
-import mk.ukim.finki.wp.fcseservices.model.room.Room;
-import mk.ukim.finki.wp.fcseservices.model.room.RoomType;
+import mk.ukim.finki.wp.fcseservices.model.base.Room;
+import mk.ukim.finki.wp.fcseservices.model.base.RoomType;
 import mk.ukim.finki.wp.fcseservices.repository.ImportRepository;
 import mk.ukim.finki.wp.fcseservices.service.RoomService;
 import org.springframework.data.domain.Page;

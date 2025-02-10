@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorDetails;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorDetails;
 
 import java.util.List;
 

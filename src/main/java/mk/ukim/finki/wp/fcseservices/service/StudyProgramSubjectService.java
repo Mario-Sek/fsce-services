@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgramDetails;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubject;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramDetails;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubject;
 
 import java.util.List;
 

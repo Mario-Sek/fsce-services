@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.UserProfessorView;
-import mk.ukim.finki.wp.fcseservices.model.UserRole;
+import mk.ukim.finki.wp.fcseservices.model.base.UserProfessorView;
+import mk.ukim.finki.wp.fcseservices.model.base.UserRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

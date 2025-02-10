@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.room.Room;
-import mk.ukim.finki.wp.fcseservices.model.room.RoomType;
+import mk.ukim.finki.wp.fcseservices.model.base.Room;
+import mk.ukim.finki.wp.fcseservices.model.base.RoomType;
 import mk.ukim.finki.wp.fcseservices.repository.RoomRepository;
 import mk.ukim.finki.wp.fcseservices.service.RoomService;
 import org.springframework.data.domain.Page;

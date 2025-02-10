@@ -1,9 +1,9 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.StudyCycle;
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorAccreditationStats;
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorTitle;
-import mk.ukim.finki.wp.fcseservices.model.semester.SemesterType;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyCycle;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorAccreditationStats;
+import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
+import mk.ukim.finki.wp.fcseservices.model.base.SemesterType;
 import mk.ukim.finki.wp.fcseservices.repository.professor.ProfessorAccreditationStatsRepository;
 import mk.ukim.finki.wp.fcseservices.service.AccreditationService;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorAccreditationStatsService;

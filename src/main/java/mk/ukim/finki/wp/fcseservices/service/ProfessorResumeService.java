@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorResume;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorResume;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Optional;

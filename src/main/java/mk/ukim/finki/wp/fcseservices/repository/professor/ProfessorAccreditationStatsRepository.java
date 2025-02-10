@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.repository.professor;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorAccreditationStats;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorAccreditationStats;
 import mk.ukim.finki.wp.fcseservices.repository.JpaSpecificationRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

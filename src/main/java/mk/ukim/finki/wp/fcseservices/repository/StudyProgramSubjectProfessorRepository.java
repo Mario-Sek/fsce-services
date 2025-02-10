@@ -1,9 +1,9 @@
 package mk.ukim.finki.wp.fcseservices.repository;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubject;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubjectProfessor;
-import mk.ukim.finki.wp.fcseservices.model.subject.dto.StudyProgramSubjectProfessorDTO;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubject;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubjectProfessor;
+import mk.ukim.finki.wp.fcseservices.model.dto.StudyProgramSubjectProfessorDTO;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +17,7 @@ public interface StudyProgramSubjectProfessorRepository extends JpaRepository<St
 
     List<StudyProgramSubjectProfessor> findAll(Specification<StudyProgramSubjectProfessor> spec);
 
-    @Query("SELECT new mk.ukim.finki.wp.fcseservices.model.subject.dto.StudyProgramSubjectProfessorDTO(" +
+    @Query("SELECT new mk.ukim.finki.wp.fcseservices.model.dto.StudyProgramSubjectProfessorDTO(" +
             "s.studyProgramSubject.subject.subject.id, " +
             "s.professor.id, " +
             "s.studyProgramSubject.studyProgram.code, " +

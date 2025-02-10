@@ -2,9 +2,9 @@ package mk.ukim.finki.wp.fcseservices.service.specifications;
 
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
-import mk.ukim.finki.wp.fcseservices.model.StudyCycle;
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorTitle;
-import mk.ukim.finki.wp.fcseservices.model.semester.SemesterType;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyCycle;
+import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
+import mk.ukim.finki.wp.fcseservices.model.base.SemesterType;
 import org.springframework.data.jpa.domain.Specification;
 
 

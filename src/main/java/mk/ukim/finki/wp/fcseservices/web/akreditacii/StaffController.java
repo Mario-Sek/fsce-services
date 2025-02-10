@@ -1,11 +1,12 @@
 package mk.ukim.finki.wp.fcseservices.web.akreditacii;
 
 import lombok.AllArgsConstructor;
-import mk.ukim.finki.wp.fcseservices.model.UserProfessorView;
-import mk.ukim.finki.wp.fcseservices.model.UserRole;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.base.UserProfessorView;
+import mk.ukim.finki.wp.fcseservices.model.base.UserRole;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.*;
 import mk.ukim.finki.wp.fcseservices.model.consultations.Consultation;
 import mk.ukim.finki.wp.fcseservices.model.consultations.ConsultationType;
-import mk.ukim.finki.wp.fcseservices.model.professor.*;
 import mk.ukim.finki.wp.fcseservices.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

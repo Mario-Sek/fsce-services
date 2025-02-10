@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.subject.Subject;
+import mk.ukim.finki.wp.fcseservices.model.base.Subject;
 
 import java.util.List;
 

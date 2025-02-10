@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.repository;
 
-import mk.ukim.finki.wp.fcseservices.model.StudyCycle;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgramDetails;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyCycle;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

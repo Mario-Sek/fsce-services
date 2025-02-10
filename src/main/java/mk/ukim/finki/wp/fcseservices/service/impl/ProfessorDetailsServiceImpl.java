@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorDetails;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorDetails;
 import mk.ukim.finki.wp.fcseservices.repository.professor.ProfessorDetailsRepository;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorDetailsService;
 import org.springframework.stereotype.Service;

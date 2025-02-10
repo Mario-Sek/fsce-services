@@ -1,16 +1,16 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.accreditation.Accreditation;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.Accreditation;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidSubjectId;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgram;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubject;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubjectProfessor;
-import mk.ukim.finki.wp.fcseservices.model.subject.SubjectDetails;
-import mk.ukim.finki.wp.fcseservices.model.subject.dto.StudyProgramSubjectProfessorDTO;
-import mk.ukim.finki.wp.fcseservices.model.subject.dto.SubjectAllocationStatsDTO;
-import mk.ukim.finki.wp.fcseservices.model.subject.dto.SubjectNameAndCodeDTO;
-import mk.ukim.finki.wp.fcseservices.model.subject.dto.SubjectStatisticsDTO;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.base.StudyProgram;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubject;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubjectProfessor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.SubjectDetails;
+import mk.ukim.finki.wp.fcseservices.model.dto.StudyProgramSubjectProfessorDTO;
+import mk.ukim.finki.wp.fcseservices.model.dto.SubjectAllocationStatsDTO;
+import mk.ukim.finki.wp.fcseservices.model.dto.SubjectNameAndCodeDTO;
+import mk.ukim.finki.wp.fcseservices.model.dto.SubjectStatisticsDTO;
 import mk.ukim.finki.wp.fcseservices.repository.*;
 import mk.ukim.finki.wp.fcseservices.service.SubjectDetailsService;
 import org.springframework.data.domain.Page;

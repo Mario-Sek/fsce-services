@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.config;
 
-import mk.ukim.finki.wp.fcseservices.model.User;
+import mk.ukim.finki.wp.fcseservices.model.base.User;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidUsernameException;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.repository.UserRepository;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorService;
 import org.springframework.beans.factory.annotation.Value;

@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.repository;
 
-import mk.ukim.finki.wp.fcseservices.model.accreditation.StudyProgramAccreditationDocument;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgramDetails;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramAccreditationDocument;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramDetails;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

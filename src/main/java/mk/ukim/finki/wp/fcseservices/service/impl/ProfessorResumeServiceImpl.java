@@ -1,8 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidProfessorId;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorResume;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorResume;
 import mk.ukim.finki.wp.fcseservices.repository.professor.ProfessorRepository;
 import mk.ukim.finki.wp.fcseservices.repository.professor.ProfessorResumeRepository;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorResumeService;

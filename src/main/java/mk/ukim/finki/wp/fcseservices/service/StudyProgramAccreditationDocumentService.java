@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.accreditation.AccreditationDocumentTypes;
-import mk.ukim.finki.wp.fcseservices.model.accreditation.StudyProgramAccreditationDocument;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.AccreditationDocumentTypes;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramAccreditationDocument;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

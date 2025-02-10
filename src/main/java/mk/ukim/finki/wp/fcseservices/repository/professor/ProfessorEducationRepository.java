@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.repository.professor;
 
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.professor.ProfessorEducation;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorEducation;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

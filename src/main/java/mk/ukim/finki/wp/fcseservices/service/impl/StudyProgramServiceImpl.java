@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgram;
+import mk.ukim.finki.wp.fcseservices.model.base.StudyProgram;
 import mk.ukim.finki.wp.fcseservices.repository.StudyProgramRepository;
 import mk.ukim.finki.wp.fcseservices.service.StudyProgramService;
 import org.springframework.data.domain.Page;

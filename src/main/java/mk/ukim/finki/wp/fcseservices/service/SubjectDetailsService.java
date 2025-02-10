@@ -1,12 +1,12 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
-import mk.ukim.finki.wp.fcseservices.model.accreditation.Accreditation;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
-import mk.ukim.finki.wp.fcseservices.model.study_program.StudyProgram;
-import mk.ukim.finki.wp.fcseservices.model.subject.StudyProgramSubject;
-import mk.ukim.finki.wp.fcseservices.model.subject.SubjectDetails;
-import mk.ukim.finki.wp.fcseservices.model.subject.dto.SubjectNameAndCodeDTO;
-import mk.ukim.finki.wp.fcseservices.model.subject.dto.SubjectStatisticsDTO;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.Accreditation;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.base.StudyProgram;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramSubject;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.SubjectDetails;
+import mk.ukim.finki.wp.fcseservices.model.dto.SubjectNameAndCodeDTO;
+import mk.ukim.finki.wp.fcseservices.model.dto.SubjectStatisticsDTO;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

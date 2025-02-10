@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.web.akreditacii;
 
-import mk.ukim.finki.wp.fcseservices.model.accreditation.AccreditationDocumentTypes;
-import mk.ukim.finki.wp.fcseservices.model.accreditation.StudyProgramAccreditationDocument;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.AccreditationDocumentTypes;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyProgramAccreditationDocument;
 import mk.ukim.finki.wp.fcseservices.service.StudyProgramAccreditationDocumentService;
 import mk.ukim.finki.wp.fcseservices.service.StudyProgramDetailsService;
 import org.springframework.core.io.ByteArrayResource;

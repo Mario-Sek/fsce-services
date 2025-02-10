@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.config;
 
-import mk.ukim.finki.wp.fcseservices.model.User;
-import mk.ukim.finki.wp.fcseservices.model.professor.Professor;
+import mk.ukim.finki.wp.fcseservices.model.base.User;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

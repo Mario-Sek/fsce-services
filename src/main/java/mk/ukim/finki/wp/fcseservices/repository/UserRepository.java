@@ -1,7 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.repository;
 
-import mk.ukim.finki.wp.fcseservices.model.User;
-import mk.ukim.finki.wp.fcseservices.model.UserRole;
+import mk.ukim.finki.wp.fcseservices.model.base.User;
+import mk.ukim.finki.wp.fcseservices.model.base.UserRole;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;

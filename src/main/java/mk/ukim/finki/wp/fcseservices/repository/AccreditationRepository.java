@@ -1,6 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.repository;
 
-import mk.ukim.finki.wp.fcseservices.model.accreditation.Accreditation;
+import mk.ukim.finki.wp.fcseservices.model.accreditations.Accreditation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -1,0 +1,1 @@
+alter view if exists joined_subject_group_size rename to course_size;
