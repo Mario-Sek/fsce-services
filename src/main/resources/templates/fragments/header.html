@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <body>
 <header class="p-3 text-bg-dark" th:fragment="header">
+    <div class="container-fluid">
+        <div class="d-flex align-items-center justify-content-between">
+            <div class="d-flex align-items-center">
+                <a href="/" class="d-flex align-items-center text-white text-decoration-none">
+                    <img src="/io.png" style="width: 25px"/>
+                    <span class="ms-2">ФИНКИ Сервиси</span>
+                </a>
+            </div>
 
-    <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
-        <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
-            <img src="/io.png" style="width: 25px"/>
-        </a>
-
-        <div class="text-end">
-<!--            <th:block sec:authorize="isAnonymous()">-->
-<!--                <a class="btn btn-outline-light me-2">Најави се</a>-->
-<!--            </th:block>-->
-
-            <th:block sec:authorize="isAuthenticated()">
-                    <span class="text-white me-2" sec:authentication="name">
-                    </span>
-            </th:block>
+            <div class="text-end">
+                <th:block sec:authorize="isAuthenticated()">
+                    <span class="text-white me-2" sec:authentication="name"></span>
+                </th:block>
+            </div>
         </div>
     </div>
 </header>
