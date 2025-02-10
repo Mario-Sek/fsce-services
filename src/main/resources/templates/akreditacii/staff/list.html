@@ -19,6 +19,8 @@
   </script>
 </head>
 <body>
+<div layout:fragment="subheader" th:include="akreditacii/subheader">
+</div>
 <div class="view-content my-5" layout:fragment="content">
   <h3>Вработени на ФИНКИ</h3>
   <div id="filters">
@@ -47,7 +49,7 @@
         <div class="d-flex flex-column align-items-center">
           <img th:src="@{/default.png}" alt="Слика на вработен" style="width: 70px; height: 100px; object-fit: cover;" />
           <h6 class="mt-2">
-            <a th:href="@{/templates/akreditacii/staff/details/{id}(id=${staff.id})}" class="text-decoration-none text-dark" th:text="${staff.name}">Име</a>
+            <a th:href="@{/staff/details/{id}(id=${staff.id})}" class="text-decoration-none text-dark" th:text="${staff.name}">Име</a>
           </h6>
         </div>
       </div>

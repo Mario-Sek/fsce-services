@@ -19,9 +19,11 @@
     <title></title>
 
 </head>
-<body layout:fragment="content">
-<div class="view-content my-5" >
-    <h3 th:text="#{PROFESSOR_STATS}"></h3>
+<body>
+<div layout:fragment="subheader" th:include="akreditacii/subheader">
+</div>
+<div class="view-content my-5" layout:fragment="content">
+    <h3>Статистика за предмети</h3>
 
     <div id="filters">
         <form th:method="GET" th:action="@{'/admin/subject/statistics'}">

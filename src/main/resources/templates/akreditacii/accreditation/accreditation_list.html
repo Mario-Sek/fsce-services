@@ -13,6 +13,8 @@
 <body>
 <h3 th:text="#{UNDERGRADUATE}"></h3>
 <h4 th:text="#{ACCREDITATIONS}"></h4>
+<div layout:fragment="subheader" th:include="akreditacii/subheader">
+</div>
 <div class="view-content my-5" layout:fragment="content">
     <div class="item-list">
 <table class="table table-striped table-bordered">

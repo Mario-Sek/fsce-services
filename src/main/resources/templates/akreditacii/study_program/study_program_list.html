@@ -20,6 +20,8 @@
     </script>
 </head>
 <body class="bg-light">
+<div layout:fragment="subheader" th:include="akreditacii/subheader">
+</div>
 <div class="view-content my-5" layout:fragment="content">
     <h3 th:text="#{STUDY_PROGRAMS}"></h3>
     <div id="filters">

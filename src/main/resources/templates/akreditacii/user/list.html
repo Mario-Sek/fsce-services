@@ -7,6 +7,8 @@
     <title>Акредитации</title>
 </head>
 <body>
+<div layout:fragment="subheader" th:include="akreditacii/subheader">
+</div>
 <div class="mt-4" layout:fragment="content">
     <form th:action="@{/admin/user}" method="get" class="pb-3">
         <h3>Корисници</h3>
