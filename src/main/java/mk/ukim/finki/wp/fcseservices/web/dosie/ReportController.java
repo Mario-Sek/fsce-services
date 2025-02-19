@@ -46,12 +46,10 @@ public class ReportController {
                               @RequestParam(name = "subject", required = false) String subject,
                               @RequestParam(name = "meeting", required = false) Long meeting,
                               @RequestParam(name = "suggestedSanction", required = false) String suggestedSanction,
-                              @RequestParam String username,
                               @RequestParam(defaultValue = "0") int page,
                               Model model, HttpServletRequest request) {
         int pageSize = 10;
 
-        model.addAttribute("username", username);
         model.addAttribute("statuses", DisciplinaryStatus.values());
         model.addAttribute("professors", professorService.findAll());
         model.addAttribute("subjects", joinedSubjectService.findAllJoinedSubjects());
@@ -76,15 +74,13 @@ public class ReportController {
             model.addAttribute("errorMessage", "Subject not found.");
         }
 
-        return "dosie/home";
+        return "dosie/reports";
     }
 
     @PostMapping("/showReports")
     public String showReports(@RequestParam(required = false) String index,
                               Model model, HttpServletRequest request,
-                              @RequestParam(defaultValue = "0") int page,
-                              @RequestParam String username) throws StudentNotFoundException {
-        model.addAttribute("username", username);
+                              @RequestParam(defaultValue = "0") int page) throws StudentNotFoundException {
         List<DisciplinaryRecord> reports;
         if (index == null || index.length() == 0)
             return "redirect:/reports";
@@ -102,7 +98,6 @@ public class ReportController {
 
     @GetMapping("/add-report")
     public String showAdd(Model model,
-                          @RequestParam String username,
                           HttpServletRequest request) {
         List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
         List<DisciplinaryType> categories = this.categoryService.findAllCategories();
@@ -110,14 +105,12 @@ public class ReportController {
         model.addAttribute("subjects", subjects);
         model.addAttribute("categories", categories);
         model.addAttribute("statuses", DisciplinaryStatus.values());
-        model.addAttribute("username", username);
 
         return "dosie/add-form";
     }
 
     @GetMapping("/edit-report/{id}")
     public String showEdit(@PathVariable String id, Model model,
-                           @RequestParam String username,
                            HttpServletRequest request) throws DisciplinaryRecordNotFoundException {
 
         DisciplinaryRecord report = this.reportService.findReportById(id);
@@ -130,7 +123,6 @@ public class ReportController {
         model.addAttribute("statuses", DisciplinaryStatus.values());
         model.addAttribute("setFalse", false);
 
-        model.addAttribute("username", username);
         return "dosie/add-form";
     }
 
@@ -143,7 +135,6 @@ public class ReportController {
                             @RequestParam String report_note,
                             @RequestParam String report_date,
                             @RequestParam DisciplinaryStatus status,
-                            @RequestParam String username,
                             Model model,
                             HttpServletRequest request,
                             HttpServletResponse response
@@ -154,7 +145,6 @@ public class ReportController {
         try {
             reportService.createNewReport(Integer.valueOf(degree), report_note, professor_username, student_index, subject, category, status, LocalDate.parse(report_date, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         } catch (ProfessorNotFoundException professorNotFoundException) {
-            model.addAttribute("username", username);
             errorThrown = true;
             List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
             List<DisciplinaryType> categories = this.categoryService.findAllCategories();
@@ -163,7 +153,6 @@ public class ReportController {
             model.addAttribute("professorError", professorNotFoundException.getMessage());
             return "dosie/add-form";
         } catch (StudentNotFoundException studentNotFoundException) {
-            model.addAttribute("username", username);
             errorThrown = true;
             List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
             List<DisciplinaryType> categories = this.categoryService.findAllCategories();
@@ -172,7 +161,6 @@ public class ReportController {
             model.addAttribute("studentError", studentNotFoundException.getMessage());
             return "dosie/add-form";
         } catch (JoinedSubjectNotFoundException joinedSubjectNotFoundException) {
-            model.addAttribute("username", username);
             errorThrown = true;
             List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
             List<DisciplinaryType> categories = this.categoryService.findAllCategories();
@@ -183,13 +171,11 @@ public class ReportController {
         }
 
         if (!errorThrown) {
-            model.addAttribute("username", username);
             model.addAttribute("reportCreated", true);
             List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
             List<DisciplinaryType> categories = this.categoryService.findAllCategories();
             model.addAttribute("subjects", subjects);
             model.addAttribute("categories", categories);
-            response.setHeader("Refresh", "2;url=/reports?username=" + username);
             return "dosie/add-form";
         }
 
@@ -206,7 +192,6 @@ public class ReportController {
                              @RequestParam String report_note,
                              @RequestParam String report_date,
                              @RequestParam DisciplinaryStatus status,
-                             @RequestParam String username,
                              Model model,
                              HttpServletResponse servletResponse,
                              HttpServletRequest request) throws JoinedSubjectNotFoundException, ProfessorNotFoundException, DisciplinaryTypeNotFoundException, StudentNotFoundException, DisciplinaryRecordNotFoundException {
@@ -216,7 +201,6 @@ public class ReportController {
         try {
             this.reportService.updateReport(id, Float.valueOf(degree), report_note, professor_username, student_index, subject, category, status, LocalDate.parse(report_date, DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         } catch (ProfessorNotFoundException professorNotFoundException) {
-            model.addAttribute("username", username);
             errorThrownOnUpdate = true;
             List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
             List<DisciplinaryType> categories = this.categoryService.findAllCategories();
@@ -226,7 +210,6 @@ public class ReportController {
             model.addAttribute("setFalse", true);
             return "dosie/add-form";
         } catch (StudentNotFoundException studentNotFoundException) {
-            model.addAttribute("username", username);
             errorThrownOnUpdate = true;
             List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
             List<DisciplinaryType> categories = this.categoryService.findAllCategories();
@@ -236,7 +219,6 @@ public class ReportController {
             model.addAttribute("setFalse", true);
             return "dosie/add-form";
         } catch (JoinedSubjectNotFoundException joinedSubjectNotFoundException) {
-            model.addAttribute("username", username);
             errorThrownOnUpdate = true;
             List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
             List<DisciplinaryType> categories = this.categoryService.findAllCategories();
@@ -246,7 +228,6 @@ public class ReportController {
             model.addAttribute("setFalse", true);
             return "dosie/add-form";
         } catch (DisciplinaryRecordNotFoundException disciplinaryRecordNotFoundException) {
-            model.addAttribute("username", username);
             errorThrownOnUpdate = true;
             model.addAttribute("reportNotFound", disciplinaryRecordNotFoundException.getMessage());
             List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
@@ -258,13 +239,11 @@ public class ReportController {
         }
 
         if (!errorThrownOnUpdate) {
-            model.addAttribute("username", username);
             model.addAttribute("reportUpdated", true);
             List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
             List<DisciplinaryType> categories = this.categoryService.findAllCategories();
             model.addAttribute("subjects", subjects);
             model.addAttribute("categories", categories);
-            servletResponse.setHeader("Refresh", "2;url=/reports?username=" + username);
             return "dosie/add-form";
         }
 

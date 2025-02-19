@@ -1,18 +1,16 @@
 <div class="bg-secondary py-1">
   <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
     <li>
-      <a th:href="@{'/reports'(username=${username})}" th:if="${username != null}" class="nav-link px-2 text-white">Reports</a>
+      <a th:href="@{'/reports'}" class="nav-link px-2 text-white">Reports</a>
     </li>
     <li>
-      <a th:href="@{'/meetings'(username=${username})}" th:if="${username != null}" class="nav-link px-2 text-white">Meetings</a>
+      <a th:href="@{'/meetings'}" class="nav-link px-2 text-white">Meetings</a>
     </li>
     <li>
-      <!--            <li sec:authorize="hasRole('PROFESSOR')">-->
-      <a th:href="@{'/reports/add-report'(username=${username})}" th:if="${username != null}" class="nav-link px-2 text-white">Add Report</a>
+      <a th:href="@{'/reports/add-report'}" class="nav-link px-2 text-white">Add Report</a>
     </li>
     <li>
-      <!--            <li sec:authorize="hasRole('PROFESSOR')">-->
-      <a th:href="@{'/meeting/add-form'(username=${username})}" th:if="${username != null}" class="nav-link px-2 text-white">Create Meeting</a>
+      <a th:href="@{'/meeting/add-form'}" class="nav-link px-2 text-white">Create Meeting</a>
     </li>
   </ul>
 </div>

@@ -13,30 +13,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Controller
 public class DosieHomeController {
 
-    private final ProfessorService professorService;
-    private final JoinedSubjectService joinedSubjectService;
-    private final MeetingService meetingService;
-    private final DisciplinarySanctionService disciplinarySanctionService;
-
-
-    public DosieHomeController(ProfessorService professorService, JoinedSubjectService joinedSubjectService, MeetingService meetingService, DisciplinarySanctionService disciplinarySanctionService) {
-        this.professorService = professorService;
-        this.joinedSubjectService = joinedSubjectService;
-        this.meetingService = meetingService;
-        this.disciplinarySanctionService = disciplinarySanctionService;
-    }
-
     @GetMapping("/dosie")
-    public String home(Model model, Authentication authentication) {
-
-        String username = authentication.getName();
-
-        model.addAttribute("username", username);
-        model.addAttribute("statuses", DisciplinaryStatus.values());
-        model.addAttribute("professors", professorService.findAll());
-        model.addAttribute("subjects", joinedSubjectService.findAllJoinedSubjects());
-        model.addAttribute("meetings", meetingService.getAllMeetings());
-        model.addAttribute("sanctions", disciplinarySanctionService.findAllSanctions());
+    public String home(Model model) {
         return "dosie/home";
     }
 }
