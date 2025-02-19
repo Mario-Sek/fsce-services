@@ -45,5 +45,17 @@ public class ScientificProject {
     @ManyToOne
     private ScientificProjectProgramme programme;
 
-
+    public ScientificProject(Long id, ScientificProjectStatus status, String name, String keywords, String goalsDescription, String relatedPublicationsOrProjects, String report, String expectedResults, Professor coordinator, ScientificProjectCall projectCall, ScientificProjectProgramme programme) {
+        this.id = id;
+        this.status = status;
+        this.name = name;
+        this.keywords = keywords;
+        this.goalsDescription = goalsDescription;
+        this.relatedPublicationsOrProjects = relatedPublicationsOrProjects;
+        this.report = report;
+        this.expectedResults = expectedResults;
+        this.coordinator = coordinator;
+        this.projectCall = projectCall;
+        this.programme = programme;
+    }
 }
