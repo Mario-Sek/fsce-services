@@ -15,7 +15,6 @@ public class AuthConfig {
                         .requestMatchers("/admin/**", "/api/**", "/build/**").hasAnyRole(
                                 AppRole.ADMIN.name()
                         )
-                        .requestMatchers("/**").permitAll()
                         .anyRequest().authenticated()
                 )
                 .logout(LogoutConfigurer::permitAll);
