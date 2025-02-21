@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Уреди преференци за предмет</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>Уредување преференци за предмет</h1>
+    <form th:action="@{/admin/subject-requests/{professorId}/save(professorId=${professorId})}"
+          th:object="${teacherSubjectRequest}" method="post">
+        <input type="hidden" name="id" th:value="${teacherSubjectRequest.id}">
+        <div class="form-group">
+            <label for="professor">Професор:</label>
+            <select class="form-control" id="professor" name="professorId" required disabled>
+                <option value="" disabled>Select Professor</option>
+                <option th:each="professor : ${professors}" th:value="${professor.id}"
+                        th:text="${professor.name + ' (' + professor.id + ')'}"
+                        th:selected="${professor.id == teacherSubjectRequest.professor.id}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="subject">Предмет:</label>
+            <select class="form-control" id="subject" name="subjectId" required>
+                <option value="" disabled>Select Subject</option>
+                <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                        th:text="${subject.name + ' (' + subject.abbreviation + ')'}"
+                        th:selected="${subject.abbreviation == teacherSubjectRequest.subject.abbreviation}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="priority">Приоритет (1 е највисок приоритет):</label>
+            <input type="number" class="form-control" id="priority" th:field="*{priority}" required>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="preferMultipleGroups"
+                   th:field="*{preferMultipleGroups}">
+            <label class="form-check-label" for="preferMultipleGroups">Преферирам повеќе групи</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="preferAuditoriumExercises"
+                   th:field="*{preferAuditoriumExercises}">
+            <label class="form-check-label" for="preferAuditoriumExercises">Преферирам сам/а да ги одржувам аудиториските</label>
+        </div>
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="preferLabExercises" th:field="*{preferLabExercises}">
+            <label class="form-check-label" for="preferLabExercises">Преферирам сам/а да ги одржувам лабораториските</label>
+        </div>
+        <div class="form-group">
+            <label for="schedulePreferences">Преферирани термини за држење на часови:</label>
+            <textarea class="form-control" id="schedulePreferences" th:field="*{schedulePreferences}"
+                      rows="3"></textarea>
+        </div>
+        <div class="form-group">
+            <label for="startedTeachingFrom">Држам предавања од:</label>
+            <select class="form-control" id="startedTeachingFrom" name="startedTeachingFrom"
+                    th:field="*{startedTeachingFrom}">
+                <option value="" disabled>Select Semester</option>
+                <option value="">Не сум го предавал/а претходно</option>
+                <option th:each="semester : ${semesters}" th:value="${semester.code}"
+                        th:text="${semester.code}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="startedExerciseFrom">Држам вежби од:</label>
+            <select class="form-control" id="startedExerciseFrom" name="startedExerciseFrom"
+                    th:field="*{startedExerciseFrom}">
+                <option value="" disabled>Select Semester</option>
+                <option value="">Не сум држел/а вежби претходно</option>
+                <option th:each="semester : ${semesters}" th:value="${semester.code}"
+                        th:text="${semester.code}"></option>
+            </select>
+        </div>
+
+        <div class="form-check">
+            <input type="checkbox" class="form-check-input" id="acceptsEnglishGroup"
+                   th:field="*{acceptsEnglishGroup}">
+            <label class="form-check-label" for="acceptsEnglishGroup">Прифаќам студенти кои групата наставува на
+                англиски</label>
+        </div>
+        <div class="form-group">
+            <label for="note">Дополнителна забелешка:</label>
+            <textarea class="form-control" id="note" th:field="*{note}" rows="3"></textarea>
+        </div>
+        <input type="hidden" name="referer" th:value="${referer}" />
+        <button type="submit" class="btn btn-primary">Сними</button>
+    </form>
+</div>
+</body>
+</html>

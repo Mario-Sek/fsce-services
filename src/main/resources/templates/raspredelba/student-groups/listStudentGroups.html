@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>Student Group Allocation</h1>
+
+
+    <form th:action="@{/admin/student-groups/import}" method="post"
+          enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-10">
+                <div class="form-group mt-1">
+                    <input class="form-control" type="file" name="file" id="file" required>
+                </div>
+            </div>
+            <div class="col-2">
+                <button class="btn  btn-primary mt-2 mb-2" type="submit">Import</button>
+                <a th:href="@{/admin/student-groups/export}"
+                   class="btn  btn-secondary mt-2 mb-2">Export</a>
+            </div>
+            <hr/>
+        </div>
+    </form>
+
+    <div class="row align-items-center text-center">
+        <div class="col-md-3 align-self-end">
+            <a th:href="@{/admin/student-groups/add}">
+                <button class="btn btn-primary btn-lg">Create New Student Group</button>
+            </a>
+        </div>
+        <form th:action="@{/admin/student-groups/cloneSemester}" method="post" class="mt-4 col-md-6">
+            <div class="row">
+                <div class="col-md-4">
+                    <label class="fw-bold" for="semesterFilter">Clone Semester - from:</label>
+                    <select class="form-control" id="semesterFrom" name="semesterFromCode">
+                        <th:block th:each="semester : ${semesters}">
+                            <option th:value="${semester.code}" th:text="${semester.code}"></option>
+                        </th:block>
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label class="fw-bold" for="semesterFilter">Clone Semester - to:</label>
+                    <select class="form-control" id="semesterTo" name="semesterToCode">
+                        <th:block th:each="semester : ${semesters}">
+                            <option th:value="${semester.code}" th:text="${semester.code}"></option>
+                        </th:block>
+                    </select>
+                </div>
+                <div class="col-md-4 align-self-end">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">Clone Student Groups</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="p-2 m-3">
+        <form th:action="@{/admin/student-groups}" method="get" class="mt-4">
+            <div class="row  align-items-center">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="fw-bold" for="semesterFilter">Filter by Semester:</label>
+                        <select class="form-control" id="semesterFilter" name="semester">
+                            <th:block th:each="semester : ${semesters}">
+                                <option th:value="${semester.code}" th:text="${semester.code}"
+                                        th:selected="${semester.code == selectedSemester}"></option>
+                            </th:block>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label class="fw-bold" for="studyYearFilter">Filter by Study Year:</label>
+                        <select class="form-control" id="studyYearFilter" name="studyYear">
+                            <option value="">All</option>
+                            <option value="1" th:selected="${selectedStudyYear == 1}">1st Year</option>
+                            <option value="2" th:selected="${selectedStudyYear == 2}">2nd Year</option>
+                            <option value="3" th:selected="${selectedStudyYear == 3}">3rd Year</option>
+                            <option value="4" th:selected="${selectedStudyYear == 4}">4th Year</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="col-md-3 align-self-end">
+                    <div class="form-group">
+                        <button type="submit" class="text-center btn btn-success">Apply Filters</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </div>
+    <h4 class="ms-3 ps-2 mb-2" th:text="${selectedSemester}"></h4>
+    <div class="row mx-3 ">
+        <div class="col-md-11">
+            <table class="table table-bordered table-striped text-center">
+                <tr>
+                    <th scope="col">Name</th>
+                    <th scope="col">Study Year</th>
+                    <th scope="col">Last Name</th>
+                    <th scope="col">Study Program</th>
+                    <th scope="col"></th>
+                </tr>
+                <tr th:each="group : ${page.content}">
+                    <td th:text="${group.name}"></td>
+                    <td th:text="${group.studyYear}"></td>
+                    <td th:text="${group.lastNameRegex}"></td>
+                    <td th:text="${group.programs}"></td>
+                    <td>
+                        <div>
+                            <a th:href="@{/admin/student-groups/edit/{id} (id=${group.id})}">
+                                <button class="btn btn-sm btn-primary">Edit</button>
+                            </a>
+                            <form th:action="@{/admin/student-groups/delete/{id} (id=${group.id})}" method="post"
+                                  class="d-inline-block">
+                                <button style="background-color: indianred" class="btn btn-sm text-light">Delete
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+
+            <div th:include="fragments/paging :: pageSection(${page})"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

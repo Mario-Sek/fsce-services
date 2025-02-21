@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Предмети распределба</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <div class="card">
+        <div class="card-header">
+            Delete student subject enrollment by semester
+        </div>
+        <div class="card-body">
+            <form id="delete-enrollment-form" th:action="@{/admin/subject-allocation-stats/calculate}" method="post">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="row">
+                            <label class="col-3 col-form-label" for="semester">Semester:</label>
+                            <div class="col-9">
+                                <select class="form-control" id="semester" name="semester" required>
+                                    <option value="" disabled>Select semester</option>
+                                    <option th:each="s : ${semesters}" th:value="${s.code}"
+                                            th:text="${s.code}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <button class="btn btn-success mt-2 mb-2" type="submit">Calculate</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <hr class="mt-4 mb-4">
+    <form th:action="@{/admin/subject-allocation-stats}" method="get" class="pb-3">
+        <div class="row">
+            <div class="col-12">
+                <h4>Filter allocations</h4>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control select2" name="semester">
+                    <option value="" th:selected="${param.semester==null}">Филтрирање по семестар</option>
+                    <option th:each="semester : ${semesters}"
+                            th:value="${semester.code}"
+                            th:text="${semester.code}"
+                            th:selected="${param.semester!=null && semester.code == param.semester[0]}"></option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-control" id="subject" name="subject">
+                    <option value="" selected>All Subjects</option>
+                    <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                            th:text="${subject.name + ' (' + subject.abbreviation + ')'}"
+                            th:selected="${param.subject!=null && subject.abbreviation == param.subject[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="mentorshipCourse" name="mentorshipCourse">
+                    <option value="" selected>All types</option>
+                    <option value="true"
+                            th:selected="${param.mentorshipCourse!=null && param.mentorshipCourse[0]=='true'}">
+                        Менторски
+                    </option>
+                    <option value="false"
+                            th:selected="${param.mentorshipCourse!=null && param.mentorshipCourse[0]=='false'}">
+                        Регуларна настава
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input type="number" step="1" class="form-control" placeholder="default semester"
+                       name="defaultSemester" th:value="${param.defaultSemester}"/>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+
+            <hr class="mb-2 mt-2"/>
+        </div>
+    </form>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Семестар</th>
+                <th>Предмет</th>
+                <th>Број групи</th>
+                <th>Студенти прв пат</th>
+                <th>Презапишани студенти</th>
+                <th>Студенти во група</th>
+                <th>Калкулирани групи</th>
+                <th>Менторски</th>
+                <th>Предавања</th>
+                <th>Ауд</th>
+                <th>Лаб</th>
+                <th sec:authorize="hasRole('ROLE_ADMIN')">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sa : ${page.getContent()}">
+                <td th:text="${sa.semester?.code}" th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}">
+                    Семестар
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}">
+                    <a th:href="@{/admin/subject-teacher-allocation/{subject}(subject=${sa.subject?.abbreviation}, semester=${sa.semester?.code})}"
+                       target="_blank"
+                       th:text='${sa.subject?.displayName()}'>Предмет</a>
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}">
+                    <input th:type="number" th:value="${sa.numberOfGroups}" th:id='${"sa-num-groups-"+sa.id}'>
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}"
+                    th:text="${sa.numberOfFirstTimeStudents}">Студенти прв пат
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}"
+                    th:text="${sa.numberOfReEnrollmentStudents}">Презапишани студенти
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}"
+                    th:text="${sa.averageStudentsPerGroup}">Студенти во група
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}"
+                    th:text="${sa.calculatedNumberOfGroups}">Калкулирани групи
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}">
+                    <input th:type="checkbox" th:checked="${sa.mentorshipCourse}"
+                           th:id='${"sa-menthorship-course-"+sa.id}'>
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}">
+                    <div th:if="${sa.numberOfGroups > 0
+                    && sa.subject?.weeklyLecturesClasses > 0
+                    && sa.coveredLectureGroups != sa.numberOfGroups}">
+                        <b class="me-1" th:text="${sa.coveredLectureGroups}"></b> /
+                        <b class="ms-1" th:text="${sa.numberOfGroups}"></b>
+                    </div>
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}">
+                    <div th:if="${sa.numberOfGroups > 0
+                    && sa.subject?.weeklyAuditoriumClasses > 0
+                    && sa.coveredExerciseGroups != sa.numberOfGroups}">
+                        <b class="me-1" th:text="${sa.coveredExerciseGroups}"></b> /
+                        <b class="ms-1" th:text="${sa.numberOfGroups}"></b>
+                    </div>
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}">
+                    <div th:if="${sa.numberOfGroups > 0
+                    && sa.subject?.weeklyLabClasses > 0
+                    && ((coursePref.get(sa.subject)?.get(0)?.isLabExercisesAsConsultations()==false && sa.coveredLabGroups != sa.numberOfGroups)
+                        || (coursePref.get(sa.subject)?.get(0)?.isLabExercisesAsConsultations()!=false && sa.coveredLabGroups != sa.numberOfFirstTimeStudents/40))}">
+                        <b class="me-1" th:text="${sa.coveredLabGroups}"></b> /
+                        <b class="ms-1"
+                           th:text="${coursePref.get(sa.subject)?.get(0)?.isLabExercisesAsConsultations()==false ? sa.numberOfFirstTimeStudents/40 :  sa.numberOfGroups}"></b>
+                    </div>
+                </td>
+                <td th:class="${sa.numberOfGroups == 0? 'border border-danger': ''}">
+                    <a class="btn btn-sm btn-success"
+                       th:data-id="${sa.id}"
+                       th:onclick="saveSubjectAllocationStats(this.getAttribute('data-id'))">Save</a>
+                    <a class="btn btn-sm btn-danger"
+                       th:href="@{/admin/subject-allocation-stats/{id}/delete(id=${sa.id})}"
+                       onclick="return confirm('Are you sure you want to delete this joined subject?')">Delete</a>
+                    <a th:href="@{/admin/courses/create(semester=${sa.semester?.code}, joinedSubject=${sa.subject?.abbreviation})}"
+                       class="btn btn-sm btn-primary"
+                       target="_blank">
+                        Courses
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:include="fragments/paging :: pageSection(${page})"></div>
+    </div>
+    <script>
+        function saveSubjectAllocationStats(id) {
+            console.log(id);
+            var numGroups = $("#sa-num-groups-" + id).val();
+            var mentorshipCourse = $("#sa-menthorship-course-" + id).is(":checked");
+            $.ajax("/api/subject-allocation-stats/number-of-groups/" + id + "/" + numGroups, {
+                method: "PUT",
+                data: {
+                    mentorshipCourse: mentorshipCourse
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa('riste.stojanov:SystemPass'));
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Грешка при зачувување");
+                }
+            });
+            return true;
+        }
+    </script>
+</div>
+</body>
+</html>

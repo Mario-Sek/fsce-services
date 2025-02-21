@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta>
+    <title>Декларација</title>
+</head>
+<body>
+
+<div class="mt-4" layout:fragment="content">
+
+
+    <h2 class="m-2 p-3">Декларирај активност</h2>
+
+    <div class="row">
+        <div class="col-8">
+            <form th:action="@{/engagement/save/{id}(id=${entity?.id})}" method="post">
+                <div class="form-group">
+                    <label for="semester">Семестар</label>
+                    <select class="form-control" id="semester" name="semester">
+                        <option th:each="semester : ${semesters}" th:value="${semester.code}"
+                                th:selected="${semester.code == entity?.semester?.code}"
+                                th:text="${semester.code}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Предмет</label>
+                    <select class="form-control" id="subject" name="subject" th:disabled="${entity?.id!=null}">
+                        <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                                th:selected="${subject.abbreviation == entity?.subject?.abbreviation}"
+                                th:text="${subject.displayName()}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="classType">Тип часови</label>
+                    <select class="form-control" id="classType" name="classType" th:disabled="${entity?.id!=null}">
+                        <option th:each="classType : ${classes}" th:value="${classType}"
+                                th:selected="${classType == entity?.classType}"
+                                th:text="${classType}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="numberOfClasses">Број часови</label>
+                    <input type="number" class="form-control" id="numberOfClasses"
+                           step="0.01"
+                           th:value="${entity?.numberOfClasses}"
+                           name="numberOfClasses" required>
+                </div>
+                <div class="form-group">
+                    <label for="otherTeacher">Споделени со друг наставник</label>
+                    <input type="checkbox" class="form-check-input"
+                           th:checked="${entity?.sharedWithOtherTeacher}"
+                           id="otherTeacher" name="otherTeacher">
+                </div>
+                <div class="form-group">
+                    <label for="language">Наставен јазик</label>
+                    <select class="form-control" id="language" name="language">
+                        <option th:each="language : ${languages}"
+                                th:selected="${language == entity?.language}"
+                                th:value="${language}" th:text="${language}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="numberOfStudents">Број на студенти</label>
+                    <input type="number" class="form-control"
+                           th:value="${entity?.numberOfStudents}"
+                           id="numberOfStudents" name="numberOfStudents" required>
+                </div>
+                <div class="form-group">
+                    <label for="consultative">Консултативни лабораториски</label>
+                    <input type="checkbox"
+                           th:checked="${entity?.consultative}"
+                           class="form-check-input" id="consultative" name="consultative">
+                </div>
+                <div class="form-group">
+                    <label for="note">Забелешка</label>
+                    <textarea class="form-control"
+                              th:text="${entity?.note}"
+                              id="note" name="note" rows="3"></textarea>
+                </div>
+
+                <input type="hidden" name="returnTo" th:value="${returnTo}">
+                <button type="submit" class="btn btn-primary">Save</button>
+            </form>
+        </div>
+        <div class="col-4">
+            <h4>Упатство за пополнување</h4>
+            Кога часовите се споделуваат помеѓу наставници: <br>
+            <ul>
+                <li>Број часови = Број групи од распределба * Број часови од акредитација на предметот</li>
+                <li>Број на студенти = Број групи од распределба * вкупно студенти на предметот / број на групи на
+                    предметот
+                </li>
+            </ul>
+            <br>
+            Кога лабораториските се консултативни: <br>
+            <ul>
+                <li>Број часови = Број групи од распределба * Број часови од акредитација на предметот</li>
+                <li>Број на студенти = Број групи од распределба * вкупно студенти на предметот / број на групи на
+                    предметот
+                </li>
+            </ul>
+            <br>
+            Кога лабораториските се изведуваат во лабораторија: <br>
+            <ul>
+                <li>Број часови = Број групи неделно * 2</li>
+                <li>Број на студенти = Број на студенти во лабораторија (ако е сам(а) во лабораторија)</li>
+                <li>Број на студенти = Број на студенти во лабораторија/2 (ако се заедно со тутор или асистент во
+                    терминот)
+                </li>
+            </ul>
+            Менторски изведувана настава: <br>
+            <ul>
+                <li>Број часови = Број на часови според акредитација на предметот / 2</li>
+                <li>Број на студенти = Вкупен број на студенти на предметот</li>
+            </ul>
+        </div>
+    </div>
+</div>

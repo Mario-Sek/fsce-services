@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Teacher Subject Allocations</title>
+    <script th:inline="javascript">
+        function disableButton(event) {
+            event.stopPropagation();
+            var button = document.getElementById('validateButton');
+            button.disabled = true;
+            button.innerText = 'Validating...';
+        }
+    </script>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+
+    <div class="row">
+        <div class="col-6">
+            <form th:action="@{/admin/subject-teacher-allocation/import}" method="post"
+                  enctype="multipart/form-data">
+                <div class="row">
+                    <div class="col-10">
+                        <div class="form-group mt-1">
+                            <input class="form-control" type="file" name="file" id="file" required>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <button class="btn  btn-primary mt-2 mb-2" type="submit">Import</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-6">
+            <form th:action="@{/admin/subject-teacher-allocation/export}" method="get"
+                  enctype="multipart/form-data">
+                <div class="col-8">
+                    <div class="row">
+                        <label class="col-2 col-form-label" for="semesterExport">Semester:</label>
+                        <div class="col-8">
+                            <select class="form-control" id="semesterExport" name="semesterCode" required>
+                                <option value="" disabled>Select semester from</option>
+                                <option th:each="s : ${semesters}" th:value="${s.code}"
+                                        th:text="${s.code}"></option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4">
+                    <button class="btn  btn-primary " type="submit">Export</button>
+                </div>
+            </form>
+        </div>
+        <div th:class="col-12">
+            <hr class="mt-1 mb-1"/>
+        </div>
+        <div class="col-6">
+            <form th:action="@{/admin/subject-teacher-allocation/clone}" method="post"
+                  enctype="multipart/form-data">
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <h4>Clone teacher subject allocations</h4>
+                    </div>
+                    <div class="col-5">
+                        <div class="row">
+                            <label class="col-2 col-form-label" for="semesterFrom">Semester:</label>
+                            <div class="col-8">
+                                <select class="form-control" id="semesterFrom" name="semesterFrom" required>
+                                    <option value="" disabled>Select semester from</option>
+                                    <option th:each="s : ${semesters}" th:value="${s.code}"
+                                            th:text="${s.code}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-5">
+
+                        <div class="row">
+                            <label class="col-2 col-form-label" for="semesterTo">Semester:</label>
+                            <div class="col-10">
+                                <select class="form-control" id="semesterTo" name="semesterTo" required>
+                                    <option value="" disabled>Select semester to</option>
+                                    <option th:each="s : ${semesters}" th:value="${s.code}"
+                                            th:text="${s.code}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="row">
+                            <div class="col-10 ">
+                                <button class="btn  btn-primary " type="submit">Clone</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-2 mt-2"/>
+                </div>
+            </form>
+        </div>
+        <div class="col-6">
+            <form th:action="@{/admin/subject-teacher-allocation/delete-by-semester}" method="post"
+                  enctype="multipart/form-data">
+                <div class="row mb-2">
+                    <div class="col-12">
+                        <h4>Delete allocations in semester</h4>
+                    </div>
+                    <div class="col-10">
+                        <div class="row">
+                            <label class="col-2 col-form-label" for="semesterDel">Semester:</label>
+                            <div class="col-8">
+                                <select class="form-control" id="semesterDel"
+                                        name="semesterCode" required>
+                                    <option value="" disabled>Select semester from</option>
+                                    <option th:each="s : ${semesters}" th:value="${s.code}"
+                                            th:text="${s.code}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="row">
+                            <div class="col-10 ">
+                                <button class="btn  btn-danger" type="submit">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                    <hr class="mb-2 mt-2"/>
+                </div>
+            </form>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <h4>Filter allocations</h4>
+            </div>
+            <div class="col-md-10">
+                <form th:action="@{/admin/subject-teacher-allocation}" method="get" class="pb-3">
+                    <div class="row">
+
+                        <div class="col-md-3">
+                            <select class="form-control select2" name="semester">
+                                <option value="" th:selected="${param.semester==null}">Филтрирање по семестар</option>
+                                <option th:each="semester : ${semesters}"
+                                        th:value="${semester.code}"
+                                        th:text="${semester.code}"
+                                        th:selected="${param.semester!=null && semester.code == param.semester[0]}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" id="professor" name="professor">
+                                <option value="" selected>All Professors</option>
+                                <option th:each="professor : ${professors}" th:value="${professor.id}"
+                                        th:text="${professor.name + ' (' + professor.id + ')'}"
+                                        th:selected="${param.professor!=null && professor.id == param.professor[0]}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <select class="form-control" id="subject" name="subject">
+                                <option value="" selected>All Subjects</option>
+                                <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                                        th:text="${subject.displayName()}"
+                                        th:selected="${param.subject!=null && subject.abbreviation == param.subject[0]}"></option>
+                            </select>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" class="btn btn-primary">Филтрирај</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-2">
+                <form th:action="@{/admin/subject-teacher-allocation/validate}" method="post"
+                      onsubmit="disableButton()">
+                    <input type="hidden" th:value="${semester}" th:name="semesterCode"/>
+                    <button id="validateButton" type="submit"
+                            title="Validate allocations for selected semester"
+                            class="btn btn-warning" th:disabled="${semester==null || semester.isEmpty()}">Validate semester</button>
+                </form>
+            </div>
+            <div class="col-md-12">
+                <hr class="mb-2 mt-2"/>
+                <div class="m-1 p-1 col-12 text-center justify-content-center" th:if="${param.validationSuccess}">
+                    <h3 class="rounded-2 bg-success-subtle border-success border-2 p-2 text-center text-success">Sucessfully
+                        validated allocations</h3>
+                </div>
+                <div class="m-1 p-1 col-12 justify-content-center text-center" th:if="${param.validationFailed}">
+                    <h3 class="rounded-2 bg-danger-subtle border-danger border-2 p-2 text-center text-danger">Allocations
+                        validation failed. Please select semester.</h3>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <div>
+        <h4>Semester <span th:text="${semester}"></span></h4>
+        <!--        <form th:each="allocation : ${semesterAllocations.value}" th:object="${teacherSubjectAllocation}" th:action="@{/admin/subject-teacher-allocation/{joined-subject-id}/update(joined-subject-id=${joinedSubjectId})}" method="post">-->
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Semester</th>
+                <th>Subject</th>
+                <th>Professor</th>
+                <th>Lectures</th>
+                <th>Exercises</th>
+                <th>Labs</th>
+                <th>English</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr th:each="allocation : ${page.content}">
+                <form th:object="${allocation}"
+                      th:id="${'allocation-form-' + allocation.id}"
+                      th:action="@{/admin/subject-teacher-allocation/{id}/update(id=${allocation.id})}"
+                      method="post">
+                    <input type="hidden" name="allocationId" th:value="${allocation.id}"/>
+                    <td th:text="${allocation.semester?.code}"></td>
+                    <td>
+                        <a th:href="@{/admin/subject-teacher-allocation/{subjectId}(subjectId=${allocation.subject?.abbreviation})}"
+                           target="_blank"
+                           title="Open course preferences"
+                           th:text="${allocation.subject?.displayName()}"></a>
+                    </td>
+                    <td>
+                        <span th:text="${allocation.professor?.name}"></span>
+                        <i class="bi bi-exclamation-triangle text-warning" th:if="${allocation.validationMessage != null && !allocation.validationMessage.isEmpty()}"
+                           th:title="${allocation.validationMessage}"></i>
+                    </td>
+                    <td><input type="number" name="numberOfLectureGroups" class="form-control"
+                               th:value="${allocation.numberOfLectureGroups}" step="0.01"/></td>
+                    <td><input type="number" name="numberOfExerciseGroups" class="form-control"
+                               th:value="${allocation.numberOfExerciseGroups}" step="0.01"/></td>
+                    <td><input type="number" name="numberOfLabGroups" class="form-control"
+                               th:value="${allocation.numberOfLabGroups}" step="0.01"/></td>
+                    <td>
+                        <input type="checkbox" name="englishGroup" class="form-check-label"
+                               th:checked="${allocation.englishGroup}"/>
+                    </td>
+                    <td>
+                        <button type="submit" class="btn btn-sm btn-success">Save</button>
+                        <a th:href="@{/admin/subject-teacher-allocation/{id}/delete(id=${allocation.id})}"
+                           type="submit" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                </form>
+            </tr>
+            </tbody>
+        </table>
+        <div th:include="fragments/paging :: pageSection(${page})"></div>
+    </div>
+
+</div>
+</body>
+</html>

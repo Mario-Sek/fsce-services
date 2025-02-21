@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Add New Course Preference</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>Add New Course Preference</h1>
+    <form th:action="@{/admin/course-preferences/save}" th:object="${coursePreference}" method="post">
+        <div class="form-group">
+            <label for="subject">Subject:</label>
+            <select class="form-control" id="subject" name="subject" required>
+                <option value="" disabled th:selected="${joinedSubjectAbbreviation==null}">Select Subject</option>
+                <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                        th:text="${subject.name + ' (' + subject.abbreviation + ')'}"
+                        th:selected="${subject.abbreviation == joinedSubjectAbbreviation}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lectureSharing">Lecture Sharing:</label>
+            <select class="form-control" id="lectureSharing" name="lectureSharing" required>
+                <option th:each="sharing : ${T(mk.ukim.finki.wp.fcseservices.model.LectureSharing).values()}"
+                        th:value="${sharing}"
+                        th:text="${sharing}"
+                        th:selected="${param.sharing!=null && sharing.name() == param.sharing[0]}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="auditoriumExercisesSharing">Auditorium Exercises Sharing:</label>
+            <select class="form-control" id="auditoriumExercisesSharing" name="auditoriumExercisesSharing"
+                    required>
+                <option th:each="sharing : ${T(mk.ukim.finki.wp.fcseservices.model.LectureSharing).values()}"
+                        th:value="${sharing}"
+                        th:text="${sharing}"
+                        th:selected="${param.sharing!=null && sharing.name() == param.sharing[0]}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="preferOnlineLectures">Prefer Online Lectures:</label>
+
+            <input type="checkbox" name="preferOnlineLectures" class="form-check-input" id="preferOnlineLectures"
+                   th:field="*{preferOnlineLectures}">
+            <label class="checkbox-label" for="preferOnlineLectures"></label>
+
+        </div>
+        <div class="form-group">
+            <label for="preferOnlineExercises">Prefer Online Exercises:</label>
+            <input name="preferOnlineExercises" type="checkbox" class="form-check-input" id="preferOnlineExercises"
+                   th:field="*{preferOnlineExercises}">
+            <label class="checkbox-label" for="preferOnlineExercises"></label>
+        </div>
+
+        <div class="form-group">
+            <label for="labExercisesAsConsultations">Lab Exercises as Consultations:</label>
+            <input name="labExercisesAsConsultations" type="checkbox" class="form-check-input"
+                   id="labExercisesAsConsultations" th:field="*{labExercisesAsConsultations}">
+            <label class="checkbox-label" for="labExercisesAsConsultations"></label>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Паралелки</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h3>Паралелки</h3>
+    <div class="row mb-2">
+        <div class="col-2">
+            <a class="btn btn-primary"
+               th:href="@{/admin/courses/add}">Add</a>
+        </div>
+        <div class="col-8">
+            <div class="row">
+                <div class="col-6" sec:authorize="hasRole('ROLE_ADMIN')">
+                    <div class="card">
+                        <div class="card-header">
+                            Import courses
+                        </div>
+                        <div class="card-body">
+                            <form th:action="@{/admin/courses/import}" method="post"
+                                  enctype="multipart/form-data">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="form-group mt-1">
+                                            <input class="form-control" type="file" name="file" id="file" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 text-end">
+                                        <button class="btn  btn-primary mt-2 mb-2" type="submit">Import</button>
+                                        <a th:href="@{/admin/courses/sample-tsv}"
+                                           class="btn  btn-secondary mt-2 mb-2">Template</a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-2 text-end" th:if="${param.semesterCode!=null && param.semesterCode[0]!=''}">
+            <a class="btn btn-primary"
+               th:href="@{/admin/courses/export-schedule(semesterCode=${param.semesterCode[0]})}">Export Schedule
+                Format</a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <form th:action="@{/admin/courses/calculate}" method="post">
+                <div class="row">
+                    <div class="col-5">
+                        <div class="row">
+                            <label class="col-3 col-form-label">Semester:</label>
+                            <div class="col-9">
+                                <select class="form-control" id="allocate-semester" name="semesterCode" required>
+                                    <option value="" disabled>Select semester</option>
+                                    <option th:each="s : ${semesters}" th:value="${s.code}"
+                                            th:text="${s.code}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-7">
+                        <button class="btn btn-primary " type="submit">Calculate</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <form th:action="@{/admin/courses}" method="get" class="pb-3">
+        <div class="row">
+
+            <div class="col-12">
+                <h4>Filter allocations</h4>
+            </div>
+            <div class="col-md-1">
+                <select class="form-control select2" name="semesterCode">
+                    <option value="" th:selected="${param.semester==null}">Филтрирање по семестар</option>
+                    <option th:each="semester : ${semesters}"
+                            th:value="${semester.code}"
+                            th:text="${semester.code}"
+                            th:selected="${param.semesterCode!=null && semester.code == param.semesterCode[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <input type="text" th:value="${param.groupName}" placeholder="Group name" name="groupName"
+                       class="form-control"/>
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-control" id="professor" name="professor">
+                    <option value="" selected>All Professors</option>
+                    <option th:each="professor : ${professors}" th:value="${professor.id}"
+                            th:text="${professor.name + ' (' + professor.id + ')'}"
+                            th:selected="${param.professor!=null && professor.id == param.professor[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="subject" name="joinedSubject">
+                    <option value="" selected>All Subjects</option>
+                    <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                            th:text="${subject.name + ' (' + subject.abbreviation + ')'}"
+                            th:selected="${param.joinedSubject!=null && subject.abbreviation == param.joinedSubject[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input type="checkbox" name="export" value="true" th:checked="${param.export!=null}"/> Export
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+
+
+            <hr class="mb-2 mt-2"/>
+        </div>
+    </form>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>semester</th>
+                <th>joinedSubject</th>
+
+                <th>professors</th>
+                <th>assistants</th>
+
+                <th>studentGroups</th>
+
+                <th>rooms</th>
+
+                <th># FirstEnrollments</th>
+                <th># ReEnrollments</th>
+                <th>Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ta : ${page.getContent()}">
+                <td th:text="${ta.semester.code}"></td>
+                <td>
+                    <a th:text="${ta.joinedSubject.displayName()}"
+                       th:href="@{/admin/courses(semesterCode=${ta.semester.code},joinedSubject=${ta.joinedSubject.abbreviation})}"/>
+                </td>
+                <td>
+                    <input type="text"
+                           th:id="${'professors-' + ta.id}"
+                           name="professors"
+                           title="Professors"
+                           th:value="${ta.professors}"/>
+                </td>
+                <td>
+                    <input type="text"
+                           th:id="${'assistants-' + ta.id}"
+                           name="assistants"
+                           th:value="${ta.assistants}"
+                           title="Assistants"/>
+                </td>
+                <td>
+                    <input type="text"
+                           th:id="${'groups-' + ta.id}"
+                           name="groups"
+                           th:value="${ta.groups}"
+                           title="Assistants"/>
+                </td>
+                <td>
+                    <span th:each="sg: ${ta.rooms}" th:text="${sg.name}" class="me-1"></span>
+                </td>
+                <td th:text="${ta.numberOfFirstEnrollments}"></td>
+                <td th:text="${ta.numberOfReEnrollments}"></td>
+                <td>
+                    <a class="btn btn-sm btn-success"
+                       th:data-id="${ta.id}"
+                       th:onclick="saveCourse(this.getAttribute('data-id'))">Save</a>
+                    <form th:action="@{/admin/courses/delete/{id}(id=${ta.id})}" method="post">
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:include="fragments/paging :: pageSection(${page})"></div>
+
+
+        <script>
+            function saveCourse(id) {
+                console.log(id);
+                var professors = $("#professors-" + id).val();
+                var assistants = $("#assistants-" + id).val();
+                var groups = $("#groups-" + id).val();
+                $.ajax("/api/courses/save/" + id, {
+                    method: "POST",
+                    data: {
+                        professors: professors,
+                        assistants: assistants,
+                        groups: groups
+                    },
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Basic " + btoa('riste.stojanov:SystemPass'));
+                    },
+                    success: function (data) {
+                        location.reload();
+                    },
+                    error: function (data) {
+                        console.log(data);
+                        alert("Грешка при зачувување");
+                    }
+                });
+                return true;
+            }
+        </script>
+    </div>
+</div>
+</body>
+</html>

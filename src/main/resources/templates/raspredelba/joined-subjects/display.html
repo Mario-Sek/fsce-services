@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Joined Subject Details</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <div th:fragment="joinedSubjectDetails">
+        <h1>Joined Subject Details</h1>
+        <table class="table table-bordered">
+            <tbody>
+            <tr>
+                <th scope="row">Abbreviation:</th>
+                <td th:text="${joinedSubject.abbreviation}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Name:</th>
+                <td th:text="${joinedSubject.name}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Codes:</th>
+                <td th:text="${joinedSubject.codes}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Semester Type:</th>
+                <td th:text="${joinedSubject.semesterType}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Main Subject:</th>
+                <td th:text="${joinedSubject.mainSubject.name + ' (' + joinedSubject.mainSubject.id + ')' }"></td>
+            </tr>
+            <tr>
+                <th scope="row">Weekly Lectures Classes:</th>
+                <td th:text="${joinedSubject.weeklyLecturesClasses}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Weekly Auditorium Classes:</th>
+                <td th:text="${joinedSubject.weeklyAuditoriumClasses}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Weekly Lab Classes:</th>
+                <td th:text="${joinedSubject.weeklyLabClasses}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <h1>Историја на промени</h1>
+        <table class="table table-bordered" th:each="h: ${joinedSubject.getHistory()}">
+            <tbody>
+            <tr>
+                <th scope="row">Abbreviation:</th>
+                <td>
+                    <span th:text="${h.abbreviation}"></span>
+                    <form th:action="@{/admin/joined-subjects/restore/{id}(id=${h.abbreviation})}"
+                          class="float-end"
+                          method="post">
+                        <input type="hidden" name="name" th:value="${h.name}">
+                        <input type="hidden" name="codes" th:value="${h.codes}">
+                        <input type="hidden" name="semesterType" th:value="${h.semesterType}">
+                        <input type="hidden" name="mainSubjectId" th:value="${h.mainSubject.id}">
+                        <input type="hidden" name="weeklyLecturesClasses" th:value="${h.weeklyLecturesClasses}">
+                        <input type="hidden" name="weeklyAuditoriumClasses" th:value="${h.weeklyAuditoriumClasses}">
+                        <input type="hidden" name="weeklyLabClasses" th:value="${h.weeklyLabClasses}">
+                        <button type="submit" class="btn btn-primary">Restore</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Name:</th>
+                <td th:text="${h.name}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Codes:</th>
+                <td th:text="${h.codes}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Semester Type:</th>
+                <td th:text="${h.semesterType}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Main Subject:</th>
+                <td th:text="${h.mainSubject.name + ' (' + h.mainSubject.id + ')' }"></td>
+            </tr>
+            <tr>
+                <th scope="row">Weekly Lectures Classes:</th>
+                <td th:text="${h.weeklyLecturesClasses}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Weekly Auditorium Classes:</th>
+                <td th:text="${h.weeklyAuditoriumClasses}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Weekly Lab Classes:</th>
+                <td th:text="${h.weeklyLabClasses}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Update Time:</th>
+                <td th:text="${h.lastUpdateTime}"></td>
+            </tr>
+            <tr>
+                <th scope="row">Update User:</th>
+                <td th:text="${h.lastUpdateUser}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

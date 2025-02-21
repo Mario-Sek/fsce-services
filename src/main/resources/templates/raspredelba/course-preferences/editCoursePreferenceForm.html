@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Edit Course Preference</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>Edit Course Preference</h1>
+    <form th:action="@{/admin/course-preferences/save}" th:object="${coursePreference}" method="post">
+        <input type="hidden" name="id" th:value="${coursePreference.id}">
+        <div class="form-group">
+            <label for="subject">Subject:</label>
+            <select class="form-control" id="subject" name="subject" required>
+                <option value="" disabled>Select Subject</option>
+                <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                        th:text="${subject.name + ' (' + subject.abbreviation + ')'}"
+                        th:selected="${subject.abbreviation == coursePreference.subject.abbreviation}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="lectureSharing">Lecture Sharing:</label>
+            <select class="form-control" id="lectureSharing" th:field="*{lectureSharing}" required>
+                <option th:each="sharing : ${T(mk.ukim.finki.wp.fcseservices.model.LectureSharing).values()}"
+                        th:value="${sharing}" th:text="${sharing}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="auditoriumExercisesSharing">Auditorium Exercises Sharing:</label>
+            <select class="form-control" id="auditoriumExercisesSharing" th:field="*{auditoriumExercisesSharing}" required>
+                <option th:each="sharing : ${T(mk.ukim.finki.wp.fcseservices.model.LectureSharing).values()}"
+                        th:value="${sharing}" th:text="${sharing}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="preferOnlineLectures">Prefer Online Lectures:</label>
+            <input type="checkbox" class="form-check-input" id="preferOnlineLectures" th:field="*{preferOnlineLectures}">
+            <label class="checkbox-label" for="preferOnlineLectures"></label>
+        </div>
+        <div class="form-group">
+            <label for="preferOnlineExercises">Prefer Online Exercises:</label>
+            <input type="checkbox" class="form-check-input" id="preferOnlineExercises" th:field="*{preferOnlineExercises}">
+            <label class="checkbox-label" for="preferOnlineExercises"></label>
+        </div>
+        <div class="form-group">
+            <label for="labExercisesAsConsultations">Lab Exercises as Consultations:</label>
+            <input type="checkbox" class="form-check-input" id="labExercisesAsConsultations" th:field="*{labExercisesAsConsultations}">
+            <label class="checkbox-label" for="labExercisesAsConsultations"></label>
+        </div>
+        <input type="hidden" name="referer" th:value="${referer}" />
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+
+</div>
+
+</body>
+</html>

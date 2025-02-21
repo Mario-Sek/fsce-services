@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta>
+    <title>Add Student Group</title>
+</head>
+<body>
+
+<div class="mt-4" layout:fragment="content">
+
+
+    <h2 class="m-2 p-3">Add Student Group</h2>
+
+    <div class="container w-75 m-0">
+        <form th:action="@{'/admin/student-groups/save/{id}' (id=${group?.getId()})}" method="POST">
+            <div class="mb-3">
+                <label for="name">Name:</label>
+                <input type="text" th:value="${group?.name}" class="form-control" id="name" name="name"/>
+
+            </div>
+            <div class="mb-3">
+                <label for="programs">Programs:</label>
+                <input type="text" th:value="${group?.programs}" class="form-control" id="programs" name="programs"/>
+
+            </div>
+
+            <div class="mb-3">
+                <label for="semester">Semester:</label>
+                <select class="form-control" id="semester" name="semester">
+                    <th:block th:each="semester : ${semesters}">
+                        <option th:value="${semester.code}" th:text="${semester.code}"
+                                th:selected="${semester.code == group?.semester?.code}"></option>
+                    </th:block>
+                </select>
+            </div>
+            <div class="mb-3">
+                <label for="studyYear" class="form-label">Year</label>
+                <input type="number"
+                       class="form-control"
+                       id="studyYear"
+                       name="studyYear"
+                       th:value="${group?.studyYear ?: ''}"
+                       placeholder="Enter Study Year">
+            </div>
+
+            <div class="mb-3">
+                <label for="lastNameRegex" class="form-label">Last Name Regex</label>
+                <input type="text"
+                       class="form-control"
+                       id="lastNameRegex"
+                       name="lastNameRegex"
+                       th:value="${group?.lastNameRegex ?: ''}"
+                       placeholder="Enter Last Name Regex">
+            </div>
+
+
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>

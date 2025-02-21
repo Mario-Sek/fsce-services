@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<html>
+<head>
+    <title>Teacher Details</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>Teacher Details</h1>
+    <h3 th:text="${professor.name}"></h3>
+    <hr>
+
+    <!-- Semester Filter -->
+    <div class="col-12">
+        <form th:action="@{/admin/teacher/{tId}/details(tId=${professor.id})}" method="get" class="pb-3">
+            <div class="row">
+                <div class="col-md-3">
+                    <select class="form-control" name="semesterCode">
+                        <option value="" th:selected="${param.semesterCode==null}">Филтрирај по семестар</option>
+                        <option th:each="semester : ${semesters}"
+                                th:value="${semester.code}"
+                                th:text="${semester.code}"
+                                th:selected="${param.semesterCode!=null && semester.code == param.semesterCode[0]}"></option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary">Филтрирај</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <hr>
+
+    <h2>Teacher Subject Requests</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Професор</th>
+            <th>Предмет</th>
+            <th>Приоритет</th>
+            <th>Преферира повеќе групи</th>
+            <th>Преферира аудиториски вежби</th>
+            <th>Преферира лабораториски вежби</th>
+            <th>Преференци за распоред</th>
+            <th>Забелешка</th>
+            <th>Акции</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacherSubjectRequest : ${requests}">
+            <td th:text="${teacherSubjectRequest.professor.name}"></td>
+            <td th:text="${teacherSubjectRequest.subject.name + ' (' + teacherSubjectRequest.subject.abbreviation + ')' }"></td>
+            <td th:text="${teacherSubjectRequest.priority}"></td>
+            <td th:text="${teacherSubjectRequest.preferMultipleGroups ? 'Да' : 'Не'}"></td>
+            <td th:text="${teacherSubjectRequest.preferAuditoriumExercises ? 'Да' : 'Не'}"></td>
+            <td th:text="${teacherSubjectRequest.preferLabExercises ? 'Да' : 'Не'}"></td>
+            <td th:text="${teacherSubjectRequest.schedulePreferences}"></td>
+            <td th:text="${teacherSubjectRequest.note}"></td>
+            <td>
+                <a class="btn btn-sm btn-primary"
+                   th:href="@{/admin/subject-requests/{professorId}/edit/{id}(professorId=${teacherSubjectRequest.professor.id},id=${teacherSubjectRequest.id})}">Промени</a>
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/admin/subject-requests/display/{id}(id=${teacherSubjectRequest.id})}">Детали</a>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/admin/subject-requests/{professorId}/delete/{id}(professorId=${teacherSubjectRequest.professor.id},id=${teacherSubjectRequest.id})}"
+                   onclick="return confirm('Дали сте сигурни дека сакате да го избришете овој предмет?')">Избриши</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Teacher Subject Allocations</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Semester</th>
+            <th>Subject</th>
+            <th>Professor</th>
+            <th>Lectures</th>
+            <th>Exercises</th>
+            <th>Labs</th>
+            <th>English</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        <tr th:each="allocation : ${allocations}">
+            <form th:object="${allocation}"
+                  th:id="${'allocation-form-' + allocation.id}"
+                  th:action="@{/admin/subject-teacher-allocation/{id}/update(id=${allocation.id})}"
+                  method="post">
+                <input type="hidden" name="allocationId" th:value="${allocation.id}"/>
+                <td th:text="${allocation.semester?.code}"></td>
+                <td>
+                    <a th:href="@{/admin/course-preferences(subjectId=${allocation.subject?.abbreviation})}"
+                       target="_blank"
+                       title="Open course preferences"
+                       th:text="${allocation.subject?.displayName()}"></a>
+                </td>
+                <td th:text="${allocation.professor?.name}"></td>
+                <td><input type="number" name="numberOfLectureGroups" class="form-control"
+                           th:value="${allocation.numberOfLectureGroups}" step="0.01"/></td>
+                <td><input type="number" name="numberOfExerciseGroups" class="form-control"
+                           th:value="${allocation.numberOfExerciseGroups}" step="0.01"/></td>
+                <td><input type="number" name="numberOfLabGroups" class="form-control"
+                           th:value="${allocation.numberOfLabGroups}" step="0.01"/></td>
+                <td>
+                    <input type="checkbox" name="englishGroup" class="form-check-label"
+                           th:checked="${allocation.englishGroup}"/>
+                </td>
+                <td>
+                    <button type="submit" class="btn btn-sm btn-success">Сними</button>
+                    <a th:href="@{/admin/subject-teacher-allocation/{id}/delete(id=${allocation.id})}"
+                       type="submit" class="btn btn-sm btn-danger"
+                       onclick="return confirm('Are you sure you want to delete this teacher subject allocation?')">Избриши</a>
+                </td>
+            </form>
+        </tr>
+        </tbody>
+    </table>
+
+    <h2>Joined Subject Groups</h2>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>semester</th>
+            <th>joinedSubject</th>
+            <th>professors</th>
+            <th>assistants</th>
+            <th>studentGroups</th>
+            <th>rooms</th>
+            <th># FirstEnrollments</th>
+            <th># ReEnrollments</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="ta : ${groups}">
+            <td th:text="${ta.semester.code}"></td>
+            <td>
+                <a th:text="${ta.joinedSubject.displayName()}"
+                   th:href="@{/admin/courses(semesterCode=${ta.semester.code},joinedSubject=${ta.joinedSubject.abbreviation})}"/>
+            </td>
+            <td>
+                <input type="text"
+                       th:id="${'professors-' + ta.id}"
+                       name="professors"
+                       title="Professors"
+                       th:value="${ta.professors}"/>
+            </td>
+            <td>
+                <input type="text"
+                       th:id="${'assistants-' + ta.id}"
+                       name="assistants"
+                       th:value="${ta.assistants}"
+                       title="Assistants"/>
+            </td>
+            <td>
+                <input type="text"
+                       th:id="${'groups-' + ta.id}"
+                       name="groups"
+                       th:value="${ta.groups}"
+                       title="Assistants"/>
+            </td>
+            <td>
+                <span th:each="sg: ${ta.rooms}" th:text="${sg.name}" class="me-1"></span>
+            </td>
+            <td th:text="${ta.numberOfFirstEnrollments}"></td>
+            <td th:text="${ta.numberOfReEnrollments}"></td>
+            <td>
+                <a class="btn btn-sm btn-success"
+                   th:data-id="${ta.id}"
+                   th:onclick="saveCourse(this.getAttribute('data-id'))">Сними</a>
+                <form th:action="@{/admin/courses/delete/{id}(id=${ta.id})}" method="post">
+                    <button type="submit" class="btn btn-danger btn-sm"
+                            onclick="return confirm('Are you sure you want to delete this joined subject group?')">
+                        Избриши
+                    </button>
+                </form>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function saveCourse(id) {
+            console.log(id);
+            var professors = $("#professors-" + id).val();
+            var assistants = $("#assistants-" + id).val();
+            var groups = $("#groups-" + id).val();
+            $.ajax("/api/courses/save/" + id, {
+                method: "POST",
+                data: {
+                    professors: professors,
+                    assistants: assistants,
+                    groups: groups
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa('riste.stojanov:SystemPass'));
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Грешка при зачувување");
+                }
+            });
+            return true;
+        }
+    </script>
+</div>
+</body>
+</html>

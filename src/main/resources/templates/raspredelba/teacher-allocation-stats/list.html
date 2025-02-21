@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Професори распределба</title>
+
+
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h3>Tacher allocation stats</h3>
+    <!--    <a class="btn btn-primary" th:href="@{/admin/teacher-allocation-stats/export}">Export</a>-->
+    <div class="d-flex">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="exportCheckbox">
+            <label class="form-check-label" for="exportCheckbox">Export</label>
+        </div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            console.log("DOM fully loaded and parsed");
+            const exportCheckbox = document.getElementById('exportCheckbox');
+            if (exportCheckbox) {
+                console.log("Checkbox found");
+                exportCheckbox.addEventListener('change', function () {
+                    console.log("Checkbox state changed");
+                    if (this.checked) {
+                        console.log("Checkbox is checked, sending request");
+                        fetch('/admin/teacher-allocation-stats/export', {
+                            method: 'GET'
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok ' + response.statusText);
+                                }
+                                return response.blob();
+                            })
+                            .then(blob => {
+                                console.log("Request successful, processing blob");
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.style.display = 'none';
+                                a.href = url;
+                                a.download = 'teacher_stats.tsv';
+                                document.body.appendChild(a);
+                                a.click();
+                                window.URL.revokeObjectURL(url);
+                            })
+                            .catch(error => console.error('There was a problem with the fetch operation:', error));
+                    }
+                });
+            } else {
+                console.log("Checkbox not found");
+            }
+        });
+    </script>
+    <form th:action="@{/admin/teacher-allocation-stats}" method="get" class="pb-3">
+        <div class="row">
+            <div class="col-12">
+                <h4>Filter allocations</h4>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control select2" name="semesterCode">
+                    <option value="" th:selected="${param.semester==null}">Филтрирање по семестар</option>
+                    <option th:each="semester : ${semesters}"
+                            th:value="${semester.code}"
+                            th:text="${semester.code}"
+                            th:selected="${param.semesterCode!=null && semester.code == param.semesterCode[0]}"></option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-control" id="professor" name="professorId">
+                    <option value="" selected>All Professors</option>
+                    <option th:each="professor : ${professors}" th:value="${professor.id}"
+                            th:text="${professor.name + ' (' + professor.id + ')'}"
+                            th:selected="${param.professorId!=null && professor.id == param.professorId[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" id="titles" name="professorTitle">
+                    <option value="" selected>All Titles</option>
+                    <option th:each="t : ${titles}" th:value="${t.name()}"
+                            th:text="${t.name()}"
+                            th:selected="${param.professorTitle!=null && t.name() == param.professorTitle[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+
+            <hr class="mb-2 mt-2"/>
+        </div>
+    </form>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Код на семестар</th>
+                <th>Професор</th>
+                <th>Вкупно часови (п+а+л)</th>
+
+                <th># предмети предавања</th>
+                <th># предмети вежби</th>
+                <th># предмети лаборатории</th>
+
+                <th># групи предавања</th>
+                <th># групи вежби</th>
+                <th># групи лаборатории</th>
+
+                <th># англиски групи предавања</th>
+                <th># англиски групи вежби</th>
+                <th># англиски групи лаборатории</th>
+
+                <th>Студенти на предавања</th>
+                <th>Студенти на вежби</th>
+                <th>Студенти на лаборатории</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ta : ${page.getContent()}">
+                <td th:text="${ta.semester.code}"></td>
+                <td>
+                    <a th:href="@{/admin/subject-teacher-allocation(semester=${ta.semester.code}, professor=${ta.professor.id})}"
+                       target="_blank"
+                       th:text="${ta.professor?.name}"></a>
+                </td>
+                <td th:text="${ta.totalClasses}"></td>
+                <td th:text="${ta.numberOfLectureSubjects}"></td>
+                <td th:text="${ta.numberOfExerciseSubjects}"></td>
+                <td th:text="${ta.numberOfLabSubjects}"></td>
+
+                <td th:text="${ta.numberOfLectureGroups}"></td>
+                <td th:text="${ta.numberOfExerciseGroups}"></td>
+                <td th:text="${ta.numberOfLabGroups}"></td>
+
+                <td th:text="${ta.numberOfLectureEnGroups}"></td>
+                <td th:text="${ta.numberOfExerciseEnGroups}"></td>
+                <td th:text="${ta.numberOfLabEnGroups}"></td>
+
+
+                <td th:text="${ta.totalLectureStudents}"></td>
+                <td th:text="${ta.totalExerciseStudents}"></td>
+                <td th:text="${ta.totalLabStudents}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:include="fragments/paging :: pageSection(${page})"></div>
+    </div>
+</div>
+</body>
+</html>

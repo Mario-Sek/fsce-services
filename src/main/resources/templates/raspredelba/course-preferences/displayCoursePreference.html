@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Course Preference Details</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>Course Preference Details</h1>
+    <table class="table table-bordered">
+        <tbody>
+        <tr>
+            <th scope="row">ID:</th>
+            <td th:text="${coursePreference.id}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Subject:</th>
+            <td th:text="${coursePreference.subject.name + ' (' + coursePreference.subject.abbreviation + ')' }"></td>
+        </tr>
+        <tr>
+            <th scope="row">Lecture Sharing:</th>
+            <td th:text="${coursePreference.lectureSharing}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Auditorium Exercises Sharing:</th>
+            <td th:text="${coursePreference.auditoriumExercisesSharing}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Prefer Online Lectures:</th>
+            <td th:text="${coursePreference.preferOnlineLectures}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Prefer Online Exercises:</th>
+            <td th:text="${coursePreference.preferOnlineExercises}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Lab Exercises as Consultations:</th>
+            <td th:text="${coursePreference.labExercisesAsConsultations}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <h1>Историја на промени</h1>
+    <table class="table table-bordered" th:each="h: ${coursePreference.getHistory()}">
+        <tbody>
+        <tr>
+            <th scope="row">ID:</th>
+            <td>
+                <span th:text="${h.id}"></span>
+                <form th:action="@{/admin/course-preferences/restore/{id}(id=${h.id})}"
+                      class="float-end"
+                      method="post">
+                    <input type="hidden" name="lectureSharing" th:value="${h.lectureSharing}">
+                    <input type="hidden" name="auditoriumExercisesSharing" th:value="${h.auditoriumExercisesSharing}">
+                    <input type="hidden" name="preferOnlineLectures" th:value="${h.preferOnlineLectures}">
+                    <input type="hidden" name="preferOnlineExercises" th:value="${h.preferOnlineExercises}">
+                    <input type="hidden" name="labExercisesAsConsultations" th:value="${h.labExercisesAsConsultations}">
+                    <button type="submit" class="btn btn-primary">Restore</button>
+                </form>
+            </td>
+        </tr>
+        <tr>
+            <th scope="row">Subject:</th>
+            <td th:text="${h.subject.displayName() }"></td>
+        </tr>
+        <tr>
+            <th scope="row">Lecture Sharing:</th>
+            <td th:text="${h.lectureSharing}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Auditorium Exercises Sharing:</th>
+            <td th:text="${h.auditoriumExercisesSharing}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Prefer Online Lectures:</th>
+            <td th:text="${h.preferOnlineLectures}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Prefer Online Exercises:</th>
+            <td th:text="${h.preferOnlineExercises}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Lab Exercises as Consultations:</th>
+            <td th:text="${h.labExercisesAsConsultations}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Update Time:</th>
+            <td th:text="${h.lastUpdateTime}"></td>
+        </tr>
+        <tr>
+            <th scope="row">Update User:</th>
+            <td th:text="${h.lastUpdateUser}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+</body>
+</html>

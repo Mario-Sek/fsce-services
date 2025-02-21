@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Semesters</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>Semesters</h1>
+    <a th:href="@{/admin/semester/add}">Create New Semester</a>
+
+    <table class="table table-bordered">
+        <tr>
+            <th scope="col">Code</th>
+            <th scope="col">Year</th>
+            <th scope="col">Semester Type</th>
+            <th scope="col">Start Date</th>
+            <th scope="col">End Date</th>
+            <th scope="col">Enrollment Start Date</th>
+            <th scope="col">Enrollment End Date</th>
+            <th scope="col">Cycle</th>
+            <th scope="col">State</th>
+            <th scope="col">Edit</th>
+        </tr>
+        <tr th:each="semester : ${page}">
+            <td th:text="${semester.code}"></td>
+            <td th:text="${semester.year}"></td>
+            <td th:text="${semester.semesterType}"></td>
+            <td th:text="${semester.startDate}"></td>
+            <td th:text="${semester.endDate}"></td>
+            <td th:text="${semester.enrollmentStartDate}"></td>
+            <td th:text="${semester.enrollmentEndDate}"></td>
+            <td>
+                <!-- ni treba ova zatoa shto multiple choice e cycle-->
+                <span th:each="cycle : ${semester.cycle}" th:text="${cycle} + ' '"></span>
+            </td>
+            <td th:text="${semester.state}"></td>
+            <td>
+                <a th:href="@{/admin/semester/edit/{code} (code=${semester.code})}">Edit</a>
+            </td>
+        </tr>
+    </table>
+
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+
+
+</div>
+</body>
+</html>

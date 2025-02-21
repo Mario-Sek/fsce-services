@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Преферирана на листа на предмети</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <div class="mb-3">
+        <h2>Пријавување на листа на предмети за </h2>
+        <h1 th:text="${professorId}"></h1>
+        <a class="btn btn-success ml-2"
+           th:href="@{/admin/subject-requests/{professorId}/add(professorId=${professorId})}">Add New</a>
+    </div>
+    <div class="mb-3">
+        Секој професор треба ја пополни оваа форма со листа на предмети
+        кои би сакал/а да ги држи, подредена по растечки редослед на приоритет (1 е највисок приоритет, 2 е следен, итн.).
+
+        Дополнително, за секој од предметите треба да наведете дали преферирате самите да ги изведувате аудиториските и
+        лабораториските вежби и дали би земале повеќе групи од предметот доколку има потреба.
+
+        Според овие информации ќе биде направена првичната распределба на настава.
+    </div>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Професор</th>
+            <th>Предмет</th>
+            <th>Приоритет</th>
+            <th>Преферира повеќе групи</th>
+            <th>Преферира аудиториски вежби</th>
+            <th>Преферира лабораториски вежби</th>
+            <th>Преференци за распоред</th>
+            <th>Забелешка</th>
+            <th>Акции</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacherSubjectRequest : ${page.getContent()}">
+            <td th:text="${teacherSubjectRequest.professor.name}"></td>
+            <td th:text="${teacherSubjectRequest.subject.name + ' (' + teacherSubjectRequest.subject.abbreviation + ')' }"></td>
+            <td th:text="${teacherSubjectRequest.priority}"></td>
+            <td th:text="${teacherSubjectRequest.preferMultipleGroups ? 'Да' : 'Не'}"></td>
+            <td th:text="${teacherSubjectRequest.preferAuditoriumExercises ? 'Да' : 'Не'}"></td>
+            <td th:text="${teacherSubjectRequest.preferLabExercises ? 'Да' : 'Не'}"></td>
+            <td th:text="${teacherSubjectRequest.schedulePreferences}"></td>
+            <td th:text="${teacherSubjectRequest.note}"></td>
+            <td>
+                <a class="btn btn-sm btn-primary"
+                   th:href="@{/admin/subject-requests/{professorId}/edit/{id}(professorId=${teacherSubjectRequest.professor.id},id=${teacherSubjectRequest.id})}">Промени</a>
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/admin/subject-requests/display/{id}(id=${teacherSubjectRequest.id})}">Детали</a>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/admin/subject-requests/{professorId}/delete/{id}(professorId=${teacherSubjectRequest.professor.id},id=${teacherSubjectRequest.id})}"
+                   onclick="return confirm('Дали сте сигурни дека сакате да го избришете овој предмет?')">Избриши</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+
+</div>
+</body>
+</html>

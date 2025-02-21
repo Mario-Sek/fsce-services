@@ -20,6 +20,38 @@ public class CsvImportRepository implements ImportRepository {
     private CsvMapper mapper = new CsvMapper();
 
     @Override
+    public <T> List<T> readTypeList(MultipartFile file, Class<T> clazz) {
+        List<T> enrollments = new ArrayList<>();
+        CsvSchema schema = mapper.schemaFor(clazz)
+                .withHeader()
+                .withLineSeparator("\n")
+                .withColumnSeparator('\t');
+
+        try (BufferedReader br = new BufferedReader(new InputStreamReader(file.getInputStream()))) {
+            MappingIterator<T> r = mapper
+                    .reader(clazz)
+                    .with(schema)
+                    .readValues(br);
+            while (r.hasNext()) {
+                enrollments.add(r.nextValue());
+            }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return enrollments;
+    }
+
+    @Override
+    public <T> void writeTypeList(Class<T> clazz, List<T> entities, OutputStream outputStream) throws IOException {
+        CsvSchema schema = mapper.schemaFor(clazz)
+                .withHeader()
+                .withLineSeparator("\n")
+                .withColumnSeparator('\t');
+        mapper.writer(schema).writeValue(outputStream, entities);
+        outputStream.flush();
+    }
+
+    @Override
     public <T> List<T> readFile(MultipartFile file, Class<T> clazz) {
         List<T> enrollments = new ArrayList<>();
         CsvSchema schema = mapper.schemaFor(clazz)

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="~{layout}">
+<head>
+    <title>Организација на настава по предмет</title>
+</head>
+<body>
+
+<div class="mt-4" layout:fragment="content">
+    <div class="mb-3">
+        За секој предмет треба да одговори еден професор во координација со останатите. Се зачувува последната
+        модификација.
+
+        Објаснување:
+        <ul>
+            <li>
+                <b>NONE</b> означува дека предметот има само еден професор и нема потреба за специфицирање на начин за
+                изведување на наставата.
+            </li>
+            <li>
+                <b>Тематска настава (TOPICS)</b> означува дека еден наставник ќе ја покрие наставата за сите групи во
+                рамките на една недела (тема)
+            </li>
+            <li>
+                <b>Поделба по групи (STUDENT_GROUPS)</b> означува дека еден наставник ќе ја покрие наставата само за
+                групите за кои е распределен/а
+            </li>
+            <li>
+                За лабораториските кои не се консултативни, ќе ви бидат доделени простории само за студентите кои прв
+                пат го запишуваат предметот
+            </li>
+        </ul>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6" sec:authorize="hasRole('ROLE_ADMIN')">
+            <div class="card">
+                <div class="card-header">
+                    Import course preferences
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/admin/course-preferences/import}" method="post"
+                          enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <label class="col-3 col-form-label" for="semester">Semester:</label>
+                                    <div class="col-9">
+                                        <select class="form-control" id="semester" name="semester" required>
+                                            <option value="" disabled>Select semester</option>
+                                            <option th:each=" s : ${semesters}" th:value="${s.code}"
+                                                    th:text="${s.code}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group mt-1">
+                                    <input class="form-control" type="file" name="file" id="file" required>
+                                </div>
+                            </div>
+                            <div class="col-12 text-end">
+                                <button class="btn  btn-primary mt-2 mb-2" type="submit">Import</button>
+                                <a th:href="@{/admin/course-preferences/sample-tsv}"
+                                   class="btn  btn-secondary mt-2 mb-2">Template</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="mb-3">
+        <a class="btn btn-success ml-2" href="/admin/course-preferences/add">Додади нов предмет</a>
+    </div>
+
+
+
+    <form th:action="@{/admin/course-preferences}" method="get" class="mb-4">
+        <div class="row">
+            <hr/>
+            <div class="col-md-2">
+                <input type="text" th:value="${param.subjectName}" placeholder="Subject Name" name="subjectName"
+                       class="form-control"/>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" name="lectureSharing">
+                    <option value="" selected>Select Lecture Sharing</option>
+                    <option value="NONE">NONE</option>
+                    <option value="TOPICS">TOPICS</option>
+                    <option value="STUDENT_GROUPS">STUDENT_GROUPS</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" name="auditoriumExercisesSharing">
+                    <option value="" selected>Select Auditorium Exercises Sharing</option>
+                    <option value="NONE">NONE</option>
+                    <option value="TOPICS">TOPICS</option>
+                    <option value="STUDENT_GROUPS">STUDENT_GROUPS</option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input type="checkbox" name="preferOnlineLectures" value="true"/> Prefer Online Lectures
+            </div>
+            <div class="col-md-1">
+                <input type="checkbox" name="preferOnlineExercises" value="true"/> Prefer Online Exercises
+            </div>
+            <div class="col-md-1">
+                <input type="checkbox" name="labExercisesAsConsultations" value="true"/> Lab as Consultations
+            </div>
+            <div class="col-md-1">
+                <input type="checkbox" name="export" value="true"/> Export
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+            <hr/>
+        </div>
+    </form>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Предмет</th>
+            <th>Организација на предавања</th>
+            <th>Организација на аудиториски</th>
+            <th>Преферирани онлајн предавања</th>
+            <th>Преферирани онлајн аудиториски</th>
+            <th>Консултативни лабораториски</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="coursePreference : ${page.getContent()}">
+            <td th:text="${coursePreference.subject.name}"></td>
+            <td th:text="${coursePreference.lectureSharing}"></td>
+            <td th:text="${coursePreference.auditoriumExercisesSharing}"></td>
+            <td th:text="${coursePreference.preferOnlineLectures? 'Да' : 'Не'}"></td>
+            <td th:text="${coursePreference.preferOnlineExercises? 'Да' : 'Не'}"></td>
+            <td th:text="${coursePreference.labExercisesAsConsultations? 'Да' : 'Не'}"></td>
+            <td>
+                <a class="btn btn-sm btn-primary"
+                   th:href="@{/admin/course-preferences/edit/{id}(id=${coursePreference.id})}">Edit</a>
+                <a class="btn btn-sm btn-info"
+                   th:href="@{/admin/course-preferences/display/{id}(id=${coursePreference.id})}"
+                   sec:authorize="hasRole('ROLE_ADMIN')">Details</a>
+                <a class="btn btn-sm btn-danger"
+                   th:href="@{/admin/course-preferences/delete/{id}(id=${coursePreference.id})}"
+                   sec:authorize="hasRole('ROLE_ADMIN')"
+                   onclick="return confirm('Are you sure you want to delete this course preference?')">Delete</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+
+
+</div>
+</body>
+</html>

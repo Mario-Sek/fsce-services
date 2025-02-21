@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Add New Joined Subject</title>
+
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>Add New Joined Subject</h1>
+    <form th:action="@{/admin/courses/save}" th:object="${course}" method="post">
+
+        <div class="form-group">
+            <label for="semesterType">Semester:</label>
+            <select class="form-control" id="semesterType" th:field="*{semester}" required>
+                <option th:each="semester : ${semesters}"
+                        th:value="${semester.code}" th:text="${semester.code}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="mainSubject">Subject:</label>
+            <select class="form-control" id="mainSubject" th:field="*{joinedSubject}" required>
+                <option value="" disabled selected>Subject</option>
+                <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                        th:text="${subject.displayName()}"></option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="professors">Professors:</label>
+            <input type="text" class="form-control" id="professors" th:field="*{professors}"
+            >
+        </div>
+        <div class="form-group">
+            <label for="asistants">Assistants:</label>
+            <input type="text" class="form-control" id="asistants" th:field="*{assistants}"
+            >
+        </div>
+        <div class="form-group">
+            <label for="groups">Groups:</label>
+            <input type="text" class="form-control" id="groups" th:field="*{groups}">
+        </div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+</div>
+
+</body>
+</html>

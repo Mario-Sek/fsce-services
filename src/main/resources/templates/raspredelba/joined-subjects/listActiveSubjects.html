@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Активирани предмети</title>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+
+
+</head>
+<body>
+<div class="mt-4 container">
+    <div class="mb-3">
+        <h1>Листа на активни предмети</h1>
+    </div>
+
+    <form th:action="@{/active-subjects}" method="get" class="pb-3">
+        <div class="row">
+            <div class="col-md-3">
+                <input type="text" class="form-control"
+                       placeholder="Филтрирај по име или код на предмет"
+                       name="name"
+                       th:value="${param.name}">
+            </div>
+            <div class="col-md-3">
+                <select class="form-control select2" name="semesterType">
+                    <option value="" th:selected="${param.semesterType==null}">Филтрирање по тип на семестар</option>
+                    <option th:each="semester : ${T(mk.ukim.finki.wp.fcseservices.model.SemesterType).values()}"
+                            th:value="${semester}"
+                            th:text="${semester}"
+                            th:selected="${param.semesterType!=null && semester.name() == param.semesterType[0]}"></option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+        </div>
+    </form>
+
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Предмет</th>
+            <th>Кодови на предмети</th>
+            <th>Семестар</th>
+            <th>Професори кои го побарале предметот</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="subjectDTO : ${page.getContent()}">
+            <td th:text="${subjectDTO.getSubject().displayName()}"></td>
+            <td>
+                <span th:each="code : ${subjectDTO.getSubject().codesList()}">
+                   <a th:text="${code}"
+                      target="_blank"
+                      th:href="@{__${subjectDetailsPath}__/{code}(code=${code.trim()})}"></a>;
+                </span>
+            </td>
+            <td th:text="${subjectDTO.getSubject().semesterType}"></td>
+            <td th:text="${subjectDTO.professorsToString()}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
+<script>
+    $(document).ready(function () {
+        // Initialize Select2 for the dropdowns
+        $('.select2').select2();
+    });
+</script>
+</body>
+</html>

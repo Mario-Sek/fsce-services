@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Import Form</title>
+</head>
+<body>
+<div layout:fragment="content" class="mt-4">
+    <div class="row">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    Import student subject enrollments
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/admin/enroll/student-subject/import}" method="post"
+                          enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row">
+                                    <label class="col-3 col-form-label" for="semester">Semester:</label>
+                                    <div class="col-9">
+                                        <select class="form-control" id="semester" name="semester" required>
+                                            <option value="" disabled>Select semester</option>
+                                            <option th:each="s : ${semesters}" th:value="${s.code}"
+                                                    th:text="${s.code}"></option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group mt-1">
+                                    <input class="form-control" type="file" name="file" id="file" required>
+                                </div>
+                            </div>
+                            <div class="col-12 text-end">
+                                <button class="btn  btn-primary mt-2 mb-2" type="submit">Import</button>
+                                <a th:href="@{/admin/enroll/student-subject/sample-tsv}"
+                                   class="btn  btn-secondary mt-2 mb-2">Template</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            <div class="col-12 mb-4">
+                <form id="delete-enrollment-form" th:action="@{/admin/enroll/student-subject/delete}" method="post">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="row">
+                                <label class="col-3 col-form-label" for="delete-semester">Semester:</label>
+                                <div class="col-9">
+                                    <select class="form-control" id="delete-semester" name="semester" required>
+                                        <option value="" disabled>Select semester</option>
+                                        <option th:each="s : ${semesters}" th:value="${s.code}"
+                                                th:text="${s.code}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <button class="btn btn-danger " type="submit">Delete</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12">
+                <form th:action="@{/admin/enroll/student-subject/allocate-groups-subjects}" method="post">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="row">
+                                <label class="col-3 col-form-label" for="delete-semester">Semester:</label>
+                                <div class="col-9">
+                                    <select class="form-control" id="allocate-semester" name="semester" required>
+                                        <option value="" disabled>Select semester</option>
+                                        <option th:each="s : ${semesters}" th:value="${s.code}"
+                                                th:text="${s.code}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <button class="btn btn-primary " type="submit">Allocate groups</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="col-12">
+                <form th:action="@{/admin/enroll/student-subject/allocate-professors}" method="post">
+                    <div class="row">
+                        <div class="col-5">
+                            <div class="row">
+                                <label class="col-3 col-form-label" for="delete-semester">Semester:</label>
+                                <div class="col-9">
+                                    <select class="form-control" id="allocate-professor" name="semester" required>
+                                        <option value="" disabled>Select semester</option>
+                                        <option th:each="s : ${semesters}" th:value="${s.code}"
+                                                th:text="${s.code}"></option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-7">
+                            <button class="btn btn-primary " type="submit">Allocate professors</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <form th:action="@{/admin/enroll/student-subject}" method="get">
+        <div class="row">
+
+            <div class="col-12">
+                <h4>Filter enrollments</h4>
+            </div>
+            <div class="col-md-1">
+                <input type="text" th:value="${param.studentId}" placeholder="Student index" name="studentId"
+                       class="form-control"/>
+            </div>
+            <div class="col-md-2">
+                <input type="text" th:value="${param.subject}" placeholder="Subject code" name="subject"
+                       class="form-control"/>
+            </div>
+            <div class="col-md-2">
+                <input type="text" th:value="${param.groupName}" placeholder="Group name" name="groupName"
+                       class="form-control"/>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control select2" name="semesterCode">
+                    <option value="" th:selected="${param.semesterCode==null}">Филтрирање по семестар</option>
+                    <option th:each="semester : ${semesters}"
+                            th:value="${semester.code}"
+                            th:text="${semester.code}"
+                            th:selected="${param.semesterCode!=null && semester.code == param.semesterCode[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" id="subject" name="joinedSubject">
+                    <option value="" selected>All Subjects</option>
+                    <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                            th:text="${subject.name + ' (' + subject.abbreviation + ')'}"
+                            th:selected="${param.joinedSubject!=null && subject.abbreviation == param.joinedSubject[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input type="checkbox" name="export" value="true"/> Export
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+        </div>
+
+
+    </form>
+    <div class="mt-4">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Student</th>
+                <th>Study Program</th>
+                <th>Subject</th>
+                <th># Enrollments</th>
+                <th>Semester</th>
+                <th>Group</th>
+                <th>Joined Subject</th>
+                <th>Professor</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="enrollment : ${page.content}">
+                <td th:text="${enrollment.student.displayName()}"></td>
+                <td th:text="${enrollment.student?.studyProgram?.code}"></td>
+                <td th:text="${enrollment.subject.displayName()}"></td>
+                <td th:text="${enrollment.numEnrollments}"></td>
+                <td th:text="${enrollment.semester.code}"></td>
+                <td th:text="${enrollment.groupName}"></td>
+                <td th:text="${enrollment.joinedSubject?.name}"></td>
+                <td th:text="${enrollment.professorId}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+</div>
+</body>
+</html>

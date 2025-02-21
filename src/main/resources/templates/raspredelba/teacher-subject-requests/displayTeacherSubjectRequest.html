@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <title>Teacher Subject Request Details</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+  <h1>Teacher Subject Request Details</h1>
+  <table class="table table-bordered">
+    <tbody>
+    <tr>
+      <th scope="row">Professor Name:</th>
+      <td th:text="${teacherSubjectRequest.professor.name}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Subject:</th>
+      <td th:text="${teacherSubjectRequest.subject.name + ' (' + teacherSubjectRequest.subject.abbreviation + ')' }"></td>
+    </tr>
+    <tr>
+      <th scope="row">Priority:</th>
+      <td th:text="${teacherSubjectRequest.priority}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Prefer Multiple Groups:</th>
+      <td th:text="${teacherSubjectRequest.preferMultipleGroups ? 'Yes' : 'No'}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Prefer Auditorium Exercises:</th>
+      <td th:text="${teacherSubjectRequest.preferAuditoriumExercises ? 'Yes' : 'No'}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Prefer Lab Exercises:</th>
+      <td th:text="${teacherSubjectRequest.preferLabExercises ? 'Yes' : 'No'}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Schedule Preferences:</th>
+      <td th:text="${teacherSubjectRequest.schedulePreferences}"></td>
+    </tr>
+    <tr>
+      <th scope="row">Note:</th>
+      <td th:text="${teacherSubjectRequest.note}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html  xmlns:th="http://www.thymeleaf.org"
+       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+       layout:decorate="~{layout}">
+<head>
+    <meta>
+    <title>Add semester</title>
+</head>
+<body>
+
+<div class="mt-4" layout:fragment="content">
+    <form th:action="@{/admin/semester/save{id}(id=${semester != null ? '/' + semester.code : ''})}" method="POST">
+        <div class="mb-3" th:if="${semester != null}">
+            <label for="code" class="form-label">Code</label>
+            <input type="text" class="form-control" id="code" name="code" th:value="${semester.code}">
+        </div>
+        <div class="mb-3">
+            <label for="year" class="form-label">Year</label>
+            <input type="text"
+                   class="form-control"
+                   id="year"
+                   name="year"
+                   th:value="${semester?.year ?: ''}"
+                   placeholder="Enter semester year (Format: 2024-25)"
+                   pattern="[0-9]{4}-[0-9]{2}" >
+        </div>
+        <div class="mb-3">
+            <label for="startDate" class="form-label">Start date</label>
+            <input type="date"
+                   class="form-control"
+                   id="startDate"
+                   name="startDate"
+                   th:value="${semester?.startDate ?: ''}"
+                   placeholder="Start Date">
+        </div>
+        <div class="mb-3">
+            <label for="endDate" class="form-label">End date</label>
+            <input type="date"
+                   class="form-control"
+                   id="endDate"
+                   name="endDate"
+                   th:value="${semester?.endDate ?: ''}"
+                   placeholder="End Date">
+        </div>
+        <div class="mb-3">
+            <label for="enrollmentStartDate" class="form-label">Enrollment Start date</label>
+            <input type="date"
+                   class="form-control"
+                   id="enrollmentStartDate"
+                   name="enrollmentStartDate"
+                   th:value="${semester?.enrollmentStartDate ?: ''}"
+                   placeholder="Enrollment Start Date">
+        </div>
+        <div class="mb-3">
+            <label for="enrollmentEndDate" class="form-label">Enrollment End date</label>
+            <input type="date"
+                   class="form-control"
+                   id="enrollmentEndDate"
+                   name="enrollmentEndDate"
+                   th:value="${semester?.enrollmentEndDate ?: ''}"
+                   placeholder="Enrollment End Date">
+        </div>
+        <div class="mb-3">
+            <label for="semesterType" class="form-label">Semester Type</label>
+            <select id="semesterType" name="semesterType" class="form-select">
+                <option th:each="type : ${T(mk.ukim.finki.wp.fcseservices.model.SemesterType).values()}"
+                        th:value="${type}" th:text="${type}"
+                        th:selected="${semester?.semesterType == type}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="cycles" class="form-label">Semester Cycle</label>
+            <select id="cycles" name="cycles" class="form-select" multiple="multiple">
+                <option th:each="cycle : ${T(mk.ukim.finki.wp.fcseservices.model.enums.StudyCycle).values()}"
+                        th:value="${cycle}" th:text="${cycle}"
+                        th:selected="${semester?.cycle?.contains(cycle)}"></option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="state" class="form-label">Start date</label>
+            <select id="state" name="state" class="form-select">
+                <option th:each="state : ${T(mk.ukim.finki.wp.fcseservices.model.SemesterState).values()}"
+                        th:value="${state}" th:text="${state}"
+                        th:selected="${semester?.state == state}"></option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

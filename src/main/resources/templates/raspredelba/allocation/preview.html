@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${'Распределба за '+semesterCode}"></title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h3 th:text="${'Распределба за '+semesterCode}"></h3>
+
+    <form th:action="@{/allocation/{id}(id=${allocationId})}" method="get" class="pb-3">
+        <div class="row">
+            <div class="col-md-5">
+                <select class="form-control" id="professor" name="professor">
+                    <option value="" selected>Сите професори</option>
+                    <option th:each="professor : ${professors}" th:value="${professor.id}"
+                            th:text="${professor.name + ' (' + professor.id + ')'}"
+                            th:selected="${param.professor!=null && professor.id == param.professor[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-5">
+                <select class="form-control" id="subject" name="subject">
+                    <option value="" selected>Сите предмети</option>
+                    <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                            th:text="${subject.displayName()}"
+                            th:selected="${param.subject!=null && subject.abbreviation == param.subject[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary d-print-none">Филтрирај</button>
+            </div>
+
+            <hr class="mb-2 mt-2"/>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-12" th:each="subject: ${subjectAllocations}">
+            <h3 th:text="${subject.key.displayName()}"></h3>
+            <table class="table table-bordered table-striped">
+                <thead>
+                <tr>
+                    <th>Професор</th>
+                    <th>Предавања</th>
+                    <th>Аудиториски</th>
+                    <th>Лабораториски</th>
+                    <th>Англиска група</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="allocation : ${subject.value}">
+                    <td th:text="${allocation.professor?.name}"></td>
+                    <td th:text="${allocation.numberOfLectureGroups}"></td>
+                    <td th:text="${allocation.numberOfExerciseGroups}"></td>
+                    <td th:text="${allocation.numberOfLabGroups}"></td>
+                    <td th:text="${allocation.englishGroup == true ? 'Да': 'Не'}"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+</body>
+</html>

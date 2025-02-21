@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Edit Joined Subject ID</title>
+</head>
+<body>
+<div class="container mt-4" layout:fragment="content">
+    <h1>Edit Joined Subject ID</h1>
+
+    <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+        <p th:text="${errorMessage}"></p>
+    </div>
+
+    <form th:action="@{/admin/joined-subjects/save-id}" th:object="${joinedSubject}" method="post">
+        <div class="form-group">
+            <input type="text" class="form-control" id="oldAbbreviation" name="abbreviation" th:field="*{abbreviation}"
+                   hidden>
+        </div>
+        <div class="form-group">
+            <label for="newId">New ID:</label>
+            <input type="text" class="form-control" id="newId" name="newId" required>
+        </div>
+
+        <div class="mt-4" th:include="joined-subjects/display :: joinedSubjectDetails"></div>
+
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+</body>
+</html>

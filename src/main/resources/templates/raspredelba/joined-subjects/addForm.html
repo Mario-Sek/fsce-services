@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Add New Joined Subject</title>
+
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>Add New Joined Subject</h1>
+    <form th:action="@{/admin/joined-subjects/save}" th:object="${joinedSubject}" method="post">
+        <div class="form-group">
+            <label for="abbreviation">Abbreviation:</label>
+            <input type="text" class="form-control" id="abbreviation" th:field="*{abbreviation}" required>
+        </div>
+        <div class="form-group">
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}" required>
+        </div>
+        <div class="form-group">
+            <label for="codes">Codes:</label>
+            <input type="text" class="form-control" id="codes" th:field="*{codes}">
+        </div>
+        <div class="form-group">
+            <label for="semesterType">Semester Type:</label>
+            <select class="form-control" id="semesterType" th:field="*{semesterType}" required>
+                <option th:each="semester : ${T(mk.ukim.finki.wp.fcseservices.model.SemesterType).values()}"
+                        th:value="${semester}" th:text="${semester}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="mainSubject">Main Subject:</label>
+            <select class="form-control" id="mainSubject" name="mainSubjectId" required>
+                <option value="" disabled selected>Select Main Subject</option>
+                <option th:each="subject : ${subjects}" th:value="${subject.id}"
+                        th:text="${subject.name + ' (' + subject.id + ')'}"></option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="weeklyLecturesClasses">Weekly Lectures Classes:</label>
+            <input type="number" class="form-control" id="weeklyLecturesClasses" th:field="*{weeklyLecturesClasses}"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="weeklyAuditoriumClasses">Weekly Auditorium Classes:</label>
+            <input type="number" class="form-control" id="weeklyAuditoriumClasses" th:field="*{weeklyAuditoriumClasses}"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="weeklyLabClasses">Weekly Lab Classes:</label>
+            <input type="number" class="form-control" id="weeklyLabClasses" th:field="*{weeklyLabClasses}" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+
+</div>
+
+</body>
+</html>

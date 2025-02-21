@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <title>Студенти</title>
+</head>
+<body>
+<div layout:fragment="content" class="mt-4">
+
+
+    <form th:action="@{/admin/students/import}" method="post"
+          enctype="multipart/form-data">
+        <div class="row">
+            <div class="col-10">
+                <div class="form-group mt-1">
+                    <input class="form-control" type="file" name="file" id="file" required>
+                </div>
+            </div>
+            <div class="col-2">
+                <button class="btn  btn-primary mt-2 mb-2" type="submit">Import</button>
+                <a th:href="@{/admin/students/sample-tsv}"
+                   class="btn  btn-secondary mt-2 mb-2">Template</a>
+            </div>
+            <hr/>
+        </div>
+    </form>
+
+
+    <div class="mt-4">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Index</th>
+                <th>Name and Last name</th>
+                <th>Email</th>
+                <th>Study Program</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="student : ${page.content}">
+                <td th:text="${student.index}"></td>
+                <td>
+                    <span th:text="${student.name}"></span>
+                    <span th:text="${student.lastName}"></span>
+                </td>
+                <td th:text="${student.email}"></td>
+                <td th:text='${student.studyProgram.code +" "+ student.studyProgram.name}'></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+</div>
+</body>
+</html>

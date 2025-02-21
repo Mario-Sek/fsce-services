@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${joinedSubject.displayName()}"></title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>
+        <span th:text="${joinedSubject.displayName()}"></span>
+    </h1>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <h2>Teacher subject allocations:</h2>
+            <div th:each="semesterAllocations : ${allocationsBySemester}">
+                <h2>Semester: <span th:text="${semesterAllocations.key.code}"></span></h2>
+                <div class="col-12" th:if="${semesterStats.get(semesterAllocations.key) != null}">
+                    <b th:text="${semesterStats.get(semesterAllocations.key).numberOfFirstTimeStudents}"></b> FTS,
+                    <b th:text="${semesterStats.get(semesterAllocations.key).numberOfReEnrollmentStudents}"></b> RES,
+                    G:
+                    <input type="number" th:id='${"sa-num-groups-"+ semesterStats.get(semesterAllocations.key).id}'
+                           th:value="${semesterStats.get(semesterAllocations.key).numberOfGroups}"
+                           class="form-control form-control-sm" style="width: 80px;display: inline">
+                    (ideally <b th:text="${semesterStats.get(semesterAllocations.key).calculatedNumberOfGroups}"></b>),
+                    <b th:text="${semesterStats.get(semesterAllocations.key).averageStudentsPerGroup}"></b> SPG
+                    <b th:if="${semesterStats.get(semesterAllocations.key).mentorshipCourse}">Mentorship Course</b>
+                    <div class="text-right d-inline ml-5">
+                        <a class="btn btn-sm btn-success"
+                           th:data-id="${semesterStats.get(semesterAllocations.key).id}"
+                           onclick="saveSubjectAllocationStats(this.getAttribute('data-id'))">Save</a>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Professor</th>
+                        <th>Lectures (<b
+                                th:text="${T(mk.ukim.finki.wp.fcseservices.model.SubjectAllocationStats).sumLectureGroups(semesterAllocations.value.stream())}"></b>/<b
+                                th:text="${semesterStats.get(semesterAllocations.key)?.numberOfGroups}"></b>)
+                        </th>
+                        <th>Exercises (<b
+                                th:text="${T(mk.ukim.finki.wp.fcseservices.model.SubjectAllocationStats).sumExerciseGroups(semesterAllocations.value.stream())}"></b>/<b
+                                th:text="${semesterStats.get(semesterAllocations.key)?.numberOfGroups}"></b>)
+                        </th>
+                        <th>Labs (<b
+                                th:text="${T(mk.ukim.finki.wp.fcseservices.model.SubjectAllocationStats).sumLabGroups(semesterAllocations.value.stream())}"></b>/<b
+                                th:text="${semesterStats.get(semesterAllocations.key)?.numberOfGroups}"></b>)
+                        </th>
+                        <th>En</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="allocation : ${semesterAllocations.value}">
+                        <form th:object="${teacherSubjectAllocation}"
+                              th:action="@{/admin/subject-teacher-allocation/{id}/update(id=${allocation.id})}"
+                              method="post">
+                            <input type="hidden" name="joined-subject-id" th:value="${joinedSubjectId}"/>
+                            <td>
+                                <a th:href="@{/admin/subject-teacher-allocation(semester=${allocation.semester?.code}, professor=${allocation.professor?.id})}"
+                                   target="_blank"
+                                   th:text="${allocation.professor?.name}"></a>
+                                <i class="bi bi-exclamation-triangle text-warning"
+                                   th:if="${allocation.validationMessage != null && !allocation.validationMessage.isEmpty()}"
+                                   th:title="${allocation.validationMessage}"></i>
+                            </td>
+                            <td><input type="number" name="numberOfLectureGroups" class="form-control"
+                                       th:value="${allocation.numberOfLectureGroups}" step="0.01"/></td>
+                            <td><input type="number" name="numberOfExerciseGroups" class="form-control"
+                                       th:value="${allocation.numberOfExerciseGroups}" step="0.01"/></td>
+                            <td><input type="number" name="numberOfLabGroups" class="form-control"
+                                       th:value="${allocation.numberOfLabGroups}" step="0.01"/></td>
+                            <td><input type="checkbox" name="englishGroup" class="form-check-label"
+                                       th:checked="${allocation.englishGroup}"/></td>
+                            <td>
+                                <button type="submit" class="btn btn-sm btn-success">
+                                    <i class="bi bi-floppy"></i>
+                                </button>
+                                <a th:href="@{/admin/subject-teacher-allocation/{id}/delete(id=${allocation.id}, joined-subject-id=${joinedSubjectId})}"
+                                   type="submit" class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Are you sure you want to delete this semester allocation?')">
+                                    <i class="bi bi-trash"></i>
+                                </a>
+                            </td>
+                        </form>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <a class="btn btn-sm btn-success" sec:authorize="hasRole('ROLE_ADMIN')"
+               th:href="@{/admin/subject-teacher-allocation/{joined-subject-id}/history(joined-subject-id=${joinedSubjectId})}">
+                View Previous Semesters</a>
+        </div>
+        <div class="col-md-6">
+            <h2>Courses:</h2>
+            <div th:each="semesterAllocations : ${courses}">
+                <h2>Semester: <span th:text="${semesterAllocations.key.code}"></span></h2>
+                <div class="col-12" th:if="${semesterStats.get(semesterAllocations.key)!=null}">
+                    Students: <b th:text="${semesterStats.get(semesterAllocations.key).totalStudents}"></b>
+                    <a th:href="@{/admin/courses/create(semester=${semesterAllocations.key.code}, joinedSubject=${joinedSubject.abbreviation})}"
+                       class="btn btn-sm btn-primary d-inline"
+                       target="_blank">
+                        Courses
+                    </a>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Professors</th>
+                        <th>Assistants</th>
+                        <th>Student Groups</th>
+                        <th># 1</th>
+                        <th># 2+</th>
+                        <th>En</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ta : ${semesterAllocations.value}">
+
+
+                        <td>
+                            <select th:id="'professors-' + ${ta.id}" name="professors" multiple="multiple"
+                                    title="Professors">
+                                <option th:each="professor : ${professorsWithClasses}"
+                                        th:value="${professor.id}"
+                                        th:text="${professor.name}"
+                                        th:selected="${ta != null ? ta.professors.contains(professor) : false}"></option>
+                            </select>
+                        </td>
+
+                        <td>
+                            <select th:id="'assistants-' + ${ta.id}" name="assistants" multiple="multiple"
+                                    title="Assistants">
+                                <option th:each="assistant : ${professorsWithClasses}"
+                                        th:value="${assistant.id}"
+                                        th:text="${assistant.name}"
+                                        th:selected="${ta != null ? ta.assistants.contains(assistant) : false}"></option>
+                            </select>
+                        </td>
+                        <td>
+                            <input type="text" th:id="'groups-' + ${ta.id}" name="groups" th:value="${ta.groups}"
+                                   title="Groups" class="form-control"/>
+                        </td>
+                        <td>
+                            <input type="checkbox" th:id="'english-' + ${ta.id}" name="english"
+                                   th:checked="${ta.english}" title="English"/>
+                        </td>
+                        <td th:text="${ta.numberOfFirstEnrollments}"></td>
+                        <td th:text="${ta.numberOfReEnrollments}"></td>
+                        <td>
+                            <a class="btn btn-sm btn-success" th:data-id="${ta.id}"
+                               th:onclick="saveCourse(this.getAttribute('data-id'))">
+                                <i class="bi bi-floppy"></i>
+                            </a>
+                            <form th:action="@{/admin/courses/delete/{id}(id=${ta.id})}" method="post">
+                                <button type="submit" class="btn btn-danger btn-sm"
+                                        onclick="return confirm('Are you sure you want to delete this joined subject group?')">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+    </div>
+    <hr>
+    <div class="row">
+        <div class="col-3">
+            <form th:action="@{/admin/subject-teacher-allocation/{joined-subject-id}/save(joined-subject-id=${joinedSubjectId})}"
+                  th:object="${teacherSubjectAllocation}" method="post">
+                <div class="form-group">
+                    <label for="professor">Professor:</label>
+                    <select class="form-control my-2" id="professor" name="professorId" required>
+                        <option value="" disabled selected>Select Professor</option>
+                        <option th:each="professor : ${professors}" th:value="${professor.id}"
+                                th:text="${professor.name}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="semester">Semester:</label>
+                    <select class="form-control my-2" id="semester" name="semesterId" required>
+                        <option value="" disabled th:selected="${defaultSemesterCode!=null}">Select Semester</option>
+                        <option th:each="semester : ${semesters}" th:value="${semester.code}"
+                                th:text="${semester.code}"
+                                th:selected="${defaultSemesterCode==semester.code}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="lectureGroups">Number of Lecture Groups:</label>
+                    <input type="number" class="form-control my-2" id="lectureGroups" name="numberOfLectureGroups"
+                           th:field="*{numberOfLectureGroups}" th:value="1" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="exerciseGroups">Number of Exercise Groups:</label>
+                    <input type="number" class="form-control my-2" id="exerciseGroups" name="numberOfExerciseGroups"
+                           th:field="*{numberOfExerciseGroups}" th:value="1" step="0.01" required>
+                </div>
+                <div class="form-group">
+                    <label for="labGroups">Number of Lab Groups:</label>
+                    <input type="number" class="form-control my-2" id="labGroups" name="numberOfLabGroups"
+                           th:field="*{numberOfLabGroups}" required step="0.01" th:value="0">
+                </div>
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input my-2" id="englishGroup" name="englishGroup"
+                           th:field="*{englishGroup}">
+                    <label class="form-check-label my-2" for="englishGroup">English Group</label>
+                </div>
+                <button type="submit" class="btn btn-primary mb-4">Add Allocation</button>
+            </form>
+        </div>
+        <div class="col-6">
+            <h2>Course preferences: </h2>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Организација на предавања</th>
+                    <th>Организација на аудиториски</th>
+                    <th>Преференци</th>
+                    <th sec:authorize="hasRole('ROLE_ADMIN')">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="coursePreference : ${coursePreferences}">
+
+                    <td th:text="${coursePreference.lectureSharing}"></td>
+                    <td th:text="${coursePreference.auditoriumExercisesSharing}"></td>
+                    <td>
+                        <div th:if="${coursePreference.preferOnlineLectures}">Оналјн предавања</div>
+                        <div th:if="${coursePreference.preferOnlineExercises}">Оналјн вежби</div>
+                        <div th:if="${coursePreference.labExercisesAsConsultations}">Консултативни лаб</div>
+                    </td>
+
+                    <td sec:authorize="hasRole('ROLE_ADMIN')">
+                        <a class="btn btn-sm btn-primary"
+                           target="_blank"
+                           th:href="@{/admin/course-preferences/edit/{id}(id=${coursePreference.id})}">Промени</a>
+                        <a class="btn btn-sm btn-danger"
+                           target="_blank"
+                           th:href="@{/admin/course-preferences/delete/{id}(id=${coursePreference.id})}"
+                           onclick="return confirm('Are you sure you want to delete this course preference?')">Избриши</a>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <h2>Teacher subject requests: </h2>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Професор</th>
+                    <th>Приоритет</th>
+                    <th>Преферира</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="teacherSubjectRequest : ${teacherSubjectRequests}">
+                    <td th:text="${teacherSubjectRequest.professor.name}"></td>
+                    <td th:text="${teacherSubjectRequest.priority}"></td>
+                    <td>
+                        <span class="me-1" th:if="${teacherSubjectRequest.preferMultipleGroups }">повеќе групи</span>
+                        <span class="me-1" th:if="${teacherSubjectRequest.preferAuditoriumExercises}">аудиториски</span>
+                        <span class="me-1" th:if="${teacherSubjectRequest.preferLabExercises }">лабораториски</span>
+                    </td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="col-3">
+            <h2>Group sizes:</h2>
+            <th:block th:each="entry : ${courseSizes}" th:if="${!courseSizes.isEmpty()}">
+                <h3>Semester: <span th:text="${entry.key}"></span></h3>
+                <table class="table table-bordered">
+                    <thead>
+                    <tr>
+                        <th>Име</th>
+                        <th># 1</th>
+                        <th># 2+</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="ta : ${entry.value}">
+                        <td th:text="${ta.groupName}"></td>
+                        <td th:text="${ta.firstTimeEnrollments}"></td>
+                        <td th:text="${ta.reEnrollments}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </th:block>
+        </div>
+    </div>
+
+    <!--        </div>-->
+    <!-- Include jQuery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function saveCourse(id) {
+            console.log(id);
+            var professors = $("#professors-" + id).val() || [];
+            var assistants = $("#assistants-" + id).val() || [];
+            var groups = $("#groups-" + id).val() || '';
+            var english = $("#english-" + id).is(":checked");
+
+            var professorIds = professors.join(';');
+            var assistantIds = assistants.join(';');
+
+            $.ajax({
+                url: "/api/courses/save/" + id,
+                type: "POST",
+                contentType: "application/x-www-form-urlencoded",
+                data: {
+                    professors: professorIds,
+                    assistants: assistantIds,
+                    groups: groups,
+                    english: english
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa('riste.stojanov:SystemPass'));
+                },
+                success: function (data) {
+                    console.log("Data saved successfully");
+                    location.reload();
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error saving data:", error);
+                    alert("Error saving data. Please try again.");
+                }
+            });
+            return false;
+        }
+
+
+        function saveSubjectAllocationStats(id) {
+            console.log(id);
+            var numGroups = $("#sa-num-groups-" + id).val();
+            var mentorshipCourse = $("#sa-menthorship-course-" + id).is(":checked");
+            $.ajax("/api/subject-allocation-stats/number-of-groups/" + id + "/" + numGroups, {
+                method: "PUT",
+                data: {
+                    mentorshipCourse: mentorshipCourse
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa('riste.stojanov:SystemPass'));
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Грешка при зачувување");
+                }
+            });
+            return true;
+        }
+    </script>
+
+
+</div>
+
+</body>
+</html>

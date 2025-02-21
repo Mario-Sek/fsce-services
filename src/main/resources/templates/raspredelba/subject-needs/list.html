@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Рапределба на Предмети</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h3>Subject Needs</h3>
+    <script>
+        document.addEventListener('DOMContentLoaded', (event) => {
+            console.log("DOM fully loaded and parsed");
+            const exportCheckbox = document.getElementById('exportCheckbox');
+            if (exportCheckbox) {
+                console.log("Checkbox found");
+                exportCheckbox.addEventListener('change', function () {
+                    console.log("Checkbox state changed");
+                    if (this.checked) {
+                        console.log("Checkbox is checked, sending request");
+                        fetch('/admin/subject-needs/export', {
+                            method: 'GET'
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error('Network response was not ok ' + response.statusText);
+                                }
+                                return response.blob();
+                            })
+                            .then(blob => {
+                                console.log("Request successful, processing blob");
+                                const url = window.URL.createObjectURL(blob);
+                                const a = document.createElement('a');
+                                a.style.display = 'none';
+                                a.href = url;
+                                a.download = 'subject-needs.tsv';
+                                document.body.appendChild(a);
+                                a.click();
+                                window.URL.revokeObjectURL(url);
+                            })
+                            .catch(error => console.error('There was a problem with the fetch operation:', error));
+                    }
+                });
+            } else {
+                console.log("Checkbox not found");
+            }
+        });
+    </script>
+    <form th:action="@{/admin/subject-needs}" method="get" class="pb-3">
+        <div class="row">
+            <div class="col-12">
+                <h4>Filter subject needs</h4>
+            </div>
+            <hr class="mb-2 mt-2"/>
+            <div class="col-5">
+                <input type="text" class="form-control"
+                       placeholder="Филтрирај по име на предмет"
+                       name="name"
+                       th:value="${param.name}">
+            </div>
+            <div class="col-1">
+                <input type="checkbox" name="lessThanPRG" value="true"
+                       th:checked="${param.lessThanPRG!=null}"/> nPRG < nG
+            </div>
+            <div class="col-1">
+                <input type="checkbox" name="lessThanPR" value="true"
+                       th:checked="${param.lessThanPR!=null}"/> nPR < nG
+            </div>
+            <div class="col-1">
+                <input type="checkbox" name="lessThanARG" value="true"
+                       th:checked="${param.lessThanARG!=null}"/> nARG < nG
+            </div>
+            <div class="col-1">
+                <input type="checkbox" name="lessThanAR" value="true"
+                       th:checked="${param.lessThanAR!=null}"/> nAR < nG
+            </div>
+            <div class="col-1">
+                <input type="checkbox" name="lessThanCL" value="true"
+                       th:checked="${param.lessThanCL!=null}"/> nCL < nG
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+            <div class="col-md-1">
+                <a class="btn btn-primary" th:href="@{/admin/subject-needs/export(name=${param.name}, semester=${param.semester}, lessThanPRG=${param.lessThanPRG}, lessThanPR=${param.lessThanPR}, lessThanARG=${param.lessThanARG}, lessThanAR=${param.lessThanAR}, lessThanCL=${param.lessThanCL})}">Export</a>
+            </div>
+            <hr class="mb-2 mt-2"/>
+        </div>
+    </form>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>Код на семестар</th>
+
+                <th>Име на предмет</th>
+
+                <th>Број на групи (nG)</th>
+
+                <th>Број на доделени професори (nPRG)</th>
+
+                <th>Број на професори кои поднеле барање (nPR)</th>
+
+                <th>Број на доделени асистенти (nARG)</th>
+
+                <th>Број на асистенти кои поднеле барање (nAR)</th>
+
+                <th>Број на пресметани групи</th>
+
+                <th>Број на покриени групи (nCL)</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="sn : ${page.getContent()}">
+                <td th:text="${sn.semesterCode}"></td>
+                <td th:text="${sn.subjectName}"></td>
+                <td th:text="${sn.nGroups}"></td>
+                <td th:text="${sn.nAssignedProfessors}"></td>
+                <td th:text="${sn.nReqProfessors}"></td>
+                <td th:text="${sn.nAssignedAssistants}"></td>
+                <td th:text="${sn.nReqAssistants}"></td>
+                <td th:text="${sn.nCalcLabGroups}"></td>
+                <td th:text="${sn.nCoveredLabGroups}"></td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:include="fragments/paging :: pageSection(${page})"></div>
+    </div>
+</div>
+</body>
+</html>

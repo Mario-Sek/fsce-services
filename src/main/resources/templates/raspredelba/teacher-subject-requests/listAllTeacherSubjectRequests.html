@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>All Teacher Subject Requests List</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <div class="mb-3">
+        <h1>All Teacher Subject Requests List</h1>
+    </div>
+    <div class="row mb-3">
+        <div class="col-6">
+            <div class="card">
+                <div class="card-header">
+                    Import Teacher Subject Requests
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/admin/subject-requests/import}" method="post"
+                          enctype="multipart/form-data">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mt-1">
+                                    <input class="form-control" type="file" name="file" id="file" required>
+                                </div>
+                            </div>
+                            <div class="col-12 text-end">
+                                <button class="btn  btn-primary mt-2 mb-2" type="submit">Import</button>
+                                <a th:href="@{/admin/subject-requests/sample-tsv}"
+                                   class="btn btn-secondary mt-2 mb-2">Template</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <form th:action="@{/admin/subject-requests}" method="get" class="mb-4">
+        <div class="row">
+            <div class="col-md-3">
+                <select class="form-control" id="professor" name="professorId">
+                    <option value="" selected>All Professors</option>
+                    <option th:each="professor : ${professors}" th:value="${professor.id}"
+                            th:text="${professor.name + ' (' + professor.id + ')'}"
+                            th:selected="${param.professorId!=null && professor.id == param.professorId[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control" id="subject" name="subjectId">
+                    <option value="" selected>All Subjects</option>
+                    <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                            th:text="${subject.displayName()}"
+                            th:selected="${param.subjectId!=null && subject.abbreviation == param.subjectId[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control select2" name="semesterType">
+                    <option value="" th:selected="${param.semesterType==null}">Филтрирање по семестар</option>
+                    <option th:each="semester : ${T(mk.ukim.finki.wp.fcseservices.model.SemesterType).values()}"
+                            th:value="${semester}"
+                            th:text="${semester}"
+                            th:selected="${param.semesterType!=null && semester.name() == param.semesterType[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input type="checkbox" name="export" value="true"/> Export
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-primary form-control">Филтрирај</button>
+            </div>
+        </div>
+    </form>
+    <table class="table table-bordered">
+        <thead>
+        <tr>
+            <th>Семестар</th>
+            <th>Професор</th>
+            <th>Предмет</th>
+            <th>Приоритет</th>
+            <th>Преферира повеќе групи</th>
+            <th>Преферира аудиториски вежби</th>
+            <th>Преферира лабораториски вежби</th>
+            <th>Преференци за распоред</th>
+            <th>Забелешка</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="teacherSubjectRequest : ${page.getContent()}">
+            <td th:text="${teacherSubjectRequest.subject?.semesterType}"></td>
+            <td><a th:href="@{/admin/subject-requests/{professorId}(professorId=${teacherSubjectRequest.professor.id})}"
+                   th:text="${teacherSubjectRequest.professor.name}"></a></td>
+            <td th:text="${teacherSubjectRequest.subject?.displayName() }"></td>
+            <td th:text="${teacherSubjectRequest.priority}"></td>
+            <td th:text="${teacherSubjectRequest.preferMultipleGroups ? 'Да' : 'Не'}"></td>
+            <td th:text="${teacherSubjectRequest.preferAuditoriumExercises ? 'Да' : 'Не'}"></td>
+            <td th:text="${teacherSubjectRequest.preferLabExercises ? 'Да' : 'Не'}"></td>
+            <td th:text="${teacherSubjectRequest.schedulePreferences}"></td>
+            <td th:text="${teacherSubjectRequest.note}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+
+</div>
+</body>
+</html>

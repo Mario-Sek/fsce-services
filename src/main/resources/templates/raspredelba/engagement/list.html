@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      layout:decorate="~{layout}"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<head>
+    <meta charset="UTF-8">
+    <title>Декларации</title>
+</head>
+<body>
+<div layout:fragment="content" class="mt-4">
+
+
+    <form th:action="@{/engagement/init}" method="post" sec:authorize="hasRole('ROLE_ADMIN')">
+        <div class="row mb-4">
+            <div class="col-8">
+
+                <select class="form-control" id="semester" name="semester">
+                    <option th:each="semester : ${semesters}" th:value="${semester.code}"
+                            th:text="${semester.code}"></option>
+                </select>
+            </div>
+            <div class="col-4">
+                <button class="btn  btn-primary" type="submit">Иницијализирај</button>
+            </div>
+            <hr class="mt-2 mb-2"/>
+        </div>
+    </form>
+
+    <a href="/engagement/add"
+       onclick="this.href=('/engagement/add?returnTo='+window.location); return true;"
+       class="btn btn-primary">Додади</a>
+
+    <form action="" method="get">
+        <div class="row mt-3">
+            <div class="col-md-3" sec:authorize="hasRole('ROLE_ADMIN')">
+                <select class="form-control" id="professor" name="professor">
+                    <option value="" selected>Сите професори</option>
+                    <option th:each="professor : ${professors}" th:value="${professor.id}"
+                            th:text="${professor.name + ' (' + professor.id + ')'}"
+                            th:selected="${param.professor!=null && professor.id == param.professor[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control select2" name="semester">
+                    <option value="" th:selected="${param.semester==null}">Филтрирање по семестар</option>
+                    <option th:each="semester : ${semesters}"
+                            th:value="${semester.code}"
+                            th:text="${semester.code}"
+                            th:selected="${param.semester!=null && semester.code == param.semester[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="subject" name="subject">
+                    <option value="" selected>Сите предмети</option>
+                    <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                            th:text="${subject.name + ' (' + subject.abbreviation + ')'}"
+                            th:selected="${param.joinedSubject!=null && subject.abbreviation == param.joinedSubject[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-1">
+                <input type="checkbox" name="export" value="true"/> Експорт
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+        </div>
+
+
+    </form>
+
+    <div class="mt-4">
+        <table class="table table-bordered table-striped">
+            <thead>
+            <tr>
+                <th>Професор</th>
+                <th>Семестар</th>
+                <th>Предмет</th>
+                <th>Тип часови</th>
+                <th>Број часови</th>
+                <th>Споделени со друг наставник</th>
+                <th>Наставен јазик</th>
+                <th>Број на студенти</th>
+                <th>Консултативни лабораториски</th>
+                <th>Забелешка</th>
+                <th>Акции</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="engagement : ${page}">
+                <td>
+                    <span th:text="${engagement.professor?.name}"></span>
+                    <i class="bi bi-exclamation-triangle text-warning" th:if="${engagement.validationMessage != null && !engagement.validationMessage.isEmpty()}"
+                       th:title="${engagement.validationMessage}"></i>
+                </td>
+                </td>
+                <td th:text="${engagement.semester.code}"></td>
+                <td th:text="${engagement.subject.displayName()}"></td>
+                <td th:text="${engagement.classType}"></td>
+                <td th:text="${engagement.numberOfClasses}"></td>
+                <td th:text="${engagement.sharedWithOtherTeacher ? 'Yes' : 'No'}"></td>
+                <td th:text="${engagement.language}"></td>
+                <td th:text="${engagement.numberOfStudents}"></td>
+                <td th:text="${engagement.consultative ? 'Yes' : 'No'}"></td>
+                <td th:text="${engagement.note}"></td>
+                <td>
+                    <a
+                       th:data-id="${engagement.id}"
+                       onclick="this.href=('/engagement/edit/'+this.getAttribute('data-id')+'?returnTo='+window.location); return true;"
+                       class="btn btn-success btn-sm">Промени</a>
+                    <form th:action="@{/engagement/delete/{id}(id=${engagement?.id})}" method="post">
+                        <button class="btn btn-danger btn-sm" type="submit">Избриши</button>
+                    </form>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+</div>
+</body>
+</html>

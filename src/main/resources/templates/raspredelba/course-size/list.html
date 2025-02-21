@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Групи студенти</title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h3>Групи студенти</h3>
+    <div class="row text-end mb-2">
+        <div class="col-2">
+            <a class="btn btn-primary" th:href="@{/admin/course-size/export}">Export</a>
+        </div>
+    </div>
+    <form th:action="@{/admin/course-size}" method="get" class="pb-3">
+        <div class="row">
+
+            <div class="col-12">
+                <h4>Filter allocations</h4>
+            </div>
+            <div class="col-md-2">
+                <select class="form-control select2" name="semesterCode">
+                    <option value="" th:selected="${param.semester==null}">Филтрирање по семестар</option>
+                    <option th:each="semester : ${semesters}"
+                            th:value="${semester.code}"
+                            th:text="${semester.code}"
+                            th:selected="${param.semesterCode!=null && semester.code == param.semesterCode[0]}"></option>
+                </select>
+            </div>
+
+            <div class="col-md-3">
+                <select class="form-control" id="professor" name="professor">
+                    <option value="" selected>All Professors</option>
+                    <option th:each="professor : ${professors}" th:value="${professor.id}"
+                            th:text="${professor.name + ' (' + professor.id + ')'}"
+                            th:selected="${param.professor!=null && professor.id == param.professor[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <select class="form-control" id="subject" name="joinedSubject">
+                    <option value="" selected>All Subjects</option>
+                    <option th:each="subject : ${subjects}" th:value="${subject.abbreviation}"
+                            th:text="${subject.name + ' (' + subject.abbreviation + ')'}"
+                            th:selected="${param.joinedSubject!=null && subject.abbreviation == param.joinedSubject[0]}"></option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button type="submit" class="btn btn-primary">Филтрирај</button>
+            </div>
+
+
+            <hr class="mb-2 mt-2"/>
+        </div>
+    </form>
+    <div class="row">
+        <table class="table table-bordered">
+            <thead>
+            <tr>
+                <th>semester</th>
+                <th>joinedSubject</th>
+                <th>group name</th>
+                <th># FirstEnrollments</th>
+                <th># ReEnrollments</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="ta : ${page.getContent()}">
+                <td th:text="${ta.semesterCode}"></td>
+                <td th:text="${ta.joinedSubjectAbbreviation}"></td>
+                <td th:text="${ta.groupName}"></td>
+                <td th:text="${ta.firstTimeEnrollments}"></td>
+                <td th:text="${ta.reEnrollments}"></td>
+            </tr>
+            </tbody>
+        </table>
+
+        <div th:include="fragments/paging :: pageSection(${page})"></div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:sec="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{layout}">
+<head>
+    <title th:text="${joinedSubject.displayName()}"></title>
+</head>
+<body>
+<div class="mt-4" layout:fragment="content">
+    <h1>
+        <span th:text="${joinedSubject.displayName()}"></span>
+    </h1>
+    <hr>
+    <div class="col-md-6">
+        <h2>Teacher subject allocations History:</h2>
+        <div th:each="semesterAllocations : ${allocationsByINActiveSemester}">
+            <h2>Semester: <span th:text="${semesterAllocations.key.code}"></span></h2>
+            <div class="col-12" th:if="${semesterStats.get(semesterAllocations.key)!=null}">FTS,
+                <label for="numberOfFirstTimeStudents"></label><input type="number" id="numberOfFirstTimeStudents" th:value="${semesterStats.get(semesterAllocations.key).numberOfFirstTimeStudents}">
+
+                <label for="numberOfReEnrollmentStudents"></label><input type="number" id="numberOfReEnrollmentStudents" th:value="${semesterStats.get(semesterAllocations.key).numberOfReEnrollmentStudents}">
+                RES,
+                <label for="numberOfGroupsInput"></label><input type="number" id="numberOfGroupsInput" th:value="${semesterStats.get(semesterAllocations.key).numberOfGroups}">
+                G (ideally
+                <label for="calculatedNumberOfGroupsInput"></label><input type="number" id="calculatedNumberOfGroupsInput" th:value="${semesterStats.get(semesterAllocations.key).calculatedNumberOfGroups}">
+                ),
+
+
+                <b th:text="${semesterStats.get(semesterAllocations.key).averageStudentsPerGroup}"></b> SPG
+                <b th:if="${semesterStats.get(semesterAllocations.key).mentorshipCourse}">Mentorship Course</b>
+                <button type="button" class="btn btn-primary mt-2" onclick="saveSubjectAllocationStats('${semesterAllocations.key.code}')">Save</button>
+
+            </div>
+            <table class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Professor</th>
+                    <th>Lectures (
+                        <b th:text="${T(mk.ukim.finki.wp.fcseservices.model.SubjectAllocationStats).sumLectureGroups(semesterAllocations.value.stream())}"
+                           class="me-1"></b>
+                        /<b th:text="${semesterStats.get(semesterAllocations.key)?.numberOfGroups}"
+                            class="ms-1"></b>
+                        )
+                    </th>
+                    <th>Exercises (
+                        <b th:text="${T(mk.ukim.finki.wp.fcseservices.model.SubjectAllocationStats).sumExerciseGroups(semesterAllocations.value.stream())}"
+                           class="me-1"></b>
+                        /<b th:text="${semesterStats.get(semesterAllocations.key)?.numberOfGroups}"
+                            class="ms-1"></b>
+                        )
+                    </th>
+                    <th>Labs (
+                        <b th:text="${T(mk.ukim.finki.wp.fcseservices.model.SubjectAllocationStats).sumLabGroups(semesterAllocations.value.stream())}"
+                           class="me-1"></b>
+                        /<b th:text="${semesterStats.get(semesterAllocations.key)?.numberOfGroups}"
+                            class="ms-1"></b>
+                        )
+                    </th>
+                    <th>En</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="allocation : ${semesterAllocations.value}">
+                    <form th:object="${teacherSubjectAllocation}"
+                          th:action="@{/admin/subject-teacher-allocation/{id}/update(id=${allocation.id})}"
+                          method="post">
+                        <input type="hidden" name="joined-subject-id" th:value="${joinedSubjectId}"/>
+                        <td>
+                            <a th:href="@{/admin/subject-teacher-allocation(semester=${allocation.semester?.code}, professor=${allocation.professor?.id})}"
+                               target="_blank"
+                               th:text="${allocation.professor?.name}"></a>
+                            <i class="bi bi-exclamation-triangle text-warning"
+                               th:if="${allocation.validationMessage != null && !allocation.validationMessage.isEmpty()}"
+                               th:title="${allocation.validationMessage}"></i>
+                        </td>
+                        <td><input type="number" name="numberOfLectureGroups" class="form-control"
+                                   th:value="${allocation.numberOfLectureGroups}" step="0.01"/></td>
+                        <td><input type="number" name="numberOfExerciseGroups" class="form-control"
+                                   th:value="${allocation.numberOfExerciseGroups}" step="0.01"/></td>
+                        <td><input type="number" name="numberOfLabGroups" class="form-control"
+                                   th:value="${allocation.numberOfLabGroups}" step="0.01"/></td>
+                        <td>
+                            <input type="checkbox" name="englishGroup" class="form-check-label"
+                                   th:checked="${allocation.englishGroup}"/></td>
+                        <td>
+                            <button type="submit" class="btn btn-sm btn-success">
+                                <i class="bi bi-floppy"></i>
+                            </button>
+                            <a th:href="@{/admin/subject-teacher-allocation/{id}/delete(id=${allocation.id}, joined-subject-id=${joinedSubjectId})}"
+                               type="submit" class="btn btn-sm btn-danger"
+                               onclick="return confirm('Are you sure you want to delete this semester allocation?')">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </td>
+                    </form>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <a class="btn btn-sm btn-success" sec:authorize="hasRole('ROLE_ADMIN')"
+           th:href="@{/admin/subject-teacher-allocation/{joined-subject-id}(joined-subject-id=${joinedSubjectId})}">
+            Back</a>
+    </div>
+
+
+    <script>
+        function saveCourse(id) {
+            console.log(id);
+            var professors = $("#professors-" + id).val();
+            var assistants = $("#assistants-" + id).val();
+            var groups = $("#groups-" + id).val();
+            var english = $("#english-" + id).val();
+            $.ajax("/api/courses/save/" + id, {
+                method: "POST",
+                data: {
+                    professors: professors,
+                    assistants: assistants,
+                    groups: groups,
+                    english: english
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa('riste.stojanov:SystemPass'));
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Грешка при зачувување");
+                }
+            });
+            return true;
+        }
+    </script>
+    <script>
+        function saveSubjectAllocationStats(id) {
+            console.log(id);
+            var numGroups = $("#sa-num-groups-" + id).val();
+            var mentorshipCourse = $("#sa-menthorship-course-" + id).is(":checked");
+            $.ajax("/api/subject-allocation-stats/number-of-groups/" + id + "/" + numGroups, {
+                method: "PUT",
+                data: {
+                    mentorshipCourse: mentorshipCourse
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Authorization", "Basic " + btoa('riste.stojanov:SystemPass'));
+                },
+                success: function (data) {
+                    location.reload();
+                },
+                error: function (data) {
+                    console.log(data);
+                    alert("Грешка при зачувување");
+                }
+            });
+            return true;
+        }
+    </script>
+</div>
+</body>
+</html>
