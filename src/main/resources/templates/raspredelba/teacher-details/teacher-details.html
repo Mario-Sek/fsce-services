@@ -7,6 +7,8 @@
     <title>Teacher Details</title>
 </head>
 <body>
+<div layout:fragment="subheader" th:include="raspredelba/subheader"></div>
+
 <div class="mt-4" layout:fragment="content">
     <h1>Teacher Details</h1>
     <h3 th:text="${professor.name}"></h3>

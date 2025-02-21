@@ -1,5 +1,8 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="~{layout}">
 <head>
     <title>Активирани предмети</title>
     <meta charset="UTF-8">
@@ -9,7 +12,9 @@
 
 </head>
 <body>
-<div class="mt-4 container">
+<div layout:fragment="subheader" th:include="raspredelba/subheader"></div>
+
+<div class="mt-4 container" layout:fragment="content">
     <div class="mb-3">
         <h1>Листа на активни предмети</h1>
     </div>
