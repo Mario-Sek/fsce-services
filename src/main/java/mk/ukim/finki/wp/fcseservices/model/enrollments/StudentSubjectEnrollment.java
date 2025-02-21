@@ -48,27 +48,18 @@ public class StudentSubjectEnrollment {
     @ManyToOne
     private JoinedSubject joinedSubject;
 
-    // should be obtained from the course
-    @Deprecated
-    @ManyToOne
-    private Professor professor;
+    private String professorId;
 
-    // should be obtained from the course
-    @Deprecated
     private String professors;
 
-    // should be obtained from the course
-    @Deprecated
     private String assistants;
 
-    @ManyToOne
-    private Course course;
-
-    public StudentSubjectEnrollment(Semester semester, Student student, Subject subject) {
+    public StudentSubjectEnrollment(Semester semester, Student student, Subject subject, Short numEnrollments) {
         this.id = String.format("%s-%s-%s", semester.getCode(), student.getIndex(), subject.getId());
         this.semester = semester;
         this.student = student;
         this.subject = subject;
+        this.numEnrollments = numEnrollments;
     }
 
 }

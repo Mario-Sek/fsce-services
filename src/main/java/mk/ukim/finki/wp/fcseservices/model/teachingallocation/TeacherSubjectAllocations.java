@@ -1,5 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.model.teachingallocation;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,38 +18,45 @@ import java.util.Objects;
 @ToString
 @NoArgsConstructor
 @Entity
+@JsonPropertyOrder({"semesterCode", "subjectId", "professorId",
+        "englishGroup", "numberOfLectureGroups", "numberOfExerciseGroups", "numberOfLabGroups"})
 public class TeacherSubjectAllocations {
 
     @Id
     @GeneratedValue
     private Long id;
 
+    @JsonIgnore
     @ManyToOne
     private Professor professor;
 
+    @Column(name = "professor_id", insertable = false, updatable = false)
+    private String professorId;
+
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "subject_id")
     private JoinedSubject subject;
 
-    private Boolean englishGroup;
+    @Column(name = "subject_id", insertable = false, updatable = false)
+    private String subjectId;
 
+    @JsonIgnore
     @ManyToOne
     private Semester semester;
 
-    @Deprecated
-    private Float totalLectureClasses;
-    @Deprecated
-    private Float totalExerciseClasses;
-    @Deprecated
-    private Float totalLabClasses;
+    @Column(name = "semester_code", updatable = false, insertable = false)
+    private String semesterCode;
+
+    private Boolean englishGroup;
+
+    @Column(length = 4_000)
+    private String validationMessage;
+
 
     private Float numberOfLectureGroups;
     private Float numberOfExerciseGroups;
     private Float numberOfLabGroups;
-
-
-    @Column(length = 4_000)
-    private String validationMessage;
 
     @Override
     public boolean equals(Object o) {

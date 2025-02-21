@@ -1,10 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.model.teachingallocation;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import mk.ukim.finki.wp.fcseservices.model.base.TrackedHistoryEntity;
 import org.hibernate.Hibernate;
 
@@ -14,6 +11,7 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 public class CoursePreference extends TrackedHistoryEntity {
 
@@ -37,6 +35,11 @@ public class CoursePreference extends TrackedHistoryEntity {
 
     private boolean labExercisesAsConsultations;
 
+
+    public CoursePreference(JoinedSubject subject) {
+        this.subject = subject;
+        this.id = subject.getAbbreviation();
+    }
 
     @Override
     public boolean equals(Object o) {

@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.fcseservices.repository.professor;
+package mk.ukim.finki.wp.fcseservices.repository;
 
 import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorAccreditationStats;
 import mk.ukim.finki.wp.fcseservices.repository.JpaSpecificationRepository;

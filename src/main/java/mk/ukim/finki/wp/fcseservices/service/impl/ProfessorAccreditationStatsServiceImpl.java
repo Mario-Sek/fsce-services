@@ -4,7 +4,7 @@ import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyCycle;
 import mk.ukim.finki.wp.fcseservices.model.accreditations.ProfessorAccreditationStats;
 import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
 import mk.ukim.finki.wp.fcseservices.model.base.SemesterType;
-import mk.ukim.finki.wp.fcseservices.repository.professor.ProfessorAccreditationStatsRepository;
+import mk.ukim.finki.wp.fcseservices.repository.ProfessorAccreditationStatsRepository;
 import mk.ukim.finki.wp.fcseservices.service.AccreditationService;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorAccreditationStatsService;
 import mk.ukim.finki.wp.fcseservices.service.specifications.FieldFilterSpecification;
@@ -46,8 +46,8 @@ public class ProfessorAccreditationStatsServiceImpl implements ProfessorAccredit
                         .and(FieldFilterSpecification.filterEquals(ProfessorAccreditationStats.class, "cycle", studyCycle))
                         .and(FieldFilterSpecification.filterContainsText(ProfessorAccreditationStats.class, "professor.name", nameSearch))
                         .and(FieldFilterSpecification.filterContainsText(ProfessorAccreditationStats.class, "professor.email", emailSearch))
-                        .and(FieldFilterSpecification.filterEquals(ProfessorAccreditationStats.class, "professor.title", titleFilter))
-                        .and(FieldFilterSpecification.filterEquals(ProfessorAccreditationStats.class, "semester", semesterSearch))
+                        .and(FieldFilterSpecification.filterEqualsV(ProfessorAccreditationStats.class, "professor.title", titleFilter))
+                        .and(FieldFilterSpecification.filterEqualsV(ProfessorAccreditationStats.class, "semester", semesterSearch))
         );
 
         return professorAccreditationStatsRepository.findAll(spec, pageRequest);

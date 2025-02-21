@@ -1,14 +1,13 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import mk.ukim.finki.wp.fcseservices.model.*;
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.Student;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.*;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
 import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 import mk.ukim.finki.wp.fcseservices.repository.*;
-import mk.ukim.finki.wp.fcseservices.repository.professor.ProfessorRepository;
+import mk.ukim.finki.wp.fcseservices.repository.ProfessorRepository;
 import mk.ukim.finki.wp.fcseservices.service.DisciplinaryRecordService;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;

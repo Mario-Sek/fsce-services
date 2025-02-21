@@ -10,7 +10,7 @@ import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryStatus;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.ProfessorNotFoundException;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.StudentNotFoundException;
 import mk.ukim.finki.wp.fcseservices.repository.*;
-import mk.ukim.finki.wp.fcseservices.repository.professor.ProfessorRepository;
+import mk.ukim.finki.wp.fcseservices.repository.ProfessorRepository;
 import mk.ukim.finki.wp.fcseservices.service.MeetingService;
 import org.springframework.stereotype.Service;
 

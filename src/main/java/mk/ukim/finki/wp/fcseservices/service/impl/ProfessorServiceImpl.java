@@ -4,10 +4,11 @@ import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidId;
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
 import mk.ukim.finki.wp.fcseservices.model.dto.ProfessorNameAndCodeDTO;
-import mk.ukim.finki.wp.fcseservices.repository.professor.ProfessorRepository;
+import mk.ukim.finki.wp.fcseservices.repository.ProfessorRepository;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.text.Collator;
@@ -71,6 +72,11 @@ public class ProfessorServiceImpl implements ProfessorService {
     @Override
     public List<Professor> findAll() {
         return professorRepository.findAll();
+    }
+
+    @Override
+    public List<Professor> getAllProfessors() {
+        return professorRepository.findAll(Sort.by("email"));
     }
 
 }

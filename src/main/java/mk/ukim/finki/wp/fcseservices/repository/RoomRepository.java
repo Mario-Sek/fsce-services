@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface RoomRepository extends JpaSpecificationRepository<Room,String> {
 
@@ -27,5 +29,7 @@ public interface RoomRepository extends JpaSpecificationRepository<Room,String> 
             Pageable pageable);
 
     Room findByName(String name);
+
+    List<Room> findByCapacityGreaterThanOrderByCapacityAsc(Long capacity);
 }
 

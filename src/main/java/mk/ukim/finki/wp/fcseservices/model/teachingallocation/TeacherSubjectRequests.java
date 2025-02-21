@@ -63,4 +63,21 @@ public class TeacherSubjectRequests {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    public TeacherSubjectRequests(Professor professor, JoinedSubject subject, Double priority,
+                                  Boolean preferMultipleGroups, Boolean preferAuditoriumExercises, Boolean preferLabExercises,
+                                  String schedulePreferences, String note, Semester startedTeachingFrom, Semester startedExerciseFrom,
+                                  Boolean acceptsEnglishGroup) {
+        this.professor = professor;
+        this.subject = subject;
+        this.priority = priority;
+        this.preferMultipleGroups = preferMultipleGroups;
+        this.preferAuditoriumExercises = preferAuditoriumExercises;
+        this.preferLabExercises = preferLabExercises;
+        this.schedulePreferences = schedulePreferences;
+        this.note = note;
+        this.startedTeachingFrom = startedTeachingFrom;
+        this.startedExerciseFrom = startedExerciseFrom;
+        this.acceptsEnglishGroup = acceptsEnglishGroup;
+    }
 }

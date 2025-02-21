@@ -1,9 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.model.teachingallocation.schedule;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,11 +14,15 @@ import mk.ukim.finki.wp.fcseservices.model.base.Semester;
 @ToString
 @NoArgsConstructor
 @Entity
+@JsonPropertyOrder({"semesterCode", "programs", "name", "studyYear", "lastNameRegex"})
 public class StudentGroup {
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Column(name = "semester_code", insertable = false, updatable = false)
+    private String semesterCode;
 
     private String programs;
 
@@ -29,11 +32,9 @@ public class StudentGroup {
 
     private String lastNameRegex;
 
-    private Integer defaultSize;
-
+    @JsonIgnore
     @ManyToOne
     private Semester semester;
 
     private Boolean english = false;
-
 }

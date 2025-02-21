@@ -1,4 +1,4 @@
-package mk.ukim.finki.wp.fcseservices.repository.professor;
+package mk.ukim.finki.wp.fcseservices.repository;
 
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
@@ -24,6 +24,7 @@ public interface ProfessorRepository extends JpaRepository<Professor, String> {
             "FROM Professor p ")
     List<ProfessorNameAndCodeDTO> findAllNameAndCode();
 
+    List<Professor> findByTitle(ProfessorTitle title);
 
 
 }

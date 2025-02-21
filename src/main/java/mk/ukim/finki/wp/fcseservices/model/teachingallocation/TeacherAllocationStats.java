@@ -1,10 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.model.teachingallocation;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -20,9 +18,17 @@ import java.util.Objects;
 @Setter
 @ToString
 @NoArgsConstructor
+@Entity
 @Table(name = "teacher_allocation_stats_view")
 @Immutable
+@JsonPropertyOrder({"id", "semesterCode", "professorId",
+        "numberOfLectureSubjects", "numberOfExerciseSubjects", "numberOfLabSubjects",
+        "numberOfLectureGroups", "numberOfExerciseGroups", "numberOfLabGroups",
+        "totalLectureStudents", "totalExerciseStudents", "totalLabStudents",
+        "totalLectureClasses", "totalExerciseClasses", "totalLabClasses", "totalClasses",
+        "numberOfLectureEnGroups", "numberOfExerciseEnGroups", "numberOfLabEnGroups"})
 public class TeacherAllocationStats {
+
     @Id
     private String id;
 
@@ -62,8 +68,6 @@ public class TeacherAllocationStats {
     private Float numberOfExerciseEnGroups;
     private Float numberOfLabEnGroups;
 
-    private Float numberOfOverlappingEnSubjects;
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -76,4 +80,5 @@ public class TeacherAllocationStats {
     public int hashCode() {
         return getClass().hashCode();
     }
+
 }

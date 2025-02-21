@@ -3,6 +3,7 @@ package mk.ukim.finki.wp.fcseservices.service;
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
 import mk.ukim.finki.wp.fcseservices.model.dto.ProfessorNameAndCodeDTO;
+import mk.ukim.finki.wp.fcseservices.model.exceptions.ProfessorNotFoundException;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -22,5 +23,7 @@ public interface ProfessorService {
     void deleteById(String id);
 
     List<Professor> findAll();
+
+    List<Professor> getAllProfessors();
 
 }

@@ -80,24 +80,4 @@ public class FieldFilterSpecification {
         }
         return res;
     }
-
-    public static <T> Specification<T> filterEquals(Class<T> clazz, String field, SemesterType value) {
-        return (root, query, criteriaBuilder) -> {
-            if (value == null) {
-                return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
-            } else {
-                return criteriaBuilder.equal(fieldToPath(field, root), value);
-            }
-        };
-    }
-
-    public static <T> Specification<T> filterEquals(Class<T> clazz, String field, ProfessorTitle value) {
-        return (root, query, criteriaBuilder) -> {
-            if (value == null) {
-                return criteriaBuilder.isTrue(criteriaBuilder.literal(true));
-            } else {
-                return criteriaBuilder.equal(fieldToPath(field, root), value);
-            }
-        };
-    }
 }
