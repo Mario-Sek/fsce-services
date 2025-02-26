@@ -3,6 +3,7 @@ package mk.ukim.finki.wp.fcseservices.model.results;
 
 import jakarta.persistence.*;
 import lombok.*;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.examschedule.YearExamSession;
 import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 import org.hibernate.Hibernate;
@@ -31,6 +32,11 @@ public class Results {
     private JoinedSubject joinedSubject;
 
     private byte[] pdfBytes;
+
+    private String resultType;
+
+    @ManyToOne
+    private Professor uploadedBy;
 
     private String note;
 
