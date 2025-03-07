@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Results</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div layout:fragment="subheader" th:include="results/subheader"></div>
+<div layout:fragment="content">
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">🎓 Student Results</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-body">
+            <form th:action="@{/student/results/all/{studentIndex}(studentIndex=${studentIndex})}" method="get">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <label for="session" class="form-label fw-bold">Exam Session</label>
+                        <select class="form-select" id="session" name="session">
+                            <option value="">Select Session</option>
+                            <option th:each="sess : ${sessions}" th:value="${sess.name}" th:text="${sess.name}" th:selected="${param.session != null && param.session[0] == sess.name}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="professor" class="form-label fw-bold">Professor</label>
+                        <select class="form-select" id="professor" name="professor">
+                            <option value="">Select Professor</option>
+                            <option th:each="prof : ${professors}" th:value="${prof.id}" th:text="${prof.name}" th:selected="${param.professor != null && param.professor[0] == prof.id}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <div th:include="fragments/result-types :: resultTypes(${resultTypes},${selectedExamType})"></div>
+                    </div>
+                </div>
+
+                <div class="col-md-4 mt-3">
+                    <label class="form-label fw-bold" for="hasResults">Has Results</label>
+                    <select class="form-select" name="hasResults" id="hasResults">
+                        <option>Any</option>
+                        <option>Yes</option>
+                        <option>No</option>
+                    </select>
+                </div>
+
+                <div class="d-flex justify-content-end mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        🔍 Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <h5 class="card-title">📋 Results</h5>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover align-middle">
+                    <thead class="table-dark">
+                    <tr>
+                        <th scope="col">Subject</th>
+                        <th scope="col">Exam Session</th>
+                        <th scope="col">Uploaded At</th>
+                        <th scope="col">Uploaded By (Professor)</th>
+                        <th scope="col">Results</th>
+                        <th scope="col">Exam Type</th>
+                        <th scope="col">Note</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="result : ${results}">
+                        <td th:text="${result.getJoinedSubject().getName()}"></td>
+                        <td th:text="${result.getSession().getName()}"></td>
+                        <td th:text="${#temporals.format(result.getUploadedAt(),'dd-MM-yyyy • HH:mm')}"></td>
+                        <td th:text="${result.getUploadedBy() != null ? result.getUploadedBy().getName() : ''}"></td>
+                        <td class="text-center">
+                            <a th:if="${result.pdfBytes != null and result.pdfBytes.length > 0}"
+                               th:href="@{/student/results/download/{resultId}(resultId=${result.id})}"
+                               class="btn btn-success btn-sm">
+                                📥 Download
+                            </a>
+                            <span th:if="${result.pdfBytes == null or result.pdfBytes.length == 0}" class="text-muted">No Results.</span>
+                        </td>
+                        <td th:text="${result.getResultType() != null ? result.getResultType() : ''}"></td>
+                        <td class="fs-6" th:text="${result.getNote() != null ? result.getNote() : ''}" style="max-width: 200px; overflow-y: auto; word-wrap: break-word"></td>
+                    </tr>
+                    <tr th:if="${#lists.isEmpty(results)}">
+                        <td colspan="6" class="text-center text-muted">No results found for the selected filters.</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:include="fragments/paging :: pageSection(${results})"></div>
+        </div>
+    </div>
+
+</div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

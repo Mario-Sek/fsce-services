@@ -1,5 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.config;
 
+import lombok.Getter;
+import mk.ukim.finki.wp.fcseservices.model.base.Student;
 import mk.ukim.finki.wp.fcseservices.model.base.User;
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,9 +13,13 @@ import java.util.List;
 
 public class FacultyUserDetails implements UserDetails {
 
-    private User user;
+    @Getter
+    private final User user;
 
+    @Getter
+    private Student student;
 
+    @Getter
     private Professor professor;
 
     private String password;
@@ -26,6 +32,12 @@ public class FacultyUserDetails implements UserDetails {
     public FacultyUserDetails(User user, Professor professor, String password) {
         this.user = user;
         this.professor = professor;
+        this.password = password;
+    }
+
+    public FacultyUserDetails(User user, Student student, String password) {
+        this.user = user;
+        this.student = student;
         this.password = password;
     }
 
@@ -63,10 +75,6 @@ public class FacultyUserDetails implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
-    }
-
-    public Professor getProfessor() {
-        return professor;
     }
 
 }

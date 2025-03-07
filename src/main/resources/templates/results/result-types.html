@@ -1,0 +1,7 @@
+<div th:fragment="resultTypes(types,selectedExamType)">
+  <label class="form-label fw-bold d-block">Exam Types</label>
+  <select class="form-select" name="examType" id="examType">
+    <option value="">Select Result Type</option>
+    <option th:each="type : ${types}" th:value="${type}" th:text="${type}" th:selected="${type == selectedExamType}" ></option>
+  </select>
+</div>

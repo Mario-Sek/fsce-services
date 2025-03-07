@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.config;
 
 
+import mk.ukim.finki.wp.fcseservices.repository.StudentRepository;
 import mk.ukim.finki.wp.fcseservices.repository.UserRepository;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorService;
 import org.springframework.context.annotation.Profile;
@@ -18,8 +19,9 @@ public class CasUserDetailsService extends FacultyUserDetailsService implements 
 
     public CasUserDetailsService(UserRepository userRepository,
                                  ProfessorService professorService,
-                                 PasswordEncoder passwordEncoder) {
-        super(userRepository, professorService, passwordEncoder);
+                                 PasswordEncoder passwordEncoder,
+                                 StudentRepository studentRepository) {
+        super(userRepository, professorService, studentRepository, passwordEncoder);
     }
 
     @Override

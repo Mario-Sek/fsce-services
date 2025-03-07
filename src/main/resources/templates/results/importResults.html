@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+            crossorigin="anonymous"></script>
+
+    <title>Title</title>
+</head>
+<body>
+<div layout:fragment="subheader" th:include="results/subheader"></div>
+<div class="container" layout:fragment="content">
+<form th:action="@{'/admin/results/{id}/upload' (id = ${result?.get().getId()})}"
+      th:method="POST"
+      enctype="multipart/form-data">
+    <div class="mt-3">
+        <label for="Course" class="form-label">Course</label>
+        <input type="text"
+               id="Course"
+               name="course"
+               class="form-control"
+               th:value="${result?.get().getCourseGroup().getCourse().getId()}"
+               readonly>
+    </div>
+    <div class="mt-3">
+        <label for="Professor" class="form-label">Professor</label>
+        <input type="text"
+               id="Professor"
+               name="professor"
+               class="form-control"
+               th:value="${result?.get().getCourseGroup().getProfessor().getId()}"
+               readonly>
+    </div>
+
+    <div class="mt-3">
+        <label for="Exam Session" class="form-label">Exam Session</label>
+        <input type="text"
+               id="Exam Session"
+               name="examSession"
+               class="form-control"
+               th:value="${result.get().getSession().getName()}"
+               readonly>
+    </div>
+
+    <div class="mt-3">
+        <label for="Results" class="form-label">Results</label>
+        <input type="file"
+               id="Results"
+               name="pdfFile"
+               class="form-control"
+               accept="application/pdf">
+    </div>
+
+
+    <button id="submit" type="submit" class="btn btn-primary mt-3">Submit</button>
+</form>
+</div>
+
+</body>
+</html>

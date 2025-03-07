@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>FINKI Results</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+        crossorigin="anonymous"></script>
+<div layout:fragment="subheader" th:include="results/subheader"></div>
+<div class="container my-5" layout:fragment="content">
+
+  <section class="bg-light py-5 text-center">
+    <div class="container">
+      <h1 class="display-4 fw-bold">Систем за преглед на резултати </h1>
+      <p class="lead mt-4">Професорите прикачуваат резултати од испити, додека студентите можат едноставно и брзо да ги проверат резултатите за нивните предмети. Нашата цел е да обезбедиме транспарентност и ефикасност во процесот на објавување на академските резултати.</p>
+      <a href="#" class="btn btn-primary btn-lg mt-3">Најава</a>
+    </div>
+  </section>
+
+  <section class="py-5">
+    <div class="container">
+      <div class="row justify-content-center text-center">
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">За Студенти</h5>
+              <p class="card-text">Проверете ги резултатите за вашите предмети брзо и лесно, директно од системот.</p>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card h-100 shadow-sm">
+            <div class="card-body">
+              <h5 class="card-title">За Професори</h5>
+              <p class="card-text">Прикачете резултати од испитите и следете ги сите објавени резултати.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+</body>
+</html>

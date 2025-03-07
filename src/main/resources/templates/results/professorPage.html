@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+          crossorigin="anonymous"></script>
+  <title>Курсеви</title>
+</head>
+<body>
+<div layout:fragment="subheader" th:include="results/subheader"></div>
+<div class="container my-5" layout:fragment="content">
+  <h1 class="my-4 text-center">Курсеви</h1>
+
+  <div th:if="${coursesPage.getContent()}">
+    <table class="table table-bordered table-hover shadow-sm">
+      <thead class="table-dark text-center">
+      <tr>
+        <th>Код</th>
+        <th>Име</th>
+        <th>Семестар</th>
+        <th>Англиски</th>
+        <th>Внеси резултати</th>
+        <th>Прикачени Резултати</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="course : ${coursesPage.getContent()}" class="align-middle">
+        <td th:text="${course.joinedSubject.codes}"></td>
+        <td th:text="${course.joinedSubject.name}"></td>
+        <td th:text="${course.semester.code}"></td>
+        <td>
+          <span th:text="${course.english ? 'Yes' : 'No'}"
+                th:classappend="${course.english} ? 'badge bg-success' : 'badge bg-danger'"></span>
+        </td>
+        <td>
+          <a href="#" th:href="@{'/professors/{professor}/{courseId}/upload' (professor=${professor}, courseId=${course.getId()})}" class="btn btn-primary btn-sm">
+            <i class="bi bi-cloud-upload"></i> Внеси
+          </a>
+        </td>
+        <td>
+          <div th:each="result : ${results}" class="mb-3">
+            <div th:if="
+            ${course.getJoinedSubject().getAbbreviation()==result.getJoinedSubject().getAbbreviation()}">
+              <div class="p-2 border rounded bg-light d-flex flex-column">
+                <span class="badge bg-info me-2" th:text="${result.getSession().getName()}"></span>
+                <span class="fw-bold" th:text="${result.getResultType()}"></span>
+                <div th:if="${result.getPdfBytes()} != null" class="mt-2">
+                  <a class="btn btn-outline-success btn-sm" th:href="@{'/admin/results/DownloadResultPdf/{resultId}' (resultId=${result.getId()})}">
+                    <i class="bi bi-download"></i> Download
+                  </a>
+                </div>
+                <p th:unless="${result.getPdfBytes()}" class="text-muted">No results.</p>
+              </div>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div th:unless="${coursesPage.getContent()}">
+    <p class="text-muted text-center">There are no current courses.</p>
+  </div>
+
+  <div th:include="fragments/paging :: pageSection(${coursesPage})"></div>
+</div>
+
+</body>
+</html>
