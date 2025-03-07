@@ -113,7 +113,7 @@ public class TeacherSubjectAllocationsServiceImpl implements TeacherSubjectAlloc
     public TeacherSubjectAllocations addTeacherSubjectAllocation(TeacherSubjectAllocationsDTO newAllocation, String semester) {
         TeacherSubjectAllocations allocation = new TeacherSubjectAllocations();
 
-        Professor professor = professorService.getProfessorById(newAllocation.getProfessor());
+        Professor professor = professorService.findById(newAllocation.getProfessor());
         JoinedSubject joinedSubject = joinedSubjectService.getByAbbreviation(newAllocation.getSubject());
         Semester sem = semesterManagementService.getSemesterById(semester).orElseThrow(SemesterNotFoundException::new);
 

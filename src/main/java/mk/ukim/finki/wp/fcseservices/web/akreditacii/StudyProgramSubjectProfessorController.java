@@ -69,7 +69,7 @@ public class StudyProgramSubjectProfessorController {
                                              @PathVariable("professorId") String professorId) {
 
         StudyProgramSubject studyProgramSubject = studyProgramSubjectService.findById(subjectId);
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
 
 
         studyProgramSubjectProfessorService.deleteProfessorForSubject(professor, studyProgramSubject);

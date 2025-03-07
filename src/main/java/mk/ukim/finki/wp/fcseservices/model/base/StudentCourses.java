@@ -16,7 +16,6 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Deprecated
 public class StudentCourses {
 
     @Id

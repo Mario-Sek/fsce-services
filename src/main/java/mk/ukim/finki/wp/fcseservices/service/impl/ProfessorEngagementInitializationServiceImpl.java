@@ -61,7 +61,7 @@ public class ProfessorEngagementInitializationServiceImpl implements ProfessorEn
                 if (p.trim().isEmpty()) {
                     continue;
                 }
-                Professor prof = professorService.getProfessorById(p);
+                Professor prof = professorService.findById(p);
                 if (sharedLecture) {
                     Double groupsNum = this.countGroups(allocations, p, group, isEnglish, ClassType.Lecture);
                     Float calculatedNumberOfClasses = (float) (group.getJoinedSubject().getWeeklyLecturesClasses() * groupsNum);
@@ -104,7 +104,7 @@ public class ProfessorEngagementInitializationServiceImpl implements ProfessorEn
                 if (p.trim().isEmpty()) {
                     continue;
                 }
-                Professor prof = professorService.getProfessorById(p);
+                Professor prof = professorService.findById(p);
                 if (sharedExercise) {
                     Double groupsNum = this.countGroups(allocations, p, group, isEnglish, ClassType.Auditory_Exercises);
                     Float calculatedNumberOfClasses = (float) (group.getJoinedSubject().getWeeklyAuditoriumClasses() * groupsNum);

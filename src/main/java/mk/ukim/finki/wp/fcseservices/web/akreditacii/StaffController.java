@@ -101,7 +101,7 @@ public class StaffController {
         model.addAttribute("irregularConsultations", irregularConsultations);
 
         if (isProfessor) {
-            Professor professor = professorService.getProfessorById(id);
+            Professor professor = professorService.findById(id);
             model.addAttribute("professor", professor);
 
 

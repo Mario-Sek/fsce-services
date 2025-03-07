@@ -107,7 +107,7 @@ public class StudyProgramManagement {
 
         Professor coordinator = null;
         if (professor != null) {
-            coordinator = professorService.getProfessorById(professor);
+            coordinator = professorService.findById(professor);
         }
 
         studyProgramDetailsService.save(code, name, nameEn, order, durationYears, durationSemesters, generalInformation,

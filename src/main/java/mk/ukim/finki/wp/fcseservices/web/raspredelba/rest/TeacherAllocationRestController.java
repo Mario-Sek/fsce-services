@@ -102,7 +102,7 @@ public class TeacherAllocationRestController {
 
 
     @PostMapping("/courses/save/{id}")
-    public void save(@PathVariable String id,
+    public void save(@PathVariable Long id,
                      @RequestParam String professors,
                      @RequestParam String assistants,
                      @RequestParam String groups,

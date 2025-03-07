@@ -226,7 +226,7 @@ public class TeacherSubjectAllocationsController {
         JoinedSubject subject = joinedSubjectService.getByAbbreviation(joinedSubjectId);
         teacherSubjectAllocation.setSubject(subject);
 
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
         teacherSubjectAllocation.setProfessor(professor);
 
         Semester semester = semesterManagementService.getSemesterById(semesterId).orElseThrow(() -> new IllegalArgumentException(semesterId));

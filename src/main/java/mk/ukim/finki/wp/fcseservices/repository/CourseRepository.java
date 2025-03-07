@@ -6,9 +6,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-public interface CourseRepository extends JpaSpecificationRepository<Course, String> {
+public interface CourseRepository extends JpaSpecificationRepository<Course, Long> {
     void deleteBySemesterCode(String semesterCode);
 
     List<Course> findByProfessorsContainingOrAssistantsContaining(String professorId, String assistantId);
@@ -26,4 +27,10 @@ public interface CourseRepository extends JpaSpecificationRepository<Course, Str
     );
 
     List<Course> findBySemesterCode(String semester);
+
+    Optional<Course> findCourseById(Long courseId);
+
+    List<Course> findAllBySemesterYear(String year);
+
+    List<Course> findAllByProfessorsContaining(String professor);
 }

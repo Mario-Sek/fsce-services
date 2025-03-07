@@ -81,7 +81,7 @@ public class CourseController {
     }
 
     @PostMapping("/delete/{id}")
-    public String delete(@PathVariable String id, @RequestHeader(value = "referer", required = false) String referer) {
+    public String delete(@PathVariable Long id, @RequestHeader(value = "referer", required = false) String referer) {
         service.delete(id);
         if (referer != null && !referer.isEmpty()) {
             return "redirect:" + referer;

@@ -94,7 +94,7 @@ public class TeacherSubjectRequestsServiceImpl implements TeacherSubjectRequests
 
     private Optional<TeacherSubjectRequestsDTO> saveTeacherSubjectRequestDTO(TeacherSubjectRequestsDTO dto) {
         try {
-            Professor professor = professorService.getProfessorById(dto.getProfessorId());
+            Professor professor = professorService.findById(dto.getProfessorId());
             JoinedSubject subject = joinedSubjectRepository.findByAbbreviation(dto.getSubjectAbbreviation());
             Semester startedTeachingSemester = semesterManagementService.getSemesterById(dto.getStartedTeachingFromSemesterCode())
             .orElseThrow(SemesterNotFoundException::new);

@@ -43,7 +43,7 @@ public class ProfessorServiceImpl implements ProfessorService {
 
 
     @Override
-    public Professor getProfessorById(String professorId) {
+    public Professor findById(String professorId) {
         return professorRepository.findById(professorId).orElseThrow(() -> new InvalidId(professorId));
     }
 

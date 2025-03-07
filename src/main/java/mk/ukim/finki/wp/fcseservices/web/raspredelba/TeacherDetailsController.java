@@ -38,7 +38,7 @@ public class TeacherDetailsController {
     public String viewTeacherDetails(@PathVariable("tId") String professorId,
                                      @RequestParam(value = "semesterCode", required = false) String semesterCode,
                                      Model model) {
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
         List<Semester> semesters = semesterManagementService.getAllSemesters();
         List<TeacherSubjectRequests> requests = teacherSubjectRequestsService.getTeacherSubjectRequestsByProfessorId(professorId);
         List<TeacherSubjectAllocations> allocations;

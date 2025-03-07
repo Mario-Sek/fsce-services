@@ -39,7 +39,7 @@ public class ProfessorDeleteServiceImpl implements ProfessorDeleteService {
 
     @Override
     public void deleteProfessor(String id) {
-        Professor professor = professorService.getProfessorById(id);
+        Professor professor = professorService.findById(id);
         List<String> educationIds = getAllEducationIdsForProfessor(professor);
         professorEducationService.deleteAllByProfessor(professor);
         educationService.deleteProfessorEducations(educationIds);

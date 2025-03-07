@@ -9,8 +9,8 @@ import java.util.List;
 
 public interface CourseService {
 
-    Course findCourseById(String id) throws CourseNotFoundException;
-    List<Course> findAllCourses();
+    Course findById(Long id);
+    List<Course> findAll();
 
     void calculateGroups(String semesterCode);
 
@@ -18,11 +18,11 @@ public interface CourseService {
 
     List<CourseDto> importData(List<CourseDto> students);
 
-    void save(String id, String professors, String assistants, String groups, Boolean english);
+    void save(Long id, String professors, String assistants, String groups, Boolean english);
 
     String toTsv(List<Course> groups);
 
-    void delete(String id);
+    void delete(Long id);
 
     void save(String semesterCode, String subject, String professors, String assistants, String groups);
 
@@ -35,4 +35,7 @@ public interface CourseService {
     List<Course> getCoursesBySubjectAndSemester(String abbreviation, String semesterCode);
 
     List<Course> getCoursesByProfessorIdAndSemester(String professorId, String assistantId, String semesterCode);
+
+    Page<Course> list(Integer pageNum, Integer results);
+    Page<Course> findByProfessorIdPaginated(String professorId, Integer pageNum, Integer size);
 }

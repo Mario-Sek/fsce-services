@@ -45,13 +45,13 @@ public class ProfessorManagementController {
 
     @GetMapping(value = {"/{professorId}"})
     public String professorDetails(@PathVariable String professorId, Model model) {
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
         ProfessorDetails professorDetails = professorDetailsService.findById(professorId);
         model.addAttribute("professorDetails", professorDetails);
         model.addAttribute("professor", professor);
         model.addAttribute("educations", professorEducationService.listEducationByProfessor(professor));
 
-        ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professorService.getProfessorById(professorId));
+        ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professorService.findById(professorId));
         if (professorAcademicTitles == null) {
             model.addAttribute("academicTitle", null);
         } else {
@@ -102,7 +102,7 @@ public class ProfessorManagementController {
     @GetMapping(value = {"/{id}/edit"})
     public String editProfessor(@PathVariable String id, Model model) {
 
-        Professor professor = professorService.getProfessorById(id);
+        Professor professor = professorService.findById(id);
         ProfessorDetails professorDetails = professorDetailsService.findById(id);
         model.addAttribute("professor", professor);
         model.addAttribute("professorDetails", professorDetails);
@@ -125,7 +125,7 @@ public class ProfessorManagementController {
         if (dateOfBirth != null)
             dateOfBirthParsed = LocalDate.parse(dateOfBirth);
         professorService.save(id, name, email, title, orderingRank);
-        ProfessorDetails professorDetails = new ProfessorDetails(id, professorService.getProfessorById(id),
+        ProfessorDetails professorDetails = new ProfessorDetails(id, professorService.findById(id),
                 (float) orderingRank, degree, title.toString(), dateOfBirthParsed, null);
         professorDetailsService.save(professorDetails);
 
@@ -168,7 +168,7 @@ public class ProfessorManagementController {
 
         if (educationId == "") {
             Education education = educationService.save(professorId, degree, finishingYear, institution, discipline, field, area);
-            Professor professor = professorService.getProfessorById(professorId);
+            Professor professor = professorService.findById(professorId);
             professorEducationService.save(professor, education, 1F);
         } else {
             educationService.update(educationId, degree, finishingYear, institution, discipline, field, area);
@@ -193,7 +193,7 @@ public class ProfessorManagementController {
     @GetMapping(value = {"/{professorId}/titles"})
     public String listAcademicTitle(@PathVariable String professorId, Model model) {
         model.addAttribute("professorTitles", ProfessorTitle.values());
-        ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professorService.getProfessorById(professorId));
+        ProfessorAcademicTitles professorAcademicTitles = professorAcademicTitlesService.findByProfessor(professorService.findById(professorId));
         if (professorAcademicTitles == null) return "professor/add_academic_title";
 
         model.addAttribute("academicTitle", professorAcademicTitles.getAcademicTitle());
@@ -206,7 +206,7 @@ public class ProfessorManagementController {
     public String saveAcademicTitle(@PathVariable String professorId, @RequestParam("institution") String institution, @RequestParam("title") ProfessorTitle title, @RequestParam("area") String area, @RequestParam("electionYear") Short electionYear, @RequestParam("decisionDocumentNumber") Short decisionDocumentNumber, Model model) {
 
         AcademicTitle academicTitle = academicTitleService.save(professorId + decisionDocumentNumber, institution, title, area, electionYear, decisionDocumentNumber);
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
         professorAcademicTitlesService.save(professorId, professor, academicTitle);
 
 
@@ -226,7 +226,7 @@ public class ProfessorManagementController {
 
     @GetMapping("/{professorId}/resume/edit")
     public String editResume(@PathVariable String professorId, Model model) {
-        Professor professor = this.professorService.getProfessorById(professorId);
+        Professor professor = this.professorService.findById(professorId);
         model.addAttribute("professor", professor);
 
         Optional<ProfessorResume> professorResumeOptional = this.professorResumeService.findById(professorId);
@@ -249,7 +249,7 @@ public class ProfessorManagementController {
 
     @GetMapping("/{professorId}/resume")
     public String viewResume(@PathVariable String professorId, Model model) {
-        Professor professor = this.professorService.getProfessorById(professorId);
+        Professor professor = this.professorService.findById(professorId);
         model.addAttribute("professor", professor);
 
         Optional<ProfessorResume> professorResume = this.professorResumeService.findById(professor.getId());

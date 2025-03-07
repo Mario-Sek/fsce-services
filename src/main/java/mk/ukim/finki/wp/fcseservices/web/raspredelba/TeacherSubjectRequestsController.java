@@ -2,7 +2,6 @@ package mk.ukim.finki.wp.fcseservices.web.raspredelba;
 
 import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.wp.fcseservices.config.FacultyUserDetails;
-import mk.ukim.finki.wp.fcseservices.model.*;
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.Semester;
 import mk.ukim.finki.wp.fcseservices.model.base.SemesterType;
@@ -82,7 +81,7 @@ public class TeacherSubjectRequestsController {
                                             @RequestParam(defaultValue = "20") Integer results,
                                             @PathVariable("professorId") String professorId) {
         Page<TeacherSubjectRequests> page;
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
         page = teacherSubjectRequestsService.filter(
                 professorId, null, null, pageNum, results);
         model.addAttribute("page", page);
@@ -101,7 +100,7 @@ public class TeacherSubjectRequestsController {
         model.addAttribute("teacherSubjectRequest", new TeacherSubjectRequests());
         List<Semester> semesters = semesterManagementService.getAllSemesters();
         List<Professor> professors = professorService.getAllProfessors();
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
         model.addAttribute("professor", professor);
         model.addAttribute("professors", professors);
         model.addAttribute("semesters", semesters);
@@ -114,7 +113,7 @@ public class TeacherSubjectRequestsController {
     public String showEditTeacherSubjectRequestForm(@PathVariable("professorId") String professorId, @PathVariable Long id, Model model, @RequestHeader(value = "Referer", required = false) String referer) {
         TeacherSubjectRequests teacherSubjectRequest = teacherSubjectRequestsService.getTeacherSubjectRequestById(id);
         List<Professor> professors = professorService.getAllProfessors();
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
         List<JoinedSubject> subjects = joinedSubjectService.getAllJoinedSubjects();
         List<Semester> semesters = semesterManagementService.getAllSemesters();
         model.addAttribute("professors", professors);
@@ -134,7 +133,7 @@ public class TeacherSubjectRequestsController {
         JoinedSubject subject = joinedSubjectService.getByAbbreviation(subjectId);
         teacherSubjectRequest.setSubject(subject);
 
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
         teacherSubjectRequest.setProfessor(professor);
 
         teacherSubjectRequestsService.saveTeacherSubjectRequest(teacherSubjectRequest);

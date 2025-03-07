@@ -50,7 +50,7 @@ public class StudyProgramSubjectProfessorImpl implements StudyProgramSubjectProf
     @Override
     public StudyProgramSubjectProfessor save(String id, String studyProgramSubjectId, String professorId, Float newOrder) {
         StudyProgramSubject studyProgramSubject = studyProgramSubjectService.findById(studyProgramSubjectId);
-        Professor professor = professorService.getProfessorById(professorId);
+        Professor professor = professorService.findById(professorId);
 
         StudyProgramSubjectProfessor studyProgramSubjectProfessor = new StudyProgramSubjectProfessor();
         studyProgramSubjectProfessor.setId(id);

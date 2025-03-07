@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 
+import jakarta.persistence.criteria.Predicate;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import mk.ukim.finki.wp.fcseservices.model.dto.CourseDto;
@@ -49,12 +50,12 @@ public class CourseServiceImpl implements CourseService {
     private final CoursePreferenceRepository coursePreferenceRepository;
 
     @Override
-    public Course findCourseById(String id) throws CourseNotFoundException {
-        return this.repository.findById(id).orElseThrow(() -> new CourseNotFoundException("Course is not found"));
+    public Course findById(Long id){
+        return this.repository.findById(id).orElseThrow(() -> new InvalidId(id.toString()));
     }
 
     @Override
-    public List<Course> findAllCourses() {
+    public List<Course> findAll() {
         return this.repository.findAll();
     }
 
@@ -199,7 +200,22 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void save(String id, String professors, String assistants, String groups, Boolean english) {
+    public Page<Course> list(Integer pageNum, Integer results) {
+        return repository.findAll(PageRequest.of(pageNum - 1, results));
+    }
+
+    @Override
+    public Page<Course> findByProfessorIdPaginated(String professorId, Integer pageNum, Integer size) {
+        Specification<Course> specification = (root, criteriaQuery, criteriaBuilder) -> {
+            Predicate p1 =  criteriaBuilder.like(root.get("professors"), "%" + professorId + "%");
+            Predicate p2 = criteriaBuilder.like(root.get("assistants"),"%" + professorId + "%");
+            return criteriaBuilder.or(p1,p2);
+        };
+        return repository.findAll(specification, PageRequest.of(pageNum - 1, size));
+    }
+
+    @Override
+    public void save(Long id, String professors, String assistants, String groups, Boolean english) {
         Course instance = repository.findById(id).orElseThrow(InvalidCourseException::new);
         instance.setProfessors(professors);
         instance.setAssistants(assistants);
@@ -486,7 +502,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public void delete(String id) {
+    public void delete(Long id) {
         repository.deleteById(id);
     }
 
