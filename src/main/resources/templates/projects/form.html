@@ -38,7 +38,8 @@
         <div>
             <label for="status">Status</label><br/>
             <select id="status" name="status" multiple="multiple" size="5">
-                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}">[status.name]</option>
+                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}"
+                        th:selected="${project?.status?.name() == status.name()}">[status.name]</option>
             </select>
         </div>
         <div>
@@ -68,19 +69,22 @@
         <div>
             <label for="coordinator">Coordinator</label><br/>
             <select id="coordinator" name="coordinator">
-                <option th:each="coordinator : ${professors}" th:value="${coordinator.id}" th:text="${coordinator.getName()}">[coordinator.name]</option>
+                <option th:each="coordinator : ${professors}" th:value="${coordinator.id}" th:text="${coordinator.getName()}"
+                        th:selected="${project?.coordinator?.getName() == coordinator.getName()}">[coordinator.name]</option>
             </select>
         </div>
         <div>
             <label for="projectCall">Project Call</label><br/>
             <select id="projectCall" name="projectCall">
-                <option th:each="projectCall : ${projectCalls}" th:value="${projectCall.id}" th:text="${projectCall.getName()}">[projectCall.name]</option>
+                <option th:each="projectCall : ${projectCalls}" th:value="${projectCall.id}" th:text="${projectCall.getName()}"
+                        th:selected="${project?.projectCall?.getName() == projectCall.getName()}">[projectCall.name]</option>
             </select>
         </div>
         <div>
             <label for="programme">Programme</label><br/>
             <select id="programme" name="programme">
-                <option th:each="programme : ${programmes}" th:value="${programme.id}" th:text="${programme.getName()}">[programme.name]</option>
+                <option th:each="programme : ${programmes}" th:value="${programme.id}" th:text="${programme.getName()}"
+                        th:selected="${project?.programme?.getName() == programme.getName()}">[programme.name]</option>
             </select>
         </div>
 

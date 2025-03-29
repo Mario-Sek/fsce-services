@@ -12,8 +12,8 @@
         <form th:action="@{/scientific-projects}" th:method="GET">
             <div class="row g-3 align-items-end">
                 <div class="col-md-6 form-group">
-                    <label for="projectName" class="form-label">Search by project name</label>
-                    <input type="text" th:value="${projectName}" name="projectName" class="form-control" id="projectName"
+                    <label for="name" class="form-label">Search by project name</label>
+                    <input type="text" th:value="${name}" name="name" class="form-control" id="name"
                            placeholder="Enter project name">
                 </div>
 
@@ -24,8 +24,8 @@
                 </div>
 
                 <div class="col-md-6 form-group">
-                    <label for="projectCallName" class="form-label">Search by project call name</label>
-                    <input type="text" th:value="${projectCallName}" name="projectCallName" class="form-control" id="projectCallName"
+                    <label for="scientificProjectCallName" class="form-label">Search by project call name</label>
+                    <input type="text" th:value="${scientificProjectCallName}" name="scientificProjectCallName" class="form-control" id="scientificProjectCallName"
                            placeholder="Enter project call name">
                 </div>
 
@@ -57,8 +57,8 @@
                     <label for="international" class="form-label">International</label>
                     <select name="international" id="international" class="form-control">
                         <option value="">All</option>
-                        <option value="">Yes</option>
-                        <option value="">No</option>
+                        <option value="true">true</option>
+                        <option value="false">false</option>
                     </select>
                 </div>
 
@@ -82,7 +82,9 @@
                 <th>Professor Name</th>
                 <th>Project Call Name</th>
                 <th>Programme Name</th>
+                <th>Grant Holder Name</th>
                 <th>Status</th>
+                <th>International</th>
             </tr>
             <!-- For each project you should have one <tr> like below -->
             <tr class="item" th:each="project : ${page.getContent()}">
@@ -90,9 +92,9 @@
                 <td th:text="${project.coordinator.name}">[project.coordinator.name]</td>
                 <td th:text="${project.projectCall.name}">[project.projectCall.name]</td>
                 <td th:text="${project.programme.name}">[project.programme.name]</td>
-                <!--<td th:text="${project.grantHolderName}">[project.grantHolderName]</td>-->
+                <td th:text="${project.programme.grantHolder.name}">[project.programme.grantHolder.name]</td>
                 <td th:text="${project.status}">[project.status]</td>
-                <!--<td th:text="${project.international}">[project.international]</td>-->
+                <td th:text="${project.programme.international}">[project.programme.international]</td>
                 <td>
                     <!-- ProjectsHomeController.delete -->
                     <form th:action="@{'/projects/delete/{id}' (id=${project.getId()})}" th:method="POST">

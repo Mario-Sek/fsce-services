@@ -108,11 +108,11 @@ public class ScientificProjectServiceImpl implements ScientificProjectService {
                                                                              int pageSize) {
         Specification<ScientificProject> specification = Specification
                 .where(filterContainsText(ScientificProject.class, "name", name))
-                .and(filterEquals(ScientificProject.class, "coordinator.name", professorName))
-                .and(filterEquals(ScientificProject.class, "projectCall.name", scientificProjectCallName))
+                .and(filterContainsText(ScientificProject.class, "coordinator.name", professorName))
+                .and(filterContainsText(ScientificProject.class, "projectCall.name", scientificProjectCallName))
                 .and(filterEqualsV(ScientificProject.class, "status", status))
-                .and(filterEquals(ScientificProject.class, "programme.name", programmeName))
-                .and(filterEquals(ScientificProject.class, "programme.grantHolder", grantHolderName))
+                .and(filterContainsText(ScientificProject.class, "programme.name", programmeName))
+                .and(filterContainsText(ScientificProject.class, "programme.grantHolder.name", grantHolderName))
                 .and(filterEqualsV(ScientificProject.class, "programme.international", international));
 
         return this.scientificProjectRepository.findAll(

@@ -65,9 +65,9 @@ public class ProjectsHomeController {
         model.addAttribute("programmeName", programmeName);
         model.addAttribute("grantHolderName", grantHolderName);
         model.addAttribute("international", international);
-        model.addAttribute("projectName", name);
+        model.addAttribute("name", name);
         model.addAttribute("professorName", professorName);
-        model.addAttribute("projectCallName", scientificProjectCallName);
+        model.addAttribute("scientificProjectCallName", scientificProjectCallName);
 
         return "projects/listProjects";
     }

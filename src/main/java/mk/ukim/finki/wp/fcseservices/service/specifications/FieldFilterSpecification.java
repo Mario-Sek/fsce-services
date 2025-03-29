@@ -85,36 +85,4 @@ public class FieldFilterSpecification {
         return res;
     }
 
-    // Метод за филтрирање според grantHolderName со JOIN
-    public static Specification<ScientificProject> hasGrantHolderName(String grantHolderName) {
-        return (root, query, cb) -> {
-            if (grantHolderName == null || grantHolderName.isEmpty()) {
-                return cb.conjunction(); // Ако е null, не филтрираме
-            }
-            Join<ScientificProject, ScientificProjectProgramme> programmeJoin = root.join("programme", JoinType.LEFT);
-            return cb.like(cb.lower(programmeJoin.get("grantHolderName")), "%" + grantHolderName.toLowerCase() + "%");
-        };
-    }
-
-    // Метод за филтрирање според international со JOIN
-    public static Specification<ScientificProject> hasInternational(Boolean international) {
-        return (root, query, cb) -> {
-            if (international == null) {
-                return cb.conjunction(); // Ако е null, не филтрираме
-            }
-            Join<ScientificProject, ScientificProjectProgramme> programmeJoin = root.join("programme", JoinType.LEFT);
-            return cb.equal(programmeJoin.get("international"), international);
-        };
-    }
-
-    public static Specification<ScientificProject> hasProgrammeName(String programmeName) {
-        return (root, query, cb) -> {
-            if (programmeName == null || programmeName.isEmpty()) {
-                return cb.conjunction(); // Ако е null, не филтрираме
-            }
-            Join<ScientificProject, ScientificProjectProgramme> programmeJoin = root.join("programme", JoinType.LEFT);
-            return cb.like(cb.lower(programmeJoin.get("programmeName")), "%" + programmeName.toLowerCase() + "%");
-        };
-    }
-
 }
