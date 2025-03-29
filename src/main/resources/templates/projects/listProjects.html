@@ -9,7 +9,7 @@
 <div layout:fragment="subheader" th:include="projects/subheader"></div>
 <div class="mt-4" layout:fragment="content">
     <div class="container mt-4">
-        <form th:action="@{/scientificprojects}" th:method="GET">
+        <form th:action="@{/scientific-projects}" th:method="GET">
             <div class="row g-3 align-items-end">
                 <div class="col-md-6 form-group">
                     <label for="projectName" class="form-label">Search by project name</label>
@@ -37,7 +37,7 @@
 
                 <div class="col-md-6 form-group">
                     <label for="grantHolderName" class="form-label">Search by grant holder name</label>
-                    <input type="text" th:value="${grantHolderName}" name="programmeName" class="form-control" id="grantHolderName"
+                    <input type="text" th:value="${grantHolderName}" name="grantHolderName" class="form-control" id="grantHolderName"
                            placeholder="Enter grant holder name">
                 </div>
 
@@ -70,34 +70,8 @@
     </div>
 
     <div>
-        <!-- The form below should invoke the method ReservationsController.listAll
-        <form id="filter-form">
-            <label for="project_name">Project Name</label>
-            <input id="project_name" type="text" name="projectName"/>
-            <label for="professor_name">Professor Name</label>
-            <input id="professor_name" type="text" name="professorName"/>
-            <label for="project_call_name">Project Call Name</label>
-            <input id="project_call_name" type="text" name="projectCallName"/>
-            <label for="programme_name">Programme Name</label>
-            <input id="programme_name" type="text" name="programmeName"/>
-            <label for="grant_holder_name">Grant Holder Name</label>
-            <input id="grant_holder_name" type="text" name="grantHolderName"/>
-            <label for="project_status">Status</label>
-            <select id="project_status" name="status">
-                <option value="">All</option>
-
-                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}">[status.name]</option>
-            </select>
-            <label for="project_international">International</label>
-            <select id="project_international" name="international">
-                <option value="">All</option>
-                <option value="">YES</option>
-                <option value="">NO</option>
-            </select>
-            <button id="filter" type="submit">Filter</button>
-        </form> -->
         <div>
-             <!--ReservationsController.showAdd -->
+             <!--ProjectsHomeController.showAdd -->
             <a href="/projects/add" class="add-item">
                 Add new scientific project
             </a>
@@ -108,33 +82,24 @@
                 <th>Professor Name</th>
                 <th>Project Call Name</th>
                 <th>Programme Name</th>
-                <th>Grant Holder Name</th>
                 <th>Status</th>
-                <th>International</th>
             </tr>
-            <!-- For each reservation you should have one <tr> like below -->
+            <!-- For each project you should have one <tr> like below -->
             <tr class="item" th:each="project : ${page.getContent()}">
-                <td th:text="${project.projectName}">[project.projectName]</td>
-                <td th:text="${project.professorName}">[project.professorName]</td>
-                <td th:text="${project.projectCallName}">[project.projectCallName]</td>
-                <td th:text="${project.programmeName}">[project.programmeName]</td>
-                <td th:text="${project.grantHolderName}">[project.grantHolderName]</td>
-                <td th:each="status : ${statuses}" th:text="${status.name()}">[project.status.name]</td>
-                <td th:text="${project.international}">[project.international]</td>
+                <td th:text="${project.name}">[project.name]</td>
+                <td th:text="${project.coordinator.name}">[project.coordinator.name]</td>
+                <td th:text="${project.projectCall.name}">[project.projectCall.name]</td>
+                <td th:text="${project.programme.name}">[project.programme.name]</td>
+                <!--<td th:text="${project.grantHolderName}">[project.grantHolderName]</td>-->
+                <td th:text="${project.status}">[project.status]</td>
+                <!--<td th:text="${project.international}">[project.international]</td>-->
                 <td>
-                    <!-- ReservationsController.delete -->
-                    <form th:action="@{'/reservations/delete/{id}' (id=${reservation.getId()})}" th:method="POST"
-                          sec:authorize="hasRole('ROLE_ADMIN')">
+                    <!-- ProjectsHomeController.delete -->
+                    <form th:action="@{'/projects/delete/{id}' (id=${project.getId()})}" th:method="POST">
                         <button type="submit" class="delete-item">Delete</button>
                     </form>
-                    <!-- ReservationsController.showEdit -->
-                    <a class="edit-item" th:href="@{'/reservations/edit/{id}' (id=${reservation.getId()})}"
-                       sec:authorize="hasRole('ROLE_ADMIN')">Edit</a>
-                    <!-- ReservationsController.extend -->
-                    <form th:action="@{'/reservations/extend/{id}' (id=${reservation.getId()})}" th:method="POST"
-                          sec:authorize="hasRole('ROLE_USER')">
-                        <button type="submit" class="extend-item">Extend stay</button>
-                    </form>
+                    <!-- ProjectsHomeController.showEdit -->
+                    <a class="edit-item" th:href="@{'/projects/edit/{id}' (id=${project.getId()})}">Edit</a>
                 </td>
             </tr>
         </table>

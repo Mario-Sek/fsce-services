@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Scientific Projects Form</title>
+</head>
+<body>
+<div layout:fragment="subheader" th:include="projects/subheader"></div>
+<div class="mt-4" layout:fragment="content">
+    <!-- The form should submit to ProjectsHomeController.create or ProjectsHomeController.update,
+         depending on whether we are creating or editing a project -->
+    <form th:action="@{ ${project != null} ? '/projects/'+ ${project.id} : '/projects' }" th:method="POST">
+        <div>
+            <label for="name">Project Name</label>
+            <input type="text"
+                   id="name"
+                   name="name"
+                   th:value="${project?.name}"
+                   required>
+        </div>
+        <div>
+            <label for="keywords">Keywords</label>
+            <input type="text"
+                   id="keywords"
+                   name="keywords"
+                   th:value="${project?.keywords}"
+                   required>
+        </div>
+        <div>
+            <label for="goalsDescription">Goals Description</label>
+            <input type="text"
+                   id="goalsDescription"
+                   name="goalsDescription"
+                   th:value="${project?.goalsDescription}"
+                   required>
+        </div>
+        <div>
+            <label for="status">Status</label><br/>
+            <select id="status" name="status" multiple="multiple" size="5">
+                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}">[status.name]</option>
+            </select>
+        </div>
+        <div>
+            <label for="relatedPublicationsOrProjects">Related Publications Or Projects</label>
+            <input type="text"
+                   id="relatedPublicationsOrProjects"
+                   name="relatedPublicationsOrProjects"
+                   th:value="${project?.relatedPublicationsOrProjects}"
+                   required>
+        </div>
+        <div>
+            <label for="report">Report</label>
+            <input type="text"
+                   id="report"
+                   name="report"
+                   th:value="${project?.report}"
+                   required>
+        </div>
+        <div>
+            <label for="expectedResults">Expected Results</label>
+            <input type="text"
+                   id="expectedResults"
+                   name="expectedResults"
+                   th:value="${project?.expectedResults}"
+                   required>
+        </div>
+        <div>
+            <label for="coordinator">Coordinator</label><br/>
+            <select id="coordinator" name="coordinator">
+                <option th:each="coordinator : ${professors}" th:value="${coordinator.id}" th:text="${coordinator.getName()}">[coordinator.name]</option>
+            </select>
+        </div>
+        <div>
+            <label for="projectCall">Project Call</label><br/>
+            <select id="projectCall" name="projectCall">
+                <option th:each="projectCall : ${projectCalls}" th:value="${projectCall.id}" th:text="${projectCall.getName()}">[projectCall.name]</option>
+            </select>
+        </div>
+        <div>
+            <label for="programme">Programme</label><br/>
+            <select id="programme" name="programme">
+                <option th:each="programme : ${programmes}" th:value="${programme.id}" th:text="${programme.getName()}">[programme.name]</option>
+            </select>
+        </div>
+
+        <button id="submit" type="submit">Submit</button>
+        <a id="back" href="/scientific-projects" type="button" class="btn btn-primary">Back to projects</a>
+    </form>
+
+    <div>
+        <ul id="nav">
+            <li><a href="/">Home</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/logout">Logout</a></li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
