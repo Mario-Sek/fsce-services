@@ -9,12 +9,19 @@ import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 import mk.ukim.finki.wp.fcseservices.repository.*;
 import mk.ukim.finki.wp.fcseservices.repository.ProfessorRepository;
 import mk.ukim.finki.wp.fcseservices.service.DisciplinaryRecordService;
+import mk.ukim.finki.wp.fcseservices.service.specifications.FieldFilterSpecification;
 import org.springframework.data.domain.*;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.data.jpa.domain.Specification;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+
+import static mk.ukim.finki.wp.fcseservices.service.specifications.FieldFilterSpecification.*;
+
 
 @Service
 @RequiredArgsConstructor
@@ -36,7 +43,7 @@ public class DisciplinaryRecordServiceImpl implements DisciplinaryRecordService 
             JoinedSubjectNotFoundException,
             DisciplinaryTypeNotFoundException {
 
-        Result result = getResult(professorUsername, studentIndex, joinedSubjectId, categoryId);
+        Result result = getResult(professorUsername,studentIndex, joinedSubjectId, categoryId);
 
         DisciplinaryRecord report = new DisciplinaryRecord();
         report.setStudent(result.student);
@@ -60,58 +67,23 @@ public class DisciplinaryRecordServiceImpl implements DisciplinaryRecordService 
     }
 
     @Override
-    public Page<DisciplinaryRecord> findAllReports(String status, String professor, String subject, Long meeting, String suggestedSanction, int pageNumber, int pageSize) throws ProfessorNotFoundException, JoinedSubjectNotFoundException {
-        Professor professor1;
-        if (professor != null && !professor.isEmpty())
-            professor1 = professorRepository.findById(professor)
-                    .orElseThrow(() -> new ProfessorNotFoundException("Professor cannot be found"));
-        else {
-            professor1 = null;
-        }
+    public Page<DisciplinaryRecord> findAllReports(DisciplinaryStatus status, String professorId, String subjectId, Long meetingId, String suggestedSanction, int pageNumber, int pageSize) {
+        Specification<DisciplinaryRecord> specification = Specification
+                .where(filterEquals(DisciplinaryRecord.class, "suggestedDisciplinarySanction.id", suggestedSanction))
+                .and(filterEquals(DisciplinaryRecord.class, "reporter.id", professorId))
+                .and(filterContainsText(DisciplinaryRecord.class, "joinedSubject.name", subjectId))
+                .and(filterEquals(DisciplinaryRecord.class, "meeting.id", meetingId))
+                .and(filterEqualsV(DisciplinaryRecord.class, "status", status));
 
-        DisciplinaryStatus status1;
-        if (status != null && !status.isEmpty())
-            status1 = DisciplinaryStatus.valueOf(status);
-        else {
-            status1 = null;
-        }
-
-        JoinedSubject joinedSubject;
-        if (subject != null && !subject.isEmpty())
-            joinedSubject = joinedSubjectRepository.findById(subject)
-                    .orElseThrow(() -> new JoinedSubjectNotFoundException("Subject cannot be found"));
-        else {
-            joinedSubject = null;
-        }
-
-        DisciplinaryMeeting meeting1;
-        if (meeting != null)
-            meeting1 = meetingRepository.findById(meeting).orElseThrow(() -> new RuntimeException("Meeting cannot be found"));
-        else {
-            meeting1 = null;
-        }
-
-        DisciplinarySanction sanction;
-        if (suggestedSanction != null && !suggestedSanction.isEmpty())
-            sanction = sanctionRepository.findByName(suggestedSanction);
-        else {
-            sanction = null;
-        }
 
         Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "reportingDate"));
 
-        Page<DisciplinaryRecord> allReports = reportRepository.findAll(pageable);
-
-        List<DisciplinaryRecord> filteredReports = allReports.stream()
-                .filter(report -> (status == null || status.isEmpty() || report.getStatus().equals(status1)) &&
-                        (professor == null || professor.isEmpty() || report.getReporter().equals(professor1)) &&
-                        (subject == null || subject.isEmpty() || report.getJoinedSubject().equals(joinedSubject)) &&
-                        (meeting == null || report.getMeeting().equals(meeting1)) &&
-                        (suggestedSanction == null || suggestedSanction.isEmpty() || report.getSuggestedDisciplinarySanction().equals(sanction)))
-                .toList();
-
-        return new PageImpl<>(filteredReports);
+        return reportRepository.findAll(specification,pageable);
     }
+
+
+
+
 
     @Override
     public List<DisciplinaryRecord> findAllReportsForStudent(String index) throws StudentNotFoundException {

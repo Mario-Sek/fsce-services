@@ -7,6 +7,8 @@ import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
 import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 import mk.ukim.finki.wp.fcseservices.service.*;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +17,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/reports")
@@ -40,15 +43,17 @@ public class ReportController {
         this.meetingService = meetingService;
     }
 
+
     @GetMapping("")
-    public String getHomePage(@RequestParam(name = "status", required = false) String status,
+    public String getHomePage(@RequestParam(name = "status", required = false) DisciplinaryStatus status,
                               @RequestParam(name = "professor", required = false) String professor,
                               @RequestParam(name = "subject", required = false) String subject,
                               @RequestParam(name = "meeting", required = false) Long meeting,
                               @RequestParam(name = "suggestedSanction", required = false) String suggestedSanction,
-                              @RequestParam(defaultValue = "0") int page,
-                              Model model, HttpServletRequest request) {
-        int pageSize = 10;
+                              @RequestParam(defaultValue = "1") Integer pageNum,
+                              @RequestParam(defaultValue = "10") Integer pageSize,
+                              Model model) {
+
 
         model.addAttribute("statuses", DisciplinaryStatus.values());
         model.addAttribute("professors", professorService.findAll());
@@ -57,17 +62,19 @@ public class ReportController {
         model.addAttribute("sanctions", disciplinarySanctionService.findAllSanctions());
 
         try {
-            Page<DisciplinaryRecord> reportsPage = this.reportService.findAllReports(status, professor, subject, meeting, suggestedSanction, page, pageSize);
-            model.addAttribute("allReports", reportsPage.getContent());
-            model.addAttribute("currentPage", page);
-            model.addAttribute("totalPages", reportsPage.getTotalPages());
-            model.addAttribute("previousPage", page - 1);
-            model.addAttribute("nextPage", page + 1);
-            List<Integer> pageNumbers = new ArrayList<>();
-            for (int i = 0; i < reportsPage.getTotalPages(); i++) {
-                pageNumbers.add(i);
-            }
-            model.addAttribute("pageNumbers", pageNumbers);
+            Page<DisciplinaryRecord> reportsPage = this.reportService.findAllReports(
+                    status, professor, subject, meeting, suggestedSanction,
+                    pageNum - 1, pageSize);
+
+            model.addAttribute("page", reportsPage);
+
+
+            model.addAttribute("currentStatus", status);
+            model.addAttribute("currentProfessor", professor);
+            model.addAttribute("currentSubject", subject);
+            model.addAttribute("currentMeeting", meeting);
+            model.addAttribute("currentSuggestedSanction", suggestedSanction);
+
         } catch (ProfessorNotFoundException e) {
             model.addAttribute("errorMessage", "Professor not found.");
         } catch (JoinedSubjectNotFoundException e) {
@@ -76,6 +83,8 @@ public class ReportController {
 
         return "dosie/reports";
     }
+
+
 
     @PostMapping("/showReports")
     public String showReports(@RequestParam(required = false) String index,

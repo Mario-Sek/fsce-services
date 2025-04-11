@@ -14,7 +14,7 @@ public interface DisciplinaryRecordService {
                                        String CourseId, String categoryId, DisciplinaryStatus status, LocalDate date)
             throws StudentNotFoundException, ProfessorNotFoundException, DisciplinaryTypeNotFoundException, JoinedSubjectNotFoundException;
 
-    Page<DisciplinaryRecord> findAllReports(String status, String professor, String subject, Long meeting, String suggestedSanction, int pageNumber, int pageSize) throws ProfessorNotFoundException, JoinedSubjectNotFoundException;
+    Page<DisciplinaryRecord> findAllReports(DisciplinaryStatus status, String professor, String subject, Long meeting, String suggestedSanction, int pageNumber, int pageSize) throws ProfessorNotFoundException, JoinedSubjectNotFoundException;
 
     List<DisciplinaryRecord> findAllReportsForStudent(String index) throws StudentNotFoundException;
 
