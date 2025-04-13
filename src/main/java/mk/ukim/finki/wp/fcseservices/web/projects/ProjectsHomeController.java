@@ -42,7 +42,7 @@ public class ProjectsHomeController {
         return "projects/home";
     }
 
-    @GetMapping({"/", "/scientific-projects"})
+    @GetMapping("/scientific-projects")
     public String listAll(@RequestParam(required = false) String programmeName,
                           @RequestParam(required = false) String grantHolderName,
                           @RequestParam(required = false) Boolean international,
@@ -87,7 +87,7 @@ public class ProjectsHomeController {
         return "projects/form";
     }
 
-    @GetMapping("/projects/edit/{id}")
+    @PostMapping("/projects/edit/{id}")
     public String showEdit(@PathVariable Long id, Model model) {
         List<ScientificProjectStatus> statuses = List.of(ScientificProjectStatus.values());
         List<Professor> professors = professorService.findAll();

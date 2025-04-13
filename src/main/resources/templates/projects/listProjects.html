@@ -72,9 +72,12 @@
     <div>
         <div>
              <!--ProjectsHomeController.showAdd -->
-            <a href="/projects/add" class="add-item">
+            <form th:action="@{'/projects/add'}" th:method="GET">
+                <button type="submit" class="add-item">Add new scientific project</button>
+            </form>
+            <!--<a href="/projects/add" class="add-item">
                 Add new scientific project
-            </a>
+            </a>-->
         </div>
         <table>
             <tr>
@@ -101,7 +104,11 @@
                         <button type="submit" class="delete-item">Delete</button>
                     </form>
                     <!-- ProjectsHomeController.showEdit -->
-                    <a class="edit-item" th:href="@{'/projects/edit/{id}' (id=${project.getId()})}">Edit</a>
+                    <form th:action="@{'/projects/edit/{id}' (id=${project.getId()})}" th:method="POST">
+                        <button type="submit" class="edit-item">Edit</button>
+                    </form>
+                    <!--<a class="edit-item" >Edit</a>
+                    th:href="@{'/projects/edit/{id}' (id=${project.getId()})}"-->
                 </td>
             </tr>
         </table>
