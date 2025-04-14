@@ -54,15 +54,15 @@
                             <label for="status" class="form-label">Status</label>
                             <select name="status" id="status" class="form-select">
                                 <option value="">All</option>
-                                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}" th:selected="${status != null && status.name() == projectstatus}"></option>
+                                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}" th:selected="${status == projectstatus}"></option>
                             </select>
                         </div>
                         <div class="form-group mb-2">
                             <label for="international" class="form-label">International</label>
                             <select name="international" id="international" class="form-select">
-                                <option value="">All</option>
-                                <option value="true">True</option>
-                                <option value="false">False</option>
+                                <option value="" th:selected="${international == null}">All</option>
+                                <option value="true" th:selected="${international != null and international}">True</option>
+                                <option value="false" th:selected="${international != null and !international}">False</option>
                             </select>
                         </div>
                     </div>
