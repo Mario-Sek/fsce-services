@@ -148,4 +148,12 @@ public class ProjectsHomeController {
         this.scientificProjectService.deleteById(id);
         return "redirect:/scientific-projects";
     }
+
+    @GetMapping("/projects/details/{id}")
+    public String getProjectDetails(@PathVariable Long id, Model model) {
+        ScientificProject project = scientificProjectService.findById(id).orElseThrow(ScientificProjectNotFoundException::new);
+        model.addAttribute("project", project);
+        return "projects/details";
+    }
+
 }
