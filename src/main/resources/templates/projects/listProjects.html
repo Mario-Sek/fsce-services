@@ -4,90 +4,102 @@
       layout:decorate="~{layout}">
 <head>
     <title>Scientific Projects</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
 </head>
 <body>
 <div layout:fragment="subheader" th:include="projects/subheader"></div>
-<div class="mt-4" layout:fragment="content">
-    <div class="container mt-4">
-        <form th:action="@{/scientific-projects}" th:method="GET">
-            <div class="row g-3 align-items-end">
-                <div class="col-md-6 form-group">
-                    <label for="name" class="form-label">Search by project name</label>
-                    <input type="text" th:value="${name}" name="name" class="form-control" id="name"
-                           placeholder="Enter project name">
-                </div>
-
-                <div class="col-md-6 form-group">
-                    <label for="professorName" class="form-label">Search by professor name</label>
-                    <input type="text" th:value="${professorName}" name="professorName" class="form-control" id="professorName"
-                           placeholder="Enter professor name">
-                </div>
-
-                <div class="col-md-6 form-group">
-                    <label for="scientificProjectCallName" class="form-label">Search by project call name</label>
-                    <input type="text" th:value="${scientificProjectCallName}" name="scientificProjectCallName" class="form-control" id="scientificProjectCallName"
-                           placeholder="Enter project call name">
-                </div>
-
-                <div class="col-md-6 form-group">
-                    <label for="programmeName" class="form-label">Search by programme name</label>
-                    <input type="text" th:value="${programmeName}" name="programmeName" class="form-control" id="programmeName"
-                           placeholder="Enter programme name">
-                </div>
-
-                <div class="col-md-6 form-group">
-                    <label for="grantHolderName" class="form-label">Search by grant holder name</label>
-                    <input type="text" th:value="${grantHolderName}" name="grantHolderName" class="form-control" id="grantHolderName"
-                           placeholder="Enter grant holder name">
-                </div>
-
-                <div class="col-md-3 form-group">
-                    <label for="status" class="form-label">Status</label>
-                    <select name="status" id="status" class="form-control">
-                        <option value="">All</option>
-                        <option th:each="status : ${statuses}"
-                                th:value="${status}"
-                                th:text="${status.name()}"
-                                th:selected="${status != null && status.name() == projectstatus}">
-                        </option>
-                    </select>
-                </div>
-
-                <div class="col-md-3 form-group">
-                    <label for="international" class="form-label">International</label>
-                    <select name="international" id="international" class="form-control">
-                        <option value="">All</option>
-                        <option value="true">true</option>
-                        <option value="false">false</option>
-                    </select>
-                </div>
-
-                <div class="col-12 mb-1">
-                    <button class="btn btn-primary w-100" type="submit">Search</button>
+<div class="container mt-4" layout:fragment="content">
+    <h3 class="text-center mb-5">Search Scientific Projects</h3>
+    <form th:action="@{/scientific-projects}" th:method="GET">
+        <div class="row g-4">
+            <!-- Left Column: Basic Filters -->
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Basic Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-2">
+                            <label for="name" class="form-label">Project Name</label>
+                            <input type="text" th:value="${name}" name="name" class="form-control" id="name" placeholder="Enter project name">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="professorName" class="form-label">Professor Name</label>
+                            <input type="text" th:value="${professorName}" name="professorName" class="form-control" id="professorName" placeholder="Enter professor name">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="grantHolderName" class="form-label">Grant Holder Name</label>
+                            <input type="text" th:value="${grantHolderName}" name="grantHolderName" class="form-control" id="grantHolderName" placeholder="Enter grant holder name">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </form>
+
+            <!-- Right Column: Advanced Filters -->
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Advanced Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-2">
+                            <label for="scientificProjectCallName" class="form-label">Project Call Name</label>
+                            <input type="text" th:value="${scientificProjectCallName}" name="scientificProjectCallName" class="form-control" id="scientificProjectCallName" placeholder="Enter project call name">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="programmeName" class="form-label">Programme Name</label>
+                            <input type="text" th:value="${programmeName}" name="programmeName" class="form-control" id="programmeName" placeholder="Enter programme name">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="">All</option>
+                                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}" th:selected="${status != null && status.name() == projectstatus}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="international" class="form-label">International</label>
+                            <select name="international" id="international" class="form-select">
+                                <option value="">All</option>
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-12 d-flex justify-content-center mt-3 mb-3">
+                <button type="submit" class="btn btn-primary w-25 p-2 shadow-lg hover-shadow-lg">
+                    <i class="fa fa-search me-2"></i>Search
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="mb-4">
+        <h2 class="text-center mt-5">All Projects</h2>
     </div>
 
-    <div>
-        <div>
-             <!--ProjectsHomeController.showAdd -->
-            <form th:action="@{'/projects/add'}" th:method="GET">
-                <button type="submit" class="add-item">Add new scientific project</button>
-            </form>
-        </div>
-        <table>
-            <tr>
-                <th>Project Name</th>
-                <th>Professor Name</th>
-                <th>Project Call Name</th>
-                <th>Programme Name</th>
-                <th>Grant Holder Name</th>
-                <th>Status</th>
-                <th>International</th>
+    <!-- Project Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+            <tr class="text-center">
+                <th class="p-3">Project Name</th>
+                <th class="p-3">Professor Name</th>
+                <th class="p-3">Project Call Name</th>
+                <th class="p-3">Programme Name</th>
+                <th class="p-3">Grant Holder Name</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">International</th>
+                <th class="p-3">Actions</th>
             </tr>
-            <!-- For each project you should have one <tr> like below -->
-            <tr class="item" th:each="project : ${page.getContent()}">
+            </thead>
+            <tbody>
+            <tr th:each="project : ${page.getContent()}">
                 <td th:text="${project.name}">[project.name]</td>
                 <td th:text="${project.coordinator.name}">[project.coordinator.name]</td>
                 <td th:text="${project.projectCall.name}">[project.projectCall.name]</td>
@@ -95,27 +107,30 @@
                 <td th:text="${project.programme.grantHolder.name}">[project.programme.grantHolder.name]</td>
                 <td th:text="${project.status}">[project.status]</td>
                 <td th:text="${project.programme.international}">[project.programme.international]</td>
-                <td>
-                    <!-- ProjectsHomeController.delete -->
+                <td class="d-flex">
                     <form th:action="@{'/projects/delete/{id}' (id=${project.getId()})}" th:method="POST">
-                        <button type="submit" class="delete-item">Delete</button>
+                        <button type="submit" class="btn btn-danger btn-sm me-2">Delete</button>
                     </form>
-                    <!-- ProjectsHomeController.showEdit -->
                     <form th:action="@{'/projects/edit/{id}' (id=${project.getId()})}" th:method="POST">
-                        <button type="submit" class="edit-item">Edit</button>
+                        <button type="submit" class="btn btn-warning btn-sm">Edit</button>
                     </form>
                 </td>
             </tr>
+            </tbody>
         </table>
-        <div th:include="fragments/paging :: pageSection(${page})"></div>
     </div>
+
+    <!-- Add Project Button -->
+    <div class="mb-4 text-center">
+        <form th:action="@{'/projects/add'}" th:method="GET">
+            <button type="submit" class="btn btn-success mb-3 px-5 py-2">Add New Scientific Project</button>
+        </form>
+    </div>
+
+    <!-- Pagination -->
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
 </div>
-<div>
-    <ul id="nav">
-        <li><a href="/">Home</a></li>
-        <li><a href="/login">Login</a></li>
-        <li><a href="/logout">Logout</a></li>
-    </ul>
-</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
