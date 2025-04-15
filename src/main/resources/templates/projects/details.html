@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Project Details</title>
+</head>
+<body>
+<div layout:fragment="content" class="container mt-5">
+    <h2 class="text-center mb-4" th:text="${project.name}">Project Title</h2>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header"><strong>Basic Information</strong></div>
+        <div class="card-body">
+            <p><strong>Status:</strong> <span th:text="${project.status}"></span></p>
+            <p><strong>Keywords:</strong> <span th:text="${project.keywords}"></span></p>
+            <p><strong>Coordinator:</strong> <span th:text="${project.coordinator.name}"></span></p>
+            <p><strong>Programme:</strong> <span th:text="${project.programme.name}"></span></p>
+            <p><strong>Project Call:</strong> <span th:text="${project.projectCall.name}"></span></p>
+            <p><strong>International:</strong> <span th:text="${project.programme.international}"></span></p>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4">
+        <div class="card-header"><strong>Project Content</strong></div>
+        <div class="card-body">
+            <p><strong>Goals Description:</strong></p>
+            <p th:text="${project.goalsDescription}"></p>
+
+            <p><strong>Expected Results:</strong></p>
+            <p th:text="${project.expectedResults}"></p>
+
+            <p><strong>Related Publications or Projects:</strong></p>
+            <p th:text="${project.relatedPublicationsOrProjects}"></p>
+
+            <p><strong>Report:</strong></p>
+            <p th:text="${project.report}"></p>
+        </div>
+    </div>
+
+    <div class="text-center">
+        <a href="/scientific-projects" class="btn btn-secondary px-5 py-2">Back to all projects</a>
+    </div>
+</div>
+</body>
+</html>
