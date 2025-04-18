@@ -250,4 +250,17 @@ public class ReportController {
         return "redirect:/reports";
     }
 
+    @GetMapping("/review/{id}")
+    public String showRecord(@PathVariable String id,
+                             Model model) {
+        try {
+
+            DisciplinaryRecord disciplinaryRecord = reportService.findReportById(id);
+            model.addAttribute("record", disciplinaryRecord);
+        } catch (DisciplinaryRecordNotFoundException e) {
+
+            model.addAttribute("recordError", e.getMessage());
+        }
+        return "dosie/show-record";
+    }
 }
