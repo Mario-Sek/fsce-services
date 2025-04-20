@@ -8,10 +8,17 @@
 </head>
 <body>
 <div layout:fragment="subheader" th:include="projects/subheader"></div>
-<div class="mt-4" layout:fragment="content">
-    <h1>Scientific project programmes</h1>
-</div>
+
 <div class="view-content my-5" layout:fragment="content">
+    <h2>Scientific project programmes</h2>
+    <div th:if="${errorMessage != null and !#strings.isEmpty(errorMessage)}" class="alert alert-danger d-flex align-items-center" role="alert">
+        <i class="fas fa-exclamation-circle me-2"></i>
+        <span th:text="${errorMessage}" class="fw-bold"></span>
+    </div>
+    <div th:if="${successMessage != null and !#strings.isEmpty(successMessage)}" class="alert alert-success d-flex align-items-center" role="alert">
+        <i class="fas fa-check-circle me-2"></i>
+        <span th:text="${successMessage}" class="fw-bold"></span>
+    </div>
     <div class="item-list">
         <table class="table table-striped table-bordered">
             <thead>
@@ -26,10 +33,10 @@
                 <td th:text="${programme.getName()}"/>
                 </td>
                 <td th:text="${programme.getGrantHolder().getName()}"></td>
-                <td th:text="(${programme.getInternational()} == true) ? Да : Не"></td>
+                <td th:text="(${programme.getInternational()} == true) ? Yes : No"></td>
                 <td class="text-right d-flex flex-wrap justify-content-end">
                     <div class="col-3">
-                        <a th:href="@{'/scientific-programmes/edit-form/{id}'}"
+                        <a th:href="@{'/scientific-programmes/edit/{id}' (id=${programme.getId()})}"
                            class="btn btn-sm btn-info m-1">
                             <i th:text="#{EDIT}"></i>
                         </a>
@@ -48,7 +55,7 @@
     <div class="col mb-3">
         <div class="row">
             <div class="col-sm-12 col-md-12 text-center">
-                <a href="/scientific-programmes/add-form" class="btn btn-block btn-primary">Add Programme</a>
+                <a href="/scientific-programmes/add" class="btn btn-block btn-primary">Add Programme</a>
             </div>
         </div>
     </div>
