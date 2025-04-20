@@ -18,8 +18,6 @@ public class ScientificProjectProgrammeServiceImpl implements ScientificProjectP
     private final ScientificProjectProgrammeRepository scientificProjectProgrammeRepository;
     private final GrantHolderService grantHolderService;
 
-    public ScientificProjectProgrammeServiceImpl(ScientificProjectProgrammeRepository scientificProjectProgrammeRepository) {
-
     public ScientificProjectProgrammeServiceImpl(ScientificProjectProgrammeRepository scientificProjectProgrammeRepository, GrantHolderService grantHolderService) {
         this.scientificProjectProgrammeRepository = scientificProjectProgrammeRepository;
         this.grantHolderService = grantHolderService;
@@ -28,7 +26,6 @@ public class ScientificProjectProgrammeServiceImpl implements ScientificProjectP
 
     @Override
     public List<ScientificProjectProgramme> findAll() {
-        return this.scientificProjectProgrammeRepository.findAll();
         return scientificProjectProgrammeRepository.findAll();
     }
 
