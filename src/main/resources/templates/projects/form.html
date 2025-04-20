@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Scientific Projects Form</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+    <style>
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="subheader" th:include="projects/subheader"></div>
+
+<div class="container mt-5" layout:fragment="content">
+    <div class="card shadow-lg border-0">
+
+        <h4 class="mb-0 text-white text-center bg-black p-3">
+            <i class="bi bi-flask text-warning"></i>
+            Додај или измени научен проект
+        </h4>
+
+        <div class="card-body">
+            <form th:action="@{ ${project != null} ? '/projects/'+ ${project.id} : '/projects' }" th:method="POST">
+
+                <h5 class="text-secondary mb-3">📌 Основни информации</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="name" class="form-label fw-bold">Project Name</label>
+                        <input type="text" id="name" name="name" class="form-control" th:value="${project?.name}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="keywords" class="form-label fw-bold">Keywords</label>
+                        <input type="text" id="keywords" name="keywords" class="form-control" th:value="${project?.keywords}" required>
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <label for="goalsDescription" class="form-label fw-bold">Goals Description</label>
+                    <textarea id="goalsDescription" name="goalsDescription" class="form-control" required
+                              th:text="${project?.goalsDescription}"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="expectedResults" class="form-label fw-bold">Expected Results</label>
+                    <textarea id="expectedResults" name="expectedResults" class="form-control" required
+                              th:text="${project?.expectedResults}"></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="status" class="form-label fw-bold">Status</label>
+                    <select id="status" name="status" class="form-select" multiple size="5">
+                        <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}"
+                                th:selected="${project?.status?.name() == status.name()}"></option>
+                    </select>
+                </div>
+
+                <h5 class="text-secondary mt-5 mb-3">📚 Поврзани ресурси</h5>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <label for="relatedPublicationsOrProjects" class="form-label fw-bold">Related Publications or Projects</label>
+                        <input type="text" id="relatedPublicationsOrProjects" name="relatedPublicationsOrProjects"
+                               class="form-control" th:value="${project?.relatedPublicationsOrProjects}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="report" class="form-label fw-bold">Report</label>
+                        <input type="text" id="report" name="report" class="form-control" th:value="${project?.report}" required>
+                    </div>
+                </div>
+
+                <h5 class="text-secondary mt-5 mb-3">👥 Координатори и поврзани проекти</h5>
+                <div class="row mb-4">
+                    <div class="col-md-4">
+                        <label for="coordinator" class="form-label fw-bold">Coordinator</label>
+                        <select id="coordinator" name="coordinator" class="form-select">
+                            <option th:each="coordinator : ${professors}" th:value="${coordinator.id}"
+                                    th:text="${coordinator.getName()}"
+                                    th:selected="${project?.coordinator?.getName() == coordinator.getName()}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="projectCall" class="form-label fw-bold">Project Call</label>
+                        <select id="projectCall" name="projectCall" class="form-select">
+                            <option th:each="projectCall : ${projectCalls}" th:value="${projectCall.id}"
+                                    th:text="${projectCall.getName()}"
+                                    th:selected="${project?.projectCall?.getName() == projectCall.getName()}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-4">
+                        <label for="programme" class="form-label fw-bold">Programme</label>
+                        <select id="programme" name="programme" class="form-select">
+                            <option th:each="programme : ${programmes}" th:value="${programme.id}"
+                                    th:text="${programme.getName()}"
+                                    th:selected="${project?.programme?.getName() == programme.getName()}"></option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end gap-2">
+                    <a href="/scientific-projects" class="btn btn-outline-primary">Back to Projects</a>
+                    <button type="submit" class="btn btn-success">Save Project</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bootstrap Icons (optional) -->
+<link rel="stylesheet" th:href="@{/css/bootstrap-icons.css}" />
+</body>
+</html>

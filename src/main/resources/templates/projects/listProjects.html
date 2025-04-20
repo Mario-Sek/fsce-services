@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <title>Scientific Projects</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+<div layout:fragment="subheader" th:include="projects/subheader"></div>
+<div class="container mt-4" layout:fragment="content">
+    <h3 class="text-center mb-5">Search Scientific Projects</h3>
+    <form th:action="@{/scientific-projects}" th:method="GET">
+        <div class="row g-4">
+            <!-- Left Column: Basic Filters -->
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Basic Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-2">
+                            <label for="name" class="form-label">Project Name</label>
+                            <input type="text" th:value="${name}" name="name" class="form-control" id="name" placeholder="Enter project name">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="professorName" class="form-label">Professor Name</label>
+                            <input type="text" th:value="${professorName}" name="professorName" class="form-control" id="professorName" placeholder="Enter professor name">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="grantHolderName" class="form-label">Grant Holder Name</label>
+                            <input type="text" th:value="${grantHolderName}" name="grantHolderName" class="form-control" id="grantHolderName" placeholder="Enter grant holder name">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Advanced Filters -->
+            <div class="col-md-6 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">Advanced Filters</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group mb-2">
+                            <label for="scientificProjectCallName" class="form-label">Project Call Name</label>
+                            <input type="text" th:value="${scientificProjectCallName}" name="scientificProjectCallName" class="form-control" id="scientificProjectCallName" placeholder="Enter project call name">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="programmeName" class="form-label">Programme Name</label>
+                            <input type="text" th:value="${programmeName}" name="programmeName" class="form-control" id="programmeName" placeholder="Enter programme name">
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="">All</option>
+                                <option th:each="status : ${statuses}" th:value="${status}" th:text="${status.name()}" th:selected="${status == projectstatus}"></option>
+                            </select>
+                        </div>
+                        <div class="form-group mb-2">
+                            <label for="international" class="form-label">International</label>
+                            <select name="international" id="international" class="form-select">
+                                <option value="" th:selected="${international == null}">All</option>
+                                <option value="true" th:selected="${international != null and international}">True</option>
+                                <option value="false" th:selected="${international != null and !international}">False</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Search Button -->
+            <div class="col-12 d-flex justify-content-center mt-3 mb-3">
+                <button type="submit" class="btn btn-primary w-25 p-2 shadow-lg hover-shadow-lg">
+                    <i class="fa fa-search me-2"></i>Search
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+    <div class="mb-4">
+        <h2 class="text-center mt-5">All Projects</h2>
+    </div>
+
+    <!-- Project Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+            <tr class="text-center">
+                <th class="p-3">Project Name</th>
+                <th class="p-3">Professor Name</th>
+                <th class="p-3">Project Call Name</th>
+                <th class="p-3">Programme Name</th>
+                <th class="p-3">Grant Holder Name</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">International</th>
+                <th class="p-3">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="project : ${page.getContent()}">
+                <td th:text="${project.name}">[project.name]</td>
+                <td th:text="${project.coordinator.name}">[project.coordinator.name]</td>
+                <td th:text="${project.projectCall.name}">[project.projectCall.name]</td>
+                <td th:text="${project.programme.name}">[project.programme.name]</td>
+                <td th:text="${project.programme.grantHolder.name}">[project.programme.grantHolder.name]</td>
+                <td th:text="${project.status}">[project.status]</td>
+                <td th:text="${project.programme.international}">[project.programme.international]</td>
+                <td class="d-flex">
+                    <form th:action="@{'/projects/delete/{id}' (id=${project.getId()})}" th:method="POST">
+                        <button type="submit" class="btn btn-danger btn-sm me-2">Delete</button>
+                    </form>
+                    <form th:action="@{'/projects/edit/{id}' (id=${project.getId()})}" th:method="POST">
+                        <button type="submit" class="btn btn-warning btn-sm me-2">Edit</button>
+                    </form>
+                    <form th:action="@{'/projects/details/{id}' (id=${project.getId()})}" th:method="GET">
+                        <button type="submit" class="btn btn-primary btn-sm">Details</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Add Project Button -->
+    <div class="mb-4 text-center">
+        <form th:action="@{'/projects/add'}" th:method="GET">
+            <button type="submit" class="btn btn-success mb-3 px-5 py-2">Add New Scientific Project</button>
+        </form>
+    </div>
+
+    <!-- Pagination -->
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
