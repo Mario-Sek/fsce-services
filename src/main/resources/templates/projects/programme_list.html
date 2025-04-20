@@ -35,10 +35,9 @@
                         </a>
                     </div>
                     <div class="col-3">
-                        <a th:href="@{'/scientific-programmes/delete/{id}'}"
-                           class="btn btn-sm btn-danger m-1">
-                            <i th:text="#{DELETE}"></i>
-                        </a>
+                        <form method="post"  th:action="@{'/scientific-programmes/delete/{id}' (id=${programme.getId()})}">
+                            <button type="submit" class="btn btn-danger btn-sm" style="text-align:center" th:text="#{DELETE}"></button>
+                        </form>
                     </div>
                 </td>
             </tr>

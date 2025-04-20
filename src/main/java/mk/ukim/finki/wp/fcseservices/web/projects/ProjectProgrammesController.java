@@ -6,8 +6,7 @@ import mk.ukim.finki.wp.fcseservices.service.ScientificProjectProgrammeService;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/scientific-programmes")
 @Controller
@@ -20,7 +19,7 @@ public class ProjectProgrammesController {
     }
 
     @RequestMapping()
-    String getProjectsHome(Model model,
+    String getProgrammeHome(Model model,
                            @RequestParam(defaultValue = "1") Integer pageNum,
                            @RequestParam(defaultValue = "10") Integer results) {
 
@@ -29,4 +28,10 @@ public class ProjectProgrammesController {
 
         return "projects/programme_list";
     }
+    @PostMapping("/delete/{id}")
+    public String deleteProgramme(@PathVariable(name = "id") Long id) {
+        projectProgrammeService.deleteById(id);
+        return "redirect:/scientific-programmes";
+    }
+
 }
