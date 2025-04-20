@@ -36,17 +36,17 @@ public class ScientificProjectProgrammeServiceImpl implements ScientificProjectP
     }
 
     @Override
-    public Optional<ScientificProjectProgramme> save(String name, String grantHolderName, Boolean international) {
-        GrantHolder holder = grantHolderService.findByName(grantHolderName);
+    public Optional<ScientificProjectProgramme> save(String name, Long grantHolderId, Boolean international) {
+        GrantHolder holder = grantHolderService.findById(grantHolderId).orElseThrow();  //todo exception
         ScientificProjectProgramme programme = new ScientificProjectProgramme(null, name, holder,international);
         return Optional.of(scientificProjectProgrammeRepository.save(programme));
     }
 
     @Override
-    public Optional<ScientificProjectProgramme> edit(Long id, String name, String grantHolderName, Boolean international) {
-        ScientificProjectProgramme programme = scientificProjectProgrammeRepository.findById(id).orElse(null); //todo :exception
+    public Optional<ScientificProjectProgramme> edit(Long id, String name, Long grantHolderId, Boolean international) {
+        ScientificProjectProgramme programme = scientificProjectProgrammeRepository.findById(id).orElseThrow(); //todo exception
         programme.setName(name);
-        GrantHolder holder = grantHolderService.findByName(grantHolderName);
+        GrantHolder holder = grantHolderService.findById(grantHolderId).orElseThrow(); //todo exception
         programme.setGrantHolder(holder);
         programme.setInternational(international);
 

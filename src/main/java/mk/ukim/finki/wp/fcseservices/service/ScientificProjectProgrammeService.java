@@ -14,9 +14,9 @@ public interface ScientificProjectProgrammeService {
     Optional<ScientificProjectProgramme> findById(Long id);
 
 
-    Optional<ScientificProjectProgramme> save(String name, String grantHolderName, Boolean international);
+    Optional<ScientificProjectProgramme> save(String name, Long grantHolderId, Boolean international);
 
-    Optional<ScientificProjectProgramme> edit(Long id, String name, String grantHolderName, Boolean international);
+    Optional<ScientificProjectProgramme> edit(Long id, String name, Long grantHolderId, Boolean international);
 
     void deleteById(Long id);
 
