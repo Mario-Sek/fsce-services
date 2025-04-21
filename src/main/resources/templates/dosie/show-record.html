@@ -159,7 +159,6 @@
                 <label>Admit Report Case:</label>
                 <select name="admit_report" class="form-control" required
                         th:disabled="${record.getAdmittedByStudent()}">
-                    <option value="" th:selected="${record.getAdmittedByStudent() == null}">Please select an option</option>
                     <option value="true" th:selected="${record.getAdmittedByStudent()}">Yes</option>
                     <option value="false" th:selected="${!record.getAdmittedByStudent()}">No</option>
                 </select><br/>
