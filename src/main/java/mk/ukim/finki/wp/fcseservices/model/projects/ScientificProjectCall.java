@@ -30,4 +30,11 @@ public class ScientificProjectCall {
     @Enumerated(EnumType.STRING)
     private ScientificCallStatus status;
 
+    public ScientificProjectCall(String name, LocalDateTime createdAt, LocalDateTime applicationDeadline, ScientificProjectProgramme programme, ScientificCallStatus status) {
+        this.name = name;
+        this.createdAt = createdAt;
+        this.applicationDeadline = applicationDeadline;
+        this.programme = programme;
+        this.status = status;
+    }
 }

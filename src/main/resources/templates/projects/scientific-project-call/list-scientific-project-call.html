@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Scientific Projects Call</title>
+</head>
+<body>
+<div layout:fragment="subheader" th:include="projects/subheader"></div>
+
+<div class="mt-4" layout:fragment="content">
+    <div class="container mt-4">
+        <form th:action="@{/scientific-project-call}" th:method="GET">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-6 form-group">
+                    <label for="searchName" class="form-label">Search by Name</label>
+                    <input type="text" th:value="${name}" class="form-control" id="searchName"
+                           placeholder="Enter project name" name="name">
+                </div>
+                <div class="col-md-3 form-group">
+                    <label for="programmeSelect" class="form-label">Programme</label>
+                    <select name="programmeId" id="programmeSelect" class="form-control">
+                        <option value="">All categories</option>
+                        <option th:each="p : ${programmes}"
+                                th:value="${p.getId()}"
+                                th:text="${p.getName()}"
+                                th:selected="${programmeId != null && programmeId == p.getId()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label for="grantHolderSelect" class="form-label">GrantHolder</label>
+                    <select name="grantHolderId" id="grantHolderSelect" class="form-control">
+                        <option value="">All Grant Holders</option>
+                        <option th:each="gh : ${grantHolders}"
+                                th:value="${gh.getId()}"
+                                th:text="${gh.getName()}"
+                                th:selected="${grantHolderId != null && grantHolderId == gh.getId()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label for="programmeInternationalSelect" class="form-label">Programme Type</label>
+                    <select name="programmeInternational" id="programmeInternationalSelect" class="form-control">
+                        <option value="" th:selected="${programmeInternational == null}">All Types</option>
+                        <option value="true" th:text="International"
+                                th:selected="${programmeInternational != null && programmeInternational == true}">
+                        </option>
+                        <option value="false" th:text="National"
+                                th:selected="${programmeInternational != null && programmeInternational == false}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-md-3 form-group">
+                    <label for="statusSelect" class="form-label">GrantHolder</label>
+                    <select name="status" id="statusSelect" class="form-control">
+                        <option value="">Status</option>
+                        <option th:each="s : ${statuses}"
+                                th:value="${s.name()}"
+                                th:text="${s.name()}"
+                                th:selected="${status != null && status == s.name()}">
+                        </option>
+                    </select>
+                </div>
+                <div class="col-12 mb-1">
+                    <button class="btn btn-primary w-100" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="container mb-4">
+        <div class="row">
+            <div class="col-12" th:if="${page.totalElements > 0}">
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Project name</th>
+                            <th scope="col">Created At</th>
+                            <th scope="col">Application Deadline</th>
+                            <th scope="col">Programme</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="project : ${page.getContent()}">
+                            <td th:text="${project.getName()}"></td>
+                            <td th:text="${project.getCreatedAt()}"></td>
+                            <td th:text="${project.getApplicationDeadline()}"></td>
+                            <td th:text="${project.getProgramme().getName()}"></td>
+                            <td th:text="${project.getStatus().name()}"></td>
+                            <td class="text-right">
+                                <a th:href="@{'/scientific-project-call/delete/{id}' (id=${product.getId()})}"
+                                   class="btn btn-sm btn-danger">
+                                    <i class="fa fa-trash">Delete</i>
+                                </a>
+                                <a th:href="@{'/scientific-project-call/edit-form/{id}' (id=${product.getId()})}"
+                                   class="btn btn-sm btn-info edit-product">
+                                    <i class="fa fa-trash">Edit</i>
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div th:include="fragments/paging :: pageSection(${page})"></div>
+                </div>
+            </div>
+            <div class="col mb-3">
+                <div class="row">
+                    <div class="col-sm-12 col-md-12">
+                        <a href="/scientific-project-call/add-form" class="btn btn-block btn-dark add-product-btn">
+                            Add new project call
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
