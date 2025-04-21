@@ -76,14 +76,20 @@ public class ProjectProgrammesController {
     @GetMapping("/edit/{id}")
     public String editProgramme(Model model,
                                @PathVariable Long id,
-                               @RequestParam(required = false) String errorMessage) {
+                               @RequestParam(required = false) String errorMessage,
+                                RedirectAttributes redirectAttributes) {
 
         if (errorMessage != null) {
             model.addAttribute("errorMessage", errorMessage);
         }
+        try {
+            model.addAttribute("programme", projectProgrammeService.findById(id).orElseThrow(ScientificProjectProgrammeNotFoundException::new));
+            model.addAttribute("grantHolders", grantHolderService.findAll());
+        }catch (Exception e) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Programme with id '"+ id +"' not found");
+            return "redirect:/scientific-programmes";
+        }
 
-        model.addAttribute("programme", projectProgrammeService.findById(id).orElseThrow(ScientificProjectProgrammeNotFoundException::new));
-        model.addAttribute("grantHolders", grantHolderService.findAll());
         return "projects/form_programme";
     }
 

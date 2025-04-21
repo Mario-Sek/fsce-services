@@ -3,7 +3,7 @@
       layout:decorate="~{layout}">
 <head>
   <meta charset="UTF-8">
-  <title>Add Programme</title>
+  <title th:text="${programme != null} ? 'Edit Programme' : 'Add Programme'">Add Programme</title>
   <script>
     function goBack() {
       window.history.back();
@@ -14,7 +14,7 @@
 <div layout:fragment="subheader" th:include="projects/subheader"></div>
 <div class="mt-4" layout:fragment="content">
   <div class="container lg mt-2">
-    <h2>Add programme</h2>
+    <h2 th:text="${programme != null} ? 'Edit Programme' : 'Add Programme'">Add programme</h2>
     <div th:if="${errorMessage != null and !#strings.isEmpty(errorMessage)}" class="alert alert-danger d-flex align-items-center" role="alert">
       <i class="fas fa-exclamation-circle me-2"></i>
       <span th:text="${errorMessage}" class="fw-bold"></span>
