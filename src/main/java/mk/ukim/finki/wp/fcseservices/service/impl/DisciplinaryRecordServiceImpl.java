@@ -183,4 +183,7 @@ public class DisciplinaryRecordServiceImpl implements DisciplinaryRecordService 
 
     private record Result(Professor professor, JoinedSubject joinedSubject, Student student, DisciplinaryType category) {
     }
+
+
+
 }

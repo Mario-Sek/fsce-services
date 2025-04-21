@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
+
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryRecord;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryStatus;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
@@ -33,4 +34,9 @@ public interface DisciplinaryRecordService {
 
     DisciplinaryRecord updateStudentNotification(String reportId) throws DisciplinaryRecordNotFoundException;
 
-}
+
+
+
+
+
+    }
