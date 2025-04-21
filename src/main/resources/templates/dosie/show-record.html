@@ -13,10 +13,11 @@
 
 <div layout:fragment="content" class="mt-4">
 
-    <div class="container-sm align-items-top" style="height: 75vh" th:if="${recordError != null}">
+    <div class="container-sm d-flex align-items-start justify-content-center" style="height: 75vh" th:if="${recordError != null}">
 
-        <div class="alert alert-danger mt-5 d-flex align-items-center justify-content-center" role="alert" >
-            <h5 th:text="${recordError}"></h5>
+        <div class="alert alert-danger alert-dismissible fade show w-50" role="alert">
+            <h5 class="d-inline" th:text="${recordError}"></h5>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
 
     </div>
@@ -27,122 +28,72 @@
             <h2 class="text-center">Report review</h2>
         </div>
 
+        <div class="d-flex align-items-start justify-content-center">
+            <div class="alert alert-success alert-dismissible fade show w-50" role="alert" th:if="${updateSuccess != null}">
+                <h5 class="d-inline" th:text="${updateSuccess}"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        </div>
+
+
         <form th:method="POST" th:action="@{'/reports/review/{id}/add-note'(id=${record?.getId()})}">
 
-            <div class="form-group" th:if="${record?.getStudent() != null}">
+            <div class="form-group">
                 <label>Student Name and Surname:</label>
                 <input type="text"
                        name="student_name"
-                       th:value="${record?.getStudent()?.getName() + ' ' + record?.getStudent()?.getLastName()}"
+                       th:value="${record.getStudent().getName() + ' ' + record.getStudent().getLastName()}"
                        disabled
                        class="form-control"> <br/>
             </div>
 
             <div class="form-group">
-                <label>Student Index</label>
+                <label>Student Index:</label>
                 <input type="text"
                        name="student_index"
                        disabled
-                       th:value="${record?.getStudent()?.getIndex()}"
+                       th:value="${record.getStudent().getIndex()}"
                        required class="form-control"> <br/>
             </div>
 
+            <hr/>
+
             <div class="form-group">
-                <label>Professor Username</label>
+                <label>Professor Username:</label>
                 <input type="text" name="professor_username"
-                       th:value="${record?.getReporter().getName()}"
+                       th:value="${record.getReporter().getName()}"
                        disabled
                        class="form-control"><br/>
             </div>
 
             <div class="form-group">
-                <label>Course</label>
+                <label>Course:</label>
                 <input type="text" name="course"
-                       th:value="${record?.getJoinedSubject().getName()}"
+                       th:value="${record.getJoinedSubject().getName()}"
                        disabled
                        class="form-control"><br/>
             </div>
 
             <div class="form-group">
-                <label>Category</label>
+                <label>Category:</label>
                 <input type="text" name="category"
-                       th:value="${record?.getType().getName()}"
+                       th:value="${record.getType().getName()}"
                        disabled
                        class="form-control"><br/>
             </div>
 
             <div class="form-group">
-                <label>Degree</label>
+                <label>Degree of severity:</label>
                 <input type="number" name="degree"
-                       th:value="${record?.getSeverity()}"
+                       th:value="${record.getSeverity()}"
                        disabled
                        class="form-control"><br/>
             </div>
 
             <div class="form-group">
-                <label>Decision Name</label>
-                <input type="text" name="decision_name"
-                       th:value="${record?.getSuggestedDisciplinarySanction()?.getName()}"
-                       disabled
-                       class="form-control"><br/>
-            </div>
-
-            <div class="form-group">
-                <label>Decision Description</label>
-                <input type="text" name="decision_description"
-                       th:value="${record?.getSuggestedDisciplinarySanction()?.getDescription()}"
-                       disabled
-                       class="form-control"><br/>
-            </div>
-
-            <div class="form-group">
-                <label>Report Date</label>
+                <label>Date Reported:</label>
                 <input type="date" name="report_date"
-                       th:value="${record?.getReportingDate()}"
-                       disabled
-                       class="form-control"><br/>
-            </div>
-
-            <div class="form-group">
-                <label>Report Status</label>
-                <input type="text" name="status"
-                       th:value="${record?.getStatus()}"
-                       disabled
-                       class="form-control"><br/>
-            </div>
-
-            <div class="form-group">
-                <label>Report Note</label>
-                <textarea name="report_note"
-                          th:text="${record?.getDescription()}"
-                          th:value="${record?.getDescription()}"
-                          disabled
-                          class="form-control" rows="3"></textarea><br/>
-            </div>
-
-            <div class="form-group">
-                <label>Meeting Date</label>
-                <input type="text"
-                       name="meeting"
-                       th:value="${record?.meeting?.disciplinaryMeetingDate}"
-                       disabled
-                       class="form-control"><br/>
-            </div>
-
-            <div class="form-group">
-                <label>Sanction Name</label>
-                <input type="text"
-                       name="sanction_name"
-                       th:value="${record?.suggestedDisciplinarySanction?.name}"
-                       disabled
-                       class="form-control"><br/>
-            </div>
-
-            <div class="form-group">
-                <label>Sanction Description</label>
-                <input type="text"
-                       name="sanction_description"
-                       th:value="${record?.suggestedDisciplinarySanction?.description}"
+                       th:value="${record.getReportingDate()}"
                        disabled
                        class="form-control"><br/>
             </div>
@@ -150,24 +101,82 @@
             <hr/>
 
             <div class="form-group">
-                <label>Admit Report Case</label>
-                <select name="admit_report" class="form-control">
-                    <option value="true">Yes</option>
-                    <option value="false">No</option>
+                <label>Professor Report Note:</label>
+                <textarea name="report_note"
+                          th:text="${record.getDescription()}"
+                          th:value="${record.getDescription()}"
+                          disabled
+                          class="form-control" rows="3"></textarea><br/>
+            </div>
+
+            <div class="form-group">
+                <label>Sanction Name:</label>
+                <input type="text" name="decision_name"
+                       th:value="${record.getSuggestedDisciplinarySanction()?.getName()}"
+                       disabled
+                       class="form-control"><br/>
+            </div>
+
+            <div class="form-group">
+                <label>Sanction Description:</label>
+                <input type="text" name="decision_description"
+                       th:value="${record.getSuggestedDisciplinarySanction()?.getDescription()}"
+                       disabled
+                       class="form-control"><br/>
+            </div>
+
+           <hr/>
+
+            <div class="form-group">
+                <label>Meeting Date:</label>
+                <input type="text"
+                       name="meeting"
+                       th:value="${record.getMeeting()?.disciplinaryMeetingDate}"
+                       disabled
+                       class="form-control"><br/>
+            </div>
+
+            <div class="form-group">
+                <label>Decision Decision Description:</label>
+                <input type="text"
+                       name="sanction_name"
+                       th:value="${record.getDecision()?.getDescription()}"
+                       disabled
+                       class="form-control"><br/>
+            </div>
+
+            <div class="form-group">
+                <label>Report Status:</label>
+                <input type="text" name="status"
+                       th:value="${record.getStatus()}"
+                       disabled
+                       class="form-control"><br/>
+            </div>
+
+            <hr/>
+
+            <div class="form-group">
+                <label>Admit Report Case:</label>
+                <select name="admit_report" class="form-control" required
+                        th:disabled="${record.getAdmittedByStudent()}">
+                    <option value="" th:selected="${record.getAdmittedByStudent() == null}">Please select an option</option>
+                    <option value="true" th:selected="${record.getAdmittedByStudent()}">Yes</option>
+                    <option value="false" th:selected="${!record.getAdmittedByStudent()}">No</option>
                 </select><br/>
             </div>
 
             <div class="form-group">
-                <label>Student Note</label>
+                <label>Student Note:</label>
                 <textarea name="student_note"
                           th:text="${record?.getStudentNote()}"
                           th:value="${record?.getStudentNote()}"
                           required
-                          class="form-control" rows="3">
+                          class="form-control" rows="3"
+                          th:disabled="${record.getAdmittedByStudent()}">
                 </textarea><br/>
             </div>
 
-            <div class="form-group d-inline-block">
+            <div class="form-group d-inline-block" th:if="${!record.getAdmittedByStudent()}">
                 <button type="submit" class="btn btn-primary">Submit</button>
             </div>
 

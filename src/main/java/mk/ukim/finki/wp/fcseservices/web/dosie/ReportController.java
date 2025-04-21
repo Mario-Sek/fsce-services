@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -262,5 +263,21 @@ public class ReportController {
             model.addAttribute("recordError", e.getMessage());
         }
         return "dosie/show-record";
+    }
+
+    @PostMapping("/review/{id}/add-note")
+    public String addNoteToReport(@PathVariable String id,
+                                  @RequestParam(name="admit_report") Boolean admitReport,
+                                  @RequestParam(name="student_note") String studentNote,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+
+            reportService.updateReportForStudent(id, admitReport, studentNote);
+            redirectAttributes.addFlashAttribute("updateSuccess", "Successfully updated report");
+        } catch (DisciplinaryRecordNotFoundException e) {
+
+            redirectAttributes.addFlashAttribute("recordError", e.getMessage());
+        }
+        return "redirect:/reports/review/" + id;
     }
 }
