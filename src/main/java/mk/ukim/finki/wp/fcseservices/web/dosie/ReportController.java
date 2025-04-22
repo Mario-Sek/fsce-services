@@ -2,11 +2,15 @@ package mk.ukim.finki.wp.fcseservices.web.dosie;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.ukim.finki.wp.fcseservices.config.FacultyUserDetails;
+import mk.ukim.finki.wp.fcseservices.model.base.Student;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.*;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
 import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 import mk.ukim.finki.wp.fcseservices.service.*;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -252,12 +256,24 @@ public class ReportController {
     }
 
     @GetMapping("/review/{id}")
-    public String showRecord(@PathVariable String id,
+    public String showRecord(@AuthenticationPrincipal FacultyUserDetails userDetails,
+                             @PathVariable String id,
                              Model model) {
         try {
 
             DisciplinaryRecord disciplinaryRecord = reportService.findReportById(id);
-            model.addAttribute("record", disciplinaryRecord);
+            Student student = userDetails.getStudent();
+
+            if(student != null && student.equals(disciplinaryRecord.getStudent())) {
+                model.addAttribute("record", disciplinaryRecord);
+            } else {
+
+                model.addAttribute("status", HttpStatus.FORBIDDEN.value());
+                model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
+                model.addAttribute("message", "You don't have permission to access this resource.");
+
+                return "error";
+            }
         } catch (DisciplinaryRecordNotFoundException e) {
 
             model.addAttribute("recordError", e.getMessage());
