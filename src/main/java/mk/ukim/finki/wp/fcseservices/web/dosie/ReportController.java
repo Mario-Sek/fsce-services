@@ -259,4 +259,27 @@ public class ReportController {
         return "redirect:/reports";
     }
 
+    @GetMapping("/edit-meeting/{recordId}")
+    public String showMeetingUpdateForm(@PathVariable String recordId, Model model)
+            throws DisciplinaryRecordNotFoundException {
+
+        DisciplinaryRecord record = reportService.findReportById(recordId);
+        List<DisciplinaryMeeting> allMeetings = meetingService.getAllMeetings();
+
+        model.addAttribute("record", record);
+        model.addAttribute("meetings", allMeetings);
+        return "dosie/update-meeting-form";
+    }
+
+    @PostMapping("/edit-meeting/{recordId}")
+    public String updateMeetingForRecord(@PathVariable String recordId,
+                                         @RequestParam Long meetingId,
+                                         Model model)
+            throws DisciplinaryRecordNotFoundException {
+
+        reportService.updateMeetingForRecord(recordId, meetingId);
+        return "redirect:/reports";
+    }
+
+
 }

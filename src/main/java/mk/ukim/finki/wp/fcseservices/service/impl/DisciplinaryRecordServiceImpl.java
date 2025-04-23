@@ -184,6 +184,12 @@ public class DisciplinaryRecordServiceImpl implements DisciplinaryRecordService 
     private record Result(Professor professor, JoinedSubject joinedSubject, Student student, DisciplinaryType category) {
     }
 
-
-
+    @Override
+    public DisciplinaryRecord updateMeetingForRecord(String recordId, Long meetingId) throws DisciplinaryRecordNotFoundException {
+        DisciplinaryRecord record = reportRepository.findById(recordId)
+                .orElseThrow(() -> new DisciplinaryRecordNotFoundException("Record not found with provided id"));
+        DisciplinaryMeeting meeting = meetingRepository.findById(meetingId).get();
+        record.setMeeting(meeting);
+        return reportRepository.save(record);
+    }
 }

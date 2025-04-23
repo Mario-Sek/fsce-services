@@ -82,6 +82,7 @@
             <th>Meeting</th>
             <th>Decision</th>
             <th>Sanction</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -97,6 +98,10 @@
             <td th:text="${report.getMeeting().getDisciplinaryMeetingDate()}"></td>
             <td th:text="${report.getDecision()?.description}"></td>
             <td th:text="${report.getDecision()?.getSanction()?.name}"></td>
+            <td>
+                <a th:href="@{'/reports/edit-meeting/' + ${report.id}}"
+                   class="btn btn-sm btn-outline-primary">Change meeting</a>
+            </td>
 
         </tr>
         </tbody>

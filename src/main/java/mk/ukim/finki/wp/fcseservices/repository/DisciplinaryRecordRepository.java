@@ -17,7 +17,6 @@ public interface DisciplinaryRecordRepository extends JpaSpecificationRepository
 
     List<DisciplinaryRecord> findAllByMeetingIsNull();
 
-    @Query("SELECT DISTINCT dr.student FROM DisciplinaryRecord dr WHERE dr.status = :status")
-    List<Student> findDistinctStudentsByStatus(@Param("status") DisciplinaryStatus status);
+
 
 }
