@@ -15,10 +15,9 @@
             <div class="card shadow rounded-4">
                 <div class="card-body p-4">
                     <h3 class="card-title mb-4 text-center">Add / Edit Scientific Project Call</h3>
-                    <form action="/scientific-project-call/add" method="POST">
-                        <input id="id" type="hidden" name="id"
-                               th:value="${projectCall != null ? projectCall.id : ''}">
-
+                    <form th:action="@{ ${projectCall != null} ? '/scientific-project-call/{id}'+ ${projectCall.id} : '/scientific-project-call' }"
+                            action="/scientific-project-call/add" method="POST">
+                        <input type="hidden" name="id" th:value="${projectCall != null ? projectCall.id : null}">
                         <div class="mb-3">
                             <label for="name" class="form-label">Project Name</label>
                             <input type="text"
@@ -61,7 +60,7 @@
                                 <option th:each="stat : ${statuses}"
                                         th:value="${stat}"
                                         th:text="${stat}"
-                                        th:selected="${projectCall != null and projectCall.status != null and projectCall.status.name() == stat}">
+                                        th:selected="${projectCall != null and projectCall.status != null and projectCall.status.name() == stat.name()}">
                                 </option>
                             </select>
                         </div>

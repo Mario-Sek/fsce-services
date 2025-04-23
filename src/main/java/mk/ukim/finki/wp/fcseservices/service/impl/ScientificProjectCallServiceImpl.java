@@ -1,9 +1,8 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 
-import mk.ukim.finki.wp.fcseservices.model.exceptions.ScientificProjectProgrammeNotFoundException;
+import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
 import mk.ukim.finki.wp.fcseservices.model.projects.*;
-import mk.ukim.finki.wp.fcseservices.model.exceptions.ScientificProjectCallNotFoundException;
 import mk.ukim.finki.wp.fcseservices.repository.ScientificProjectCallRepository;
 import mk.ukim.finki.wp.fcseservices.repository.ScientificProjectProgrammeRepository;
 import mk.ukim.finki.wp.fcseservices.service.ScientificProjectCallService;
@@ -33,12 +32,9 @@ public class ScientificProjectCallServiceImpl implements ScientificProjectCallSe
 
     @Override
     public Optional<ScientificProjectCall> save(String name, LocalDateTime createdAt, LocalDateTime applicationDeadLine, Long programme, ScientificCallStatus status) {
-
         ScientificProjectProgramme projectProgramme = scientificProjectProgrammeRepository.findById(programme).orElseThrow(ScientificProjectProgrammeNotFoundException::new);
 
-
-        var scientificProjectCall = new ScientificProjectCall(name, createdAt, applicationDeadLine, projectProgramme, status);
-        return Optional.of(this.scientificProjectCallRepository.save(scientificProjectCall));
+        return Optional.of(this.scientificProjectCallRepository.save(new ScientificProjectCall(name, createdAt, applicationDeadLine, projectProgramme, status)));
     }
 
     @Override

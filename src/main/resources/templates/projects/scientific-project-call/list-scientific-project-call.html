@@ -5,119 +5,122 @@
 <head>
     <meta charset="UTF-8">
     <title>Scientific Projects Call</title>
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
 </head>
 <body>
 <div layout:fragment="subheader" th:include="projects/subheader"></div>
 
-<div class="mt-4" layout:fragment="content">
-    <div class="container mt-4">
-        <form th:action="@{/scientific-project-call}" th:method="GET">
-            <div class="row g-3 align-items-end">
-                <div class="col-md-6 form-group">
-                    <label for="searchName" class="form-label">Search by Name</label>
-                    <input type="text" th:value="${name}" class="form-control" id="searchName"
-                           placeholder="Enter project name" name="name">
-                </div>
-                <div class="col-md-3 form-group">
-                    <label for="programmeSelect" class="form-label">Programme</label>
-                    <select name="programmeId" id="programmeSelect" class="form-control">
-                        <option value="">All categories</option>
-                        <option th:each="p : ${programmes}"
-                                th:value="${p.getId()}"
-                                th:text="${p.getName()}"
-                                th:selected="${programmeId != null && programmeId == p.getId()}">
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-3 form-group">
-                    <label for="grantHolderSelect" class="form-label">GrantHolder</label>
-                    <select name="grantHolderId" id="grantHolderSelect" class="form-control">
-                        <option value="">All Grant Holders</option>
-                        <option th:each="gh : ${grantHolders}"
-                                th:value="${gh.getId()}"
-                                th:text="${gh.getName()}"
-                                th:selected="${grantHolderId != null && grantHolderId == gh.getId()}">
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-3 form-group">
-                    <label for="programmeInternationalSelect" class="form-label">Programme Type</label>
-                    <select name="programmeInternational" id="programmeInternationalSelect" class="form-control">
-                        <option value="" th:selected="${programmeInternational == null}">All Types</option>
-                        <option value="true" th:text="International"
-                                th:selected="${programmeInternational != null && programmeInternational == true}">
-                        </option>
-                        <option value="false" th:text="National"
-                                th:selected="${programmeInternational != null && programmeInternational == false}">
-                        </option>
-                    </select>
-                </div>
-                <div class="col-md-3 form-group">
-                    <label for="statusSelect" class="form-label">GrantHolder</label>
-                    <select name="status" id="statusSelect" class="form-control">
-                        <option value="">Status</option>
-                        <option th:each="s : ${statuses}"
-                                th:value="${s.name()}"
-                                th:text="${s.name()}"
-                                th:selected="${status != null && status == s.name()}">
-                        </option>
-                    </select>
-                </div>
-                <div class="col-12 mb-1">
-                    <button class="btn btn-primary w-100" type="submit">Search</button>
-                </div>
+<div class="container mt-4" layout:fragment="content">
+    <h3 class="text-center mb-5">Search Scientific Project Calls</h3>
+    <form th:action="@{/scientific-project-call}" th:method="GET">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3 form-group">
+                <label for="searchName" class="form-label">Project Call Name</label>
+                <input type="text" th:value="${name}" class="form-control" id="searchName"
+                       placeholder="Enter project call name" name="name">
             </div>
-        </form>
-    </div>
-    <div class="container mb-4">
-        <div class="row">
-            <div class="col-12" th:if="${page.totalElements > 0}">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">Project name</th>
-                            <th scope="col">Created At</th>
-                            <th scope="col">Application Deadline</th>
-                            <th scope="col">Programme</th>
-                            <th scope="col">Status</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="project : ${page.getContent()}">
-                            <td th:text="${project.getName()}"></td>
-                            <td th:text="${project.getCreatedAt()}"></td>
-                            <td th:text="${project.getApplicationDeadline()}"></td>
-                            <td th:text="${project.getProgramme().getName()}"></td>
-                            <td th:text="${project.getStatus().name()}"></td>
-                            <td class="text-right">
-                                <a th:href="@{'/scientific-project-call/delete/{id}' (id=${product.getId()})}"
-                                   class="btn btn-sm btn-danger">
-                                    <i class="fa fa-trash">Delete</i>
-                                </a>
-                                <a th:href="@{'/scientific-project-call/edit-form/{id}' (id=${product.getId()})}"
-                                   class="btn btn-sm btn-info edit-product">
-                                    <i class="fa fa-trash">Edit</i>
-                                </a>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <div th:include="fragments/paging :: pageSection(${page})"></div>
-                </div>
+            <div class="col-md-2 form-group">
+                <label for="programmeSelect" class="form-label">Programme</label>
+                <select name="programmeId" id="programmeSelect" class="form-select">
+                    <option value="">All Programmes</option>
+                    <option th:each="p : ${programmes}"
+                            th:value="${p.getId()}"
+                            th:text="${p.getName()}"
+                            th:selected="${programmeId != null && programmeId == p.getId()}">
+                    </option>
+                </select>
             </div>
-            <div class="col mb-3">
-                <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                        <a href="/scientific-project-call/add-form" class="btn btn-block btn-dark add-product-btn">
-                            Add new project call
-                        </a>
-                    </div>
-                </div>
+            <div class="col-md-2 form-group">
+                <label for="grantHolderSelect" class="form-label">Grant Holder</label>
+                <select name="grantHolderId" id="grantHolderSelect" class="form-select">
+                    <option value="">All Grant Holders</option>
+                    <option th:each="gh : ${grantHolders}"
+                            th:value="${gh.getId()}"
+                            th:text="${gh.getName()}"
+                            th:selected="${grantHolderId != null && grantHolderId == gh.getId()}">
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2 form-group">
+                <label for="programmeInternationalSelect" class="form-label">Programme Type</label>
+                <select name="programmeInternational" id="programmeInternationalSelect" class="form-select">
+                    <option value="" th:selected="${programmeInternational == null}">All Types</option>
+                    <option value="true" th:text="International"
+                            th:selected="${programmeInternational != null && programmeInternational == true}">
+                    </option>
+                    <option value="false" th:text="National"
+                            th:selected="${programmeInternational != null && programmeInternational == false}">
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-2 form-group">
+                <label for="statusSelect" class="form-label">Status</label>
+                <select name="status" id="statusSelect" class="form-select">
+                    <option value="">All Statuses</option>
+                    <option th:each="s : ${statuses}"
+                            th:value="${s.name()}"
+                            th:text="${s.name()}"
+                            th:selected="${status != null && status.name() == s.name()}">
+                    </option>
+                </select>
+            </div>
+            <div class="col-md-1 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fa fa-search me-2"></i>Search
+                </button>
             </div>
         </div>
+    </form>
+
+
+    <div class="mb-4">
+        <h2 class="text-center mt-5">All Project Calls</h2>
+    </div>
+
+    <!-- Project Call Table -->
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead class="table-dark">
+            <tr class="text-center">
+                <th class="p-3">Project Call Name</th>
+                <th class="p-3">Created At</th>
+                <th class="p-3">Application Deadline</th>
+                <th class="p-3">Programme</th>
+                <th class="p-3">Status</th>
+                <th class="p-3">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="project : ${page.getContent()}">
+                <td th:text="${project.getName()}"></td>
+                <td th:text="${project.getCreatedAt()}"></td>
+                <td th:text="${project.getApplicationDeadline()}"></td>
+                <td th:text="${project.getProgramme()?.getName()}"></td>
+                <td th:text="${project.getStatus()?.name()}"></td>
+                <td class="d-flex">
+                    <form th:action="@{'/scientific-project-call/delete/{id}' (id=${project.getId()})}" th:method="POST">
+                        <button type="submit" class="btn btn-danger btn-sm me-2">Delete</button>
+                    </form>
+                    <form th:action="@{'/scientific-project-call/edit/{id}' (id=${project.getId()})}" th:method="POST">
+                        <button type="submit" class="btn btn-warning btn-sm me-2">Edit</button>
+                    </form>
+                    <form th:action="@{'/scientific-project-call/details/{id}' (id=${project.getId()})}" th:method="POST">
+                        <button type="submit" class="btn btn-primary btn-sm">Details</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div th:include="fragments/paging :: pageSection(${page})"></div>
+    </div>
+
+    <!-- Add Project Call Button -->
+    <div class="mb-4 text-center">
+        <a href="/scientific-project-call/add-form" class="btn btn-success mb-3 px-5 py-2">
+            Add New Project Call
+        </a>
     </div>
 </div>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
