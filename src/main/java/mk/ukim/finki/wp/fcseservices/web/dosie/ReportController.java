@@ -2,14 +2,19 @@ package mk.ukim.finki.wp.fcseservices.web.dosie;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import mk.ukim.finki.wp.fcseservices.config.FacultyUserDetails;
+import mk.ukim.finki.wp.fcseservices.model.base.Student;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.*;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
 import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 import mk.ukim.finki.wp.fcseservices.service.*;
 import org.springframework.data.domain.Page;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -250,4 +255,45 @@ public class ReportController {
         return "redirect:/reports";
     }
 
+    @GetMapping("/review/{id}")
+    public String showRecord(@AuthenticationPrincipal FacultyUserDetails userDetails,
+                             @PathVariable String id,
+                             Model model) {
+        try {
+
+            DisciplinaryRecord disciplinaryRecord = reportService.findReportById(id);
+            Student student = userDetails.getStudent();
+
+            if(student != null && student.equals(disciplinaryRecord.getStudent())) {
+                model.addAttribute("record", disciplinaryRecord);
+            } else {
+
+                model.addAttribute("status", HttpStatus.FORBIDDEN.value());
+                model.addAttribute("error", HttpStatus.FORBIDDEN.getReasonPhrase());
+                model.addAttribute("message", "You don't have permission to access this resource.");
+
+                return "error";
+            }
+        } catch (DisciplinaryRecordNotFoundException e) {
+
+            model.addAttribute("recordError", e.getMessage());
+        }
+        return "dosie/show-record";
+    }
+
+    @PostMapping("/review/{id}/add-note")
+    public String addNoteToReport(@PathVariable String id,
+                                  @RequestParam(name="admit_report") Boolean admitReport,
+                                  @RequestParam(name="student_note") String studentNote,
+                                  RedirectAttributes redirectAttributes) {
+        try {
+
+            reportService.updateReportForStudent(id, admitReport, studentNote);
+            redirectAttributes.addFlashAttribute("updateSuccess", "Successfully updated report");
+        } catch (DisciplinaryRecordNotFoundException e) {
+
+            redirectAttributes.addFlashAttribute("recordError", e.getMessage());
+        }
+        return "redirect:/reports/review/" + id;
+    }
 }
