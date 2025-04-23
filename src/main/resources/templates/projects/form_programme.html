@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${programme != null} ? 'Edit Programme' : 'Add Programme'">Add Programme</title>
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+</head>
+<body>
+<div layout:fragment="subheader" th:include="projects/subheader"></div>
+<div class="mt-4" layout:fragment="content">
+  <div class="container lg mt-2">
+    <h2 th:text="${programme != null} ? 'Edit Programme' : 'Add Programme'">Add programme</h2>
+    <div th:if="${errorMessage != null and !#strings.isEmpty(errorMessage)}" class="alert alert-danger d-flex align-items-center" role="alert">
+      <i class="fas fa-exclamation-circle me-2"></i>
+      <span th:text="${errorMessage}" class="fw-bold"></span>
+    </div>
+    <div th:if="${successMessage != null and !#strings.isEmpty(successMessage)}" class="alert alert-success d-flex align-items-center" role="alert">
+      <i class="fas fa-check-circle me-2"></i>
+      <span th:text="${successMessage}" class="fw-bold"></span>
+    </div>
+    <form th:action="@{ ${programme != null} ? '/scientific-programmes/edit/'+ ${programme.getId()} : '/scientific-programmes/add' }" method="post">
+      <div class="form-row mb-3">
+        <div class="col-md-6 mb-3">
+          <label class="form-label text-muted">Name</label>
+          <input type="text" name="programmeName" required class="form-control" th:value="${programme?.getName()}">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="col-md-6 mb-3">
+          <label class="form-label text-muted">Grant Holder</label>
+          <select name="grantHolderId" required class="form-select">
+            <option disabled selected value="">Chose Grant Holder</option>
+            <option th:each="holder : ${grantHolders}" th:value="${holder.getId()}" th:text="${holder.getName()}"
+                    th:selected="${holder.getId().equals(programme?.getGrantHolder()?.getId())}"></option>
+          </select>
+        </div>
+      </div>
+      <div class="form-check mb-3">
+        <input type="checkbox" name="international" id="international" class="form-check-input" th:checked="${programme?.getInternational()}"/>
+        <label class="form-check-label" for="international" >International</label>
+      </div>
+      <input type="submit" value="Save" class="btn btn-primary">
+      <button type="button" class="btn btn-secondary m-0" onclick="goBack()">Back</button>
+    </form>
+
+  </div>
+
+</div>
+</body>
+</html>
