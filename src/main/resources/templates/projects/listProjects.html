@@ -104,7 +104,7 @@
                 <td th:text="${project.coordinator.name}">[project.coordinator.name]</td>
                 <td th:text="${project.projectCall.name}">[project.projectCall.name]</td>
                 <td th:text="${project.programme.name}">[project.programme.name]</td>
-                <td th:text="${project.programme.grantHolder.name}">[project.programme.grantHolder.name]</td>
+                <td th:text="${project.programme?.grantHolder?.name}">[project.programme.grantHolder.name]</td>
                 <td th:text="${project.status}">[project.status]</td>
                 <td th:text="${project.programme.international}">[project.programme.international]</td>
                 <td class="d-flex">
