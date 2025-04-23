@@ -25,7 +25,6 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final StudyProgramRepository studyProgramRepository;
-    private final DisciplinaryRecordRepository recordRepository;
 
 
     @Override
@@ -40,7 +39,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> findStudentByStatus(DisciplinaryStatus status) {
-        return recordRepository.findDistinctStudentsByStatus(status);
+        return Collections.emptyList();
     }
 
     @Override
