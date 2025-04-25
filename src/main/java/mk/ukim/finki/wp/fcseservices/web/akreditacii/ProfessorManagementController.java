@@ -12,6 +12,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.Optional;
 
@@ -119,24 +121,38 @@ public class ProfessorManagementController {
                                @RequestParam String email,
                                @RequestParam Short orderingRank,
                                @RequestParam ProfessorTitle title,
-                               @RequestParam EducationDegree degree) {
+                               @RequestParam(required = false) EducationDegree degree) {
 
         LocalDate dateOfBirthParsed = null;
-        if (dateOfBirth != null)
+        if (dateOfBirth != null && !dateOfBirth.isEmpty())
             dateOfBirthParsed = LocalDate.parse(dateOfBirth);
-        professorService.save(id, name, email, title, orderingRank);
+        try{
+            professorService.save(id, name, email.trim(), title, orderingRank);
+        }
+        catch(Exception e){
+            String encodedMessage = URLEncoder.encode(e.getMessage(), StandardCharsets.UTF_8);
+            return "redirect:/admin/professor?error="+encodedMessage;
+        }
         ProfessorDetails professorDetails = new ProfessorDetails(id, professorService.findById(id),
                 (float) orderingRank, degree, title.toString(), dateOfBirthParsed, null);
+
         professorDetailsService.save(professorDetails);
 
+        String successMessage = "Промената е успешно направена!";
+        String encodedMessage = URLEncoder.encode(successMessage, StandardCharsets.UTF_8);
 
-        return "redirect:/admin/professor";
+        return "redirect:/admin/professor?success="+encodedMessage;
     }
 
     @GetMapping("/{id}/delete")
     public String deleteProfessor(@PathVariable String id) {
-
-        professorDeleteService.deleteProfessor(id);
+        try {
+            professorDeleteService.deleteProfessor(id);
+        }
+        catch(Exception e){
+            String encodedMessage = URLEncoder.encode("Неуспешно бришење!", StandardCharsets.UTF_8);
+            return "redirect:/admin/professor?error="+encodedMessage;
+        }
 
         return "redirect:/admin/professor";
     }

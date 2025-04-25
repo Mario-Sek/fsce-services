@@ -4,6 +4,7 @@ import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidId;
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
 import mk.ukim.finki.wp.fcseservices.model.dto.ProfessorNameAndCodeDTO;
+import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidProfessorCredentialsException;
 import mk.ukim.finki.wp.fcseservices.repository.ProfessorRepository;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorService;
 import org.springframework.data.domain.Page;
@@ -28,13 +29,13 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Page<Professor> findAllWithPagination(int pageNum, int pageSize) {
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize);
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, pageSize,Sort.by("name"));
         return professorRepository.findAll(pageRequest);
     }
 
     @Override
     public Page<Professor> findAllWithPaginationFiltered(Integer pageNum, Integer results, String stringSearch, String filteredTitle) {
-        PageRequest pageRequest = PageRequest.of(pageNum - 1, results);
+        PageRequest pageRequest = PageRequest.of(pageNum - 1, results,Sort.by("name"));
 
         return professorRepository.findAllFiltered(stringSearch,
                 !filteredTitle.equals("") ? ProfessorTitle.valueOf(filteredTitle) : null,
@@ -60,6 +61,16 @@ public class ProfessorServiceImpl implements ProfessorService {
 
     @Override
     public Professor save(String id, String name, String email, ProfessorTitle title, Short orderingRank) {
+        if(email == null || !email.contains("@")){
+            throw new InvalidProfessorCredentialsException("Внесете емаил адреса во правилен формат!");
+        }
+        boolean emailExists = professorRepository.findAll().stream()
+                .anyMatch(prof -> prof.getEmail().equals(email) && !prof.getId().equals(id));
+
+        if (emailExists) {
+            throw new InvalidProfessorCredentialsException("Внесената емаил адреса веќе постои!");
+        }
+
         Professor professor = new Professor(id, name, email, title, orderingRank);
         return professorRepository.save(professor);
     }
