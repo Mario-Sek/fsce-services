@@ -126,6 +126,7 @@ public class DisciplinaryRecordServiceImpl implements DisciplinaryRecordService 
 
     @Override
     public DisciplinaryRecord updateReportForStudent(String reportId, Boolean admitReport, String studentNote) throws DisciplinaryRecordNotFoundException {
+
         DisciplinaryRecord report = this.reportRepository.findById(reportId)
                 .orElseThrow(() -> new DisciplinaryRecordNotFoundException("Report is not found"));
 
@@ -133,8 +134,10 @@ public class DisciplinaryRecordServiceImpl implements DisciplinaryRecordService 
         report.setStudentLastAccess(LocalDateTime.now());
         report.setAdmittedByStudent(admitReport);
         report.setStudentNote(studentNote);
-        report.setStudentLastNote(LocalDateTime.now());
 
+        if (admitReport) {
+            report.setStudentLastNote(LocalDateTime.now());
+        }
         return this.reportRepository.save(report);
     }
 

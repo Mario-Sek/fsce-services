@@ -1,13 +1,15 @@
 package mk.ukim.finki.wp.fcseservices.service.specifications;
 
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyCycle;
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
 import mk.ukim.finki.wp.fcseservices.model.base.SemesterType;
-import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinarySanction;
-import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryStatus;
+import mk.ukim.finki.wp.fcseservices.model.projects.ScientificProject;
+import mk.ukim.finki.wp.fcseservices.model.projects.ScientificProjectProgramme;
 import org.springframework.data.jpa.domain.Specification;
 
 
@@ -88,4 +90,5 @@ public class FieldFilterSpecification {
         }
         return res;
     }
+
 }

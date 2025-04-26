@@ -24,4 +24,11 @@ public class ScientificProjectProgramme {
     private GrantHolder grantHolder;
 
     private Boolean international;
+
+    public ScientificProjectProgramme(Long id, String name, GrantHolder grantHolder, Boolean international) {
+        this.id = id;
+        this.name = name;
+        this.grantHolder = grantHolder;
+        this.international = international;
+    }
 }
