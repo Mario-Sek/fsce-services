@@ -67,10 +67,10 @@ public class DisciplinaryRecordServiceImpl implements DisciplinaryRecordService 
     }
 
     @Override
-    public Page<DisciplinaryRecord> findAllReports(DisciplinaryStatus status, String professorId, String subjectId, Long meetingId, String suggestedSanction, int pageNumber, int pageSize) {
+    public Page<DisciplinaryRecord> findAllReports(DisciplinaryStatus status, String professorId, String subjectId, Long meetingId, Long suggestedSanction, int pageNumber, int pageSize) {
         Specification<DisciplinaryRecord> specification = Specification
-                .where(filterEquals(DisciplinaryRecord.class, "suggestedDisciplinarySanction.id", suggestedSanction))
-                .and(filterEquals(DisciplinaryRecord.class, "reporter.id", professorId))
+                .where(filterEquals(DisciplinaryRecord.class, "reporter.id", professorId))
+                .and(filterEquals(DisciplinaryRecord.class, "suggestedDisciplinarySanction.id", suggestedSanction))
                 .and(filterContainsText(DisciplinaryRecord.class, "joinedSubject.name", subjectId))
                 .and(filterEquals(DisciplinaryRecord.class, "meeting.id", meetingId))
                 .and(filterEqualsV(DisciplinaryRecord.class, "status", status));

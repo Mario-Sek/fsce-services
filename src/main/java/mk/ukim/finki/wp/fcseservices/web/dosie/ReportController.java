@@ -49,7 +49,7 @@ public class ReportController {
                               @RequestParam(name = "professor", required = false) String professor,
                               @RequestParam(name = "subject", required = false) String subject,
                               @RequestParam(name = "meeting", required = false) Long meeting,
-                              @RequestParam(name = "suggestedSanction", required = false) String suggestedSanction,
+                              @RequestParam(name = "suggestedSanction", required = false) Long suggestedSanction,
                               @RequestParam(defaultValue = "1") Integer pageNum,
                               @RequestParam(defaultValue = "10") Integer pageSize,
                               Model model) {
