@@ -10,42 +10,50 @@
             integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
             crossorigin="anonymous"></script>
 </head>
+
 <body>
-<div layout:fragment="subheader" th:include="akreditacii/subheader">
-</div>
+
+<div layout:fragment="subheader" th:include="akreditacii/subheader"></div>
 
 <div class="container mt-5 mb-3" layout:fragment="content">
 
     <h2 class="mb-4 text-center text-primary"
         th:text="${accreditation} != null ? 'Промени акредитација' : 'Креирај акредитација'"></h2>
 
-    <form th:action="@{/admin/accreditations/add}" method="POST" class="p-4 border rounded shadow-sm bg-light">
-        <div class="mb-3">
-            <label for="year" class="form-label" th:text="#{YEAR}"></label>
-            <input type="text" id="year" class="form-control" name="year" required="required"
-                   th:value="(${accreditation} != null ? ${accreditation.getYear()} : '')"
-                   th:readonly="${accreditation != null}" />
-        </div>
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-6">
+            <form th:action="@{/admin/accreditations/add}" method="POST" class="p-4 border rounded shadow-sm bg-light">
+                <div class="mb-3">
+                    <label for="year" class="form-label" th:text="#{YEAR}"></label>
+                    <input type="text" id="year" class="form-control" name="year" required="required"
+                           th:value="(${accreditation} != null ? ${accreditation.getYear()} : '')"
+                           th:readonly="${accreditation != null}" />
+                </div>
 
-        <div class="mb-3">
-            <label for="dateFrom" class="form-label" th:text="#{ACTIVE_FROM}"></label>
-            <input type="date" id="dateFrom" class="form-control" name="activeFrom" required="required"
-                   th:value="(${accreditation} != null ? ${accreditation.getActiveFrom()} : '')"/>
-        </div>
+                <div class="mb-3">
+                    <label for="dateFrom" class="form-label" th:text="#{ACTIVE_FROM}"></label>
+                    <input type="date" id="dateFrom" class="form-control" name="activeFrom" required="required"
+                           th:value="(${accreditation} != null ? ${accreditation.getActiveFrom()} : '')" />
+                </div>
 
-        <div class="mb-3">
-            <label for="dateTo" class="form-label" th:text="#{ACTIVE_TO}"></label>
-            <input type="date" id="dateTo" class="form-control" name="activeTo" required="required"
-                   th:value="(${accreditation} != null ? ${accreditation.getActiveTo()} : '')"/>
-        </div>
+                <div class="mb-3">
+                    <label for="dateTo" class="form-label" th:text="#{ACTIVE_TO}"></label>
+                    <input type="date" id="dateTo" class="form-control" name="activeTo" required="required"
+                           th:value="(${accreditation} != null ? ${accreditation.getActiveTo()} : '')" />
+                </div>
 
-        <textarea class="form-control" name="studyProgramFields" hidden="true">;</textarea>
+                <textarea class="form-control" name="studyProgramFields" hidden="true">;</textarea>
 
-        <div class="d-grid">
-            <button type="submit" class="btn btn-primary" th:text="#{SUBMIT}"></button>
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary" th:text="#{SUBMIT}"></button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
+
 </div>
 
 </body>
 </html>
+
+

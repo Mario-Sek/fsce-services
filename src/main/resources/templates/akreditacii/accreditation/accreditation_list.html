@@ -6,15 +6,16 @@
     <meta charset="UTF-8"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz"
             crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/6.0.3/bootbox.min.js"></script>
 </head>
 <body>
 <h3 th:text="#{UNDERGRADUATE}"></h3>
 <h4 th:text="#{ACCREDITATIONS}"></h4>
-<div layout:fragment="subheader" th:include="akreditacii/subheader">
-</div>
+<div layout:fragment="subheader" th:include="akreditacii/subheader"></div>
 <div class="view-content my-5" layout:fragment="content">
     <div class="item-list">
         <table class="table table-striped table-bordered">
@@ -30,7 +31,6 @@
             <tbody>
             <tr th:each="acc : ${accreditationsPage.getContent()}">
                 <td th:text="${acc.getYear()}"/>
-                </td>
                 <td th:text="${acc.getActiveFrom()}"></td>
                 <td th:text="${acc.getActiveTo()}"></td>
                 <td th:text="(${acc.getIsActive()} == true) ? Да : Не"></td>
@@ -44,8 +44,8 @@
                     </div>
                     <div class="col-3">
                         <a th:href="@{'/admin/accreditations/delete/{id}' (id=${acc.getYear()})}"
-                           class="btn btn-sm btn-danger m-1"
-                           onclick="return confirm('Дали сте сигурни дека сакате да ја избришете оваа акредитација?');">
+                           class="btn btn-sm btn-danger m-1 delete-accreditation"
+                           data-id th:attr="data-id=${acc.getYear()}">
                             <i th:text="#{DELETE}"></i>
                         </a>
                     </div>
@@ -69,6 +69,39 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const deleteButtons = document.querySelectorAll(".delete-accreditation");
+            deleteButtons.forEach(function (button) {
+                button.addEventListener("click", function (e) {
+                    e.preventDefault();
+
+                    const url = this.getAttribute("href");
+
+                    bootbox.confirm({
+                        title: "Потврда",
+                        message: "Со бришење на акредитацијата ќе ги избришете сите студиски програми и предмети од избраната акредитација. Дали сакате да продолжете?",
+                        buttons: {
+                            confirm: {
+                                label: 'Да',
+                                className: 'btn-danger px-5'
+                            },
+                            cancel: {
+                                label: 'Не',
+                                className: 'btn-secondary px-5'
+                            }
+                        },
+                        callback: function (result) {
+                            if (result) {
+                                window.location.href = url;
+                            }
+                        }
+                    });
+                });
+            });
+        });
+    </script>
 </div>
 </body>
 </html>
