@@ -120,4 +120,10 @@ public class ResultsController {
 
         return "redirect:/admin/results/all";
     }
+    @GetMapping("/wall-of-shame")
+        public String getWallOfShame(Model model){
+            model.addAttribute("professorsNoResults",resultsService.findProfessorsWithNoResults());
+            return "results/wallOfShame";
+        }
+
 }

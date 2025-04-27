@@ -127,4 +127,8 @@ public class ResultsServiceImpl implements ResultsService {
                 .forEach(courseGroup -> this.createResultForExamSessionAndCourseGroup(yearExamSession, courseGroup));
     }
 
+    public List<Professor> findProfessorsWithNoResults(){
+        return resultsRepository.findProfessorsWithNoResults();
+    }
+
 }
