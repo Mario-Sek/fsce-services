@@ -3,6 +3,7 @@ package mk.ukim.finki.wp.fcseservices.web.dosie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.wp.fcseservices.config.FacultyUserDetails;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.Student;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.*;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
@@ -86,7 +87,6 @@ public class ReportController {
 
         return "dosie/reports";
     }
-
 
 
     @PostMapping("/showReports")
@@ -271,7 +271,7 @@ public class ReportController {
             DisciplinaryRecord disciplinaryRecord = reportService.findReportById(id);
             Student student = userDetails.getStudent();
 
-            if(student != null && student.equals(disciplinaryRecord.getStudent())) {
+            if (student != null && student.equals(disciplinaryRecord.getStudent())) {
                 model.addAttribute("record", disciplinaryRecord);
             } else {
 
@@ -290,8 +290,8 @@ public class ReportController {
 
     @PostMapping("/review/{id}/add-note")
     public String addNoteToReport(@PathVariable String id,
-                                  @RequestParam(name="admit_report") Boolean admitReport,
-                                  @RequestParam(name="student_note") String studentNote,
+                                  @RequestParam(name = "admit_report") Boolean admitReport,
+                                  @RequestParam(name = "student_note") String studentNote,
                                   RedirectAttributes redirectAttributes) {
         try {
 
@@ -302,5 +302,27 @@ public class ReportController {
             redirectAttributes.addFlashAttribute("recordError", e.getMessage());
         }
         return "redirect:/reports/review/" + id;
+    }
+
+    @GetMapping("/edit-meeting/{recordId}")
+    public String showMeetingUpdateForm(@PathVariable String recordId, Model model)
+            throws DisciplinaryRecordNotFoundException {
+
+        DisciplinaryRecord record = reportService.findReportById(recordId);
+        List<DisciplinaryMeeting> allMeetings = meetingService.getAllMeetings();
+
+        model.addAttribute("record", record);
+        model.addAttribute("meetings", allMeetings);
+        return "dosie/update-meeting-form";
+    }
+
+    @PostMapping("/edit-meeting/{recordId}")
+    public String updateMeetingForRecord(@PathVariable String recordId,
+                                         @RequestParam Long meetingId,
+                                         Model model)
+            throws DisciplinaryRecordNotFoundException {
+
+        reportService.updateMeetingForRecord(recordId, meetingId);
+        return "redirect:/reports";
     }
 }

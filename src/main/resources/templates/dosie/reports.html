@@ -19,7 +19,7 @@
                 <select id="status" name="status" class="form-control col-sm-2">
                     <option value="">Select Status</option>
                     <option th:each="stat : ${statuses}"
-                            th:value="${stat}" th:text="${stat}">
+                            th:value="${stat}" th:text="${stat}" th:selected="${stat == currentStatus}">
                     </option>
                 </select>
             </div>
@@ -28,7 +28,7 @@
                 <select id="professor" name="professor" class="form-control col-sm-2">
                     <option value="">Select Professor</option>
                     <option th:each="prof : ${professors}"
-                            th:value="${prof.id}" th:text="${prof.name}">
+                            th:value="${prof.id}" th:text="${prof.name}" th:selected="${prof.id == currentProfessor}">
                     </option>
                 </select>
             </div>
@@ -37,7 +37,7 @@
                 <select id="subject" name="subject" class="form-control col-sm-2">
                     <option value="">Select Subject</option>
                     <option th:each="subj : ${subjects}"
-                            th:value="${subj.name}" th:text="${subj.name}">
+                            th:value="${subj.name}" th:text="${subj.name}" th:selected="${subj.name == currentSubject}">
                     </option>            </select>
             </div>
             <div class="form-group col-sm-2">
@@ -46,7 +46,9 @@
                     <option value="">Select Meeting</option>
                     <option th:each="meet : ${meetings}"
                             th:value="${meet.id}"
-                            th:text="${#temporals.format(meet.disciplinaryMeetingDate, 'yyyy-MM-dd')}">
+                            th:text="${#temporals.format(meet.disciplinaryMeetingDate, 'yyyy-MM-dd')}"
+                            th:selected="${meet.id == currentMeeting}">
+                    >
                     </option>
                 </select>
             </div>
@@ -55,7 +57,9 @@
                 <select id="suggestedSanction" name="suggestedSanction" class="form-control">
                     <option value="">Select Suggested Sanction</option>
                     <option th:each="sanction : ${sanctions}"
-                            th:value="${sanction.id}" th:text="${sanction.name}">
+                            th:value="${sanction.id}" th:text="${sanction.name}"
+                            th:selected="${sanction.id == currentSuggestedSanction}">"
+                    >
                     </option>
                 </select>
             </div>
