@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>Add Project Call</title>
+</head>
+<body>
+<div layout:fragment="subheader" th:include="projects/subheader"></div>
+
+<div class="container mt-5" layout:fragment="content">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-7">
+            <div class="card shadow rounded-4">
+                <div class="card-body p-4">
+                    <h3 class="card-title mb-4 text-center">Add / Edit Scientific Project Call</h3>
+                    <form th:action="@{ ${projectCall != null} ? '/scientific-project-call/{id}'+ ${projectCall.id} : '/scientific-project-call' }"
+                            action="/scientific-project-call/add" method="POST">
+                        <input type="hidden" name="id" th:value="${projectCall != null ? projectCall.id : null}">
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Project Name</label>
+                            <input type="text"
+                                   class="form-control"
+                                   id="name"
+                                   name="name"
+                                   th:value="${projectCall != null ? projectCall.name : ''}"
+                                   required
+                                   placeholder="Enter project name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="createdAt" class="form-label">Created At</label>
+                            <input type="datetime-local"
+                                   class="form-control"
+                                   id="createdAt"
+                                   name="createdAt"
+                                   th:value="${projectCall != null ? #temporals.format(projectCall.createdAt, 'yyyy-MM-dd''T''HH:mm') : ''}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="applicationDeadLine" class="form-label">Application Deadline</label>
+                            <input type="datetime-local"
+                                   class="form-control"
+                                   id="applicationDeadLine"
+                                   name="applicationDeadLine"
+                                   th:value="${projectCall != null ? #temporals.format(projectCall.applicationDeadline, 'yyyy-MM-dd''T''HH:mm') : ''}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="programme" class="form-label">Programme</label>
+                            <select name="programme" id="programme" class="form-select">
+                                <option th:each="prog : ${programmes}"
+                                        th:value="${prog.id}"
+                                        th:text="${prog.name}"
+                                        th:selected="${projectCall != null and projectCall.programme != null and projectCall.programme.id == prog.id}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="mb-4">
+                            <label for="status" class="form-label">Status</label>
+                            <select name="status" id="status" class="form-select">
+                                <option th:each="stat : ${statuses}"
+                                        th:value="${stat}"
+                                        th:text="${stat}"
+                                        th:selected="${projectCall != null and projectCall.status != null and projectCall.status.name() == stat.name()}">
+                                </option>
+                            </select>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            <button id="submit" type="submit" class="btn btn-success px-4">Submit</button>
+                            <a class="btn btn-outline-secondary px-4" href="/scientific-project-call">Back</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

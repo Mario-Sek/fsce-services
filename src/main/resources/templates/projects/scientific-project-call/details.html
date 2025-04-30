@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+  <meta charset="UTF-8">
+  <title>About Project Call</title>
+  <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}" />
+</head>
+<body>
+<div layout:fragment="subheader" th:include="projects/subheader"></div>
+
+<div class="container mt-5" layout:fragment="content">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+      <div class="card rounded-4">
+        <div class="card-body p-4">
+          <h3 class="card-title mb-4 text-center" th:text="'Scientific Project Call: ' + ${projectCall.name}">Scientific Project Call</h3>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Scientific Project Call Name</label>
+            <div class="form-control-plaintext ps-2" th:text="${projectCall.name}">Sample Name</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Created At</label>
+            <div class="form-control-plaintext ps-2" th:text="${#temporals.format(projectCall.createdAt, 'yyyy-MM-dd HH:mm')}">2025-04-22 12:00</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Application Deadline</label>
+            <div class="form-control-plaintext ps-2" th:text="${#temporals.format(projectCall.applicationDeadline, 'yyyy-MM-dd HH:mm')}">2025-05-22 12:00</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Programme</label>
+            <div class="form-control-plaintext ps-2" th:text="${projectCall.programme?.name}">Programme Name</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Grant Holder</label>
+            <div class="form-control-plaintext ps-2" th:text="${projectCall.programme?.grantHolder?.name}">Grant Holder Name</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Programme Type</label>
+            <div class="form-control-plaintext ps-2" th:text="${projectCall.programme?.international ? 'International' : 'National'}">International</div>
+          </div>
+          <div class="mb-4">
+            <label class="form-label fw-bold">Status</label>
+            <div class="form-control-plaintext ps-2" th:text="${projectCall.status?.name()}">OPEN</div>
+          </div>
+          <div class="d-flex justify-content-between">
+            <a href="/scientific-project-call" class="btn btn-outline-secondary px-4">
+              <i class="fa fa-arrow-left me-2"></i>Back
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

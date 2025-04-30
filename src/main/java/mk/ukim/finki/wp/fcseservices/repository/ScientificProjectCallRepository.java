@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ScientificProjectCallRepository extends JpaRepository<ScientificProjectCall, Long> {
+public interface ScientificProjectCallRepository extends JpaSpecificationRepository<ScientificProjectCall, Long> {
 
 }

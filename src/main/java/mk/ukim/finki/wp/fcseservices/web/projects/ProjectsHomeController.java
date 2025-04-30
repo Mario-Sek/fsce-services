@@ -69,7 +69,7 @@ public class ProjectsHomeController {
         model.addAttribute("professorName", professorName);
         model.addAttribute("scientificProjectCallName", scientificProjectCallName);
 
-        return "projects/listProjects";
+        return "/projects/listProjects";
     }
 
     @GetMapping("/projects/add")
