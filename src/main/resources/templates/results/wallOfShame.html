@@ -1,5 +1,6 @@
 <!doctype html>
-<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,51 +13,128 @@
     />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        .criteria-box {
+            background-color: #fff3cd;
+            border-left: 6px solid #ffeeba;
+            padding: 15px;
+            margin-bottom: 20px;
+            max-width: 50%;
+
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            padding: 10px 15px;
+            border-radius: 8px;
+        }
+
+        .table-title-danger {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .table-title-primary {
+            background-color: #d1ecf1;
+            color: #0c5460;
+        }
+    </style>
 </head>
 <body>
 
 <div th:replace="~{fragments/header :: header}"></div>
 
-
 <div layout:fragment="subheader" th:include="results/subheader"></div>
-
 
 <div class="container py-5">
     <h1 class="text-center mb-4">Wall of Shame</h1>
 
+    <!-- Search bar -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <input class="form-control" type="text" id="professorSearch" placeholder="Пребарај по име на професор"
+                   onkeyup="filterProfessors()">
+        </div>
+    </div>
+
     <div class="row">
-        <!-- Professors with no results published -->
-        <div class="col-md-6 mb-4">
-            <h2 class="text-danger mb-3">Професори кои немаат објавено резултати во ниту една сесија</h2>
-            <div class="card">
-                <ul class="list-group list-group-flush">
-                    <th:block th:each="professor : ${professorsNoResults}">
-                        <li class="list-group-item" th:text="${professor.name}"></li>
-                    </th:block>
+        <!-- Criteria for lateness -->
+        <div class="col-md-12">
+            <div class="criteria-box">
+                <h5>Критериум за доцнење</h5>
+                <ul>
+                    <li>Две недели по датумот на полагање (за колоквиуми)</li>
+                    <li>Еден месец по датумот на полагање (за други испити)</li>
                 </ul>
             </div>
+        </div>
+
+        <!-- Professors with no results published -->
+        <div class="col-md-6 mb-4">
+            <h2 class="table-title-danger text-center">Професори кои немаат објавено резултати во ниту една сесија</h2>
+            <p>Вкупно: <span th:text="${#lists.size(professorsNoResults)}"></span></p>
+            <table class="table table-bordered">
+                <thead class="table-danger">
+                <tr>
+                    <th>Име на професор</th>
+                </tr>
+                </thead>
+                <tbody id="noResultsTable">
+                <tr th:each="professor : ${professorsNoResults}">
+                    <td th:text="${professor.name}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
 
         <!-- Professors late with publishing results -->
         <div class="col-md-6 mb-4">
-            <h2 class="text-primary mb-3">Професори кои доцнеле со резултати</h2>
-            <div class="card">
-                <ul class="list-group list-group-flush">
-                    <th:block th:each="professor : ${professorsLateResults}">
-                        <li class="list-group-item" th:text="${professor.name}"></li>
-                    </th:block>
-                </ul>
-            </div>
+            <h2 class="table-title-primary text-center">Професори кои доцнеле со резултати</h2>
+            <p>Вкупно: <span th:text="${#lists.size(professorsLateResults)}"></span></p>
+            <table class="table table-bordered">
+                <thead class="table-primary">
+                <tr>
+                    <th>Име на професор</th>
+                    <th>Предмет</th>
+                    <th>Сесија</th>
+                    <th>Датум на испит</th>
+                    <th>Датум на објава</th>
+                </tr>
+                </thead>
+                <tbody id="lateResultsTable">
+                <tr th:each="result : ${professorsLateResults}">
+                    <td th:text="${result.professorName}"></td>
+                    <td th:text="${result.subjectName}"></td>
+                    <td th:text="${result.sessionName}"></td>
+                    <td th:if="${result.examDate != null}" th:text="${#temporals.format(result.examDate, 'dd-MM-yyyy')}"></td>
+                    <td th:text="${#temporals.format(result.uploadDate, 'dd-MM-yyyy')}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-
 <div th:replace="~{fragments/footer :: footer}">&copy; 2024 The Wall of Shame</div>
-
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
         crossorigin="anonymous"></script>
+
+<script>
+    function filterProfessors() {
+        const query = document.getElementById('professorSearch').value.toLowerCase();
+        const tables = ['noResultsTable', 'lateResultsTable'];
+        tables.forEach(tableId => {
+            const rows = document.getElementById(tableId).getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                const match = Array.from(cells).some(cell => cell.textContent.toLowerCase().includes(query));
+                rows[i].style.display = match ? '' : 'none';
+            }
+        });
+    }
+</script>
+
 </body>
 </html>

@@ -2,6 +2,7 @@ package mk.ukim.finki.wp.fcseservices.service;
 
 
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.dto.LateResultDto;
 import mk.ukim.finki.wp.fcseservices.model.results.Results;
 import mk.ukim.finki.wp.fcseservices.model.teachingallocation.schedule.Course;
 import org.springframework.data.domain.Page;
@@ -24,5 +25,7 @@ public interface ResultsService {
     void initializeForExamSession(String name);
 
      List<Professor> findProfessorsWithNoResults();
+
+     List<LateResultDto> getLateResults();
 
 }
