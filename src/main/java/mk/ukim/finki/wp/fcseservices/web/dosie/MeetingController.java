@@ -48,6 +48,7 @@ public class MeetingController {
                               @RequestParam(name = "record", required = false) Long record,
                               @RequestParam(defaultValue = "0") int page,
                               Model model, HttpServletRequest request) {
+
         int pageSize = 10;
 
         model.addAttribute("professors", professorService.findAll());
