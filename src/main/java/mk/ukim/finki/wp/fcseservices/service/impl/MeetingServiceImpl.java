@@ -12,6 +12,7 @@ import mk.ukim.finki.wp.fcseservices.model.exceptions.StudentNotFoundException;
 import mk.ukim.finki.wp.fcseservices.repository.*;
 import mk.ukim.finki.wp.fcseservices.repository.ProfessorRepository;
 import mk.ukim.finki.wp.fcseservices.service.MeetingService;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -92,8 +93,8 @@ public class MeetingServiceImpl implements MeetingService {
     }
 
     @Override
-    public DisciplinaryMeeting editMeeting(Long id, String meetingDate, List<String> studentIds, List<String> professorIds)
-            throws ProfessorNotFoundException, StudentNotFoundException {
+    public DisciplinaryMeeting editMeeting(Long id, String meetingDate, List<String> professorIds)
+            throws ProfessorNotFoundException {
         DisciplinaryMeeting disciplinaryMeeting = meetingRepository.findById(id).orElseThrow();
         LocalDate date = LocalDate.parse(meetingDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
         disciplinaryMeeting.setDisciplinaryMeetingDate(date);
@@ -102,13 +103,6 @@ public class MeetingServiceImpl implements MeetingService {
 
         List<DisciplinaryMeetingParticipant> participantList = new ArrayList<>();
 
-        for (String studentId : studentIds) {
-            Student student = studentRepository.findById(studentId)
-                    .orElseThrow(() -> new StudentNotFoundException("Student not found"));
-            DisciplinaryMeetingParticipant participant = new DisciplinaryMeetingParticipant();
-            participant.setMeeting(disciplinaryMeeting);
-            participantList.add(participant);
-        }
 
         for (String professorId : professorIds) {
             Professor professor = professorRepository.findById(professorId)
@@ -121,6 +115,69 @@ public class MeetingServiceImpl implements MeetingService {
 
         participantRepository.saveAll(participantList);
         return meetingRepository.save(disciplinaryMeeting);
+    }
+
+    @Override
+    public Page<DisciplinaryMeeting> findAllMeetings(String professor, LocalDate date, Long recordId, int pageNumber, int pageSize) throws ProfessorNotFoundException {
+        Professor professor1;
+        if (professor != null && !professor.isEmpty())
+            professor1 = professorRepository.findById(professor)
+                    .orElseThrow(() -> new ProfessorNotFoundException("Professor cannot be found"));
+        else {
+            professor1 = null;
+        }
+
+        DisciplinaryRecord record1;
+        if (recordId != null)
+            record1 = recordRepository.findById(String.valueOf(recordId)).orElseThrow(() -> new RuntimeException("Record cannot be found"));
+        else {
+            record1 = null;
+        }
+
+        LocalDate date1 = date;
+
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, Sort.by(Sort.Direction.DESC, "disciplinaryMeetingDate"));
+
+        Page<DisciplinaryMeeting> allMeetings = meetingRepository.findAll(pageable);
+
+        if(professor1 == null && date1 == null && record1 == null)
+            return new PageImpl<>(allMeetings.stream().toList());
+
+        List<DisciplinaryMeeting> filteredMeetings = new ArrayList<>();
+
+        for(DisciplinaryMeeting meeting : allMeetings){
+            List<DisciplinaryMeetingParticipant> participantList = this.participantRepository.findAllByMeeting(meeting);
+            List<DisciplinaryRecord> disciplinaryRecordList = this.recordRepository.findAllByMeeting(meeting);
+            boolean prof = false;
+            boolean record = false;
+            boolean datee = false;
+            for(DisciplinaryMeetingParticipant participant : participantList){
+                if(participant.getProfessor() == professor1) prof = true;
+            }
+            for(DisciplinaryRecord record2 : disciplinaryRecordList){
+                if(record2 == record1) record = true;
+            }
+            if(meeting.getDisciplinaryMeetingDate().equals(date1)){
+                datee = true;
+            }
+
+            if(professor1 != null && date1 == null && record1 == null && prof)
+                filteredMeetings.add(meeting);
+            else if(professor1 == null && date1 != null && record1 == null && datee)
+                filteredMeetings.add(meeting);
+            else if(professor1 == null && date1 == null && record1 != null && record)
+                filteredMeetings.add(meeting);
+            else if(professor1 != null && date1 != null && record1 == null && prof && datee)
+                filteredMeetings.add(meeting);
+            else if(professor1 != null && date1 == null && record1 != null && prof && record)
+                filteredMeetings.add(meeting);
+            else if(professor1 == null && date1 != null && record1 != null && record && datee)
+                filteredMeetings.add(meeting);
+            else if(professor1 != null && date1 != null && record1 != null && record && datee && prof)
+                filteredMeetings.add(meeting);
+        }
+
+        return new PageImpl<>(filteredMeetings);
     }
 
 }

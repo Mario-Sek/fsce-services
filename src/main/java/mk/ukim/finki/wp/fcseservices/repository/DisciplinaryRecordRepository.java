@@ -15,4 +15,6 @@ public interface DisciplinaryRecordRepository extends JpaRepository<Disciplinary
     List<DisciplinaryRecord> findAllByStudent(Student student);
 
     List<DisciplinaryRecord> findAllByMeetingIsNull();
+
+    List<DisciplinaryRecord> findAllByMeeting(DisciplinaryMeeting meeting);
 }

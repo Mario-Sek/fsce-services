@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
+import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryMeeting;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryRecord;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryStatus;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
@@ -18,7 +19,7 @@ public interface DisciplinaryRecordService {
 
     List<DisciplinaryRecord> findAllReportsForStudent(String index) throws StudentNotFoundException;
 
-
+    List<DisciplinaryRecord> findAll();
 
     DisciplinaryRecord findReportById(String id) throws DisciplinaryRecordNotFoundException;
 
@@ -32,5 +33,7 @@ public interface DisciplinaryRecordService {
     DisciplinaryRecord setSanctionForRecord(String id, String decisionName, String decisionDescription) throws DisciplinaryRecordNotFoundException;
 
     DisciplinaryRecord updateStudentNotification(String reportId) throws DisciplinaryRecordNotFoundException;
+
+    void setMeetingToRecordsWithoutMeeting(DisciplinaryMeeting disciplinaryMeeting);
 
 }

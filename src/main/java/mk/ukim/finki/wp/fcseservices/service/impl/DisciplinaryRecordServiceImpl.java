@@ -121,6 +121,11 @@ public class DisciplinaryRecordServiceImpl implements DisciplinaryRecordService 
     }
 
     @Override
+    public List<DisciplinaryRecord> findAll() {
+        return reportRepository.findAll();
+    }
+
+    @Override
     public DisciplinaryRecord findReportById(String id) throws DisciplinaryRecordNotFoundException {
         return this.reportRepository.findById(id)
                 .orElseThrow(() -> new DisciplinaryRecordNotFoundException("Report is not found"));
@@ -198,6 +203,16 @@ public class DisciplinaryRecordServiceImpl implements DisciplinaryRecordService 
         report.setStudentLastAccess(LocalDateTime.now());
 
         return this.reportRepository.save(report);
+    }
+
+    @Override
+    public void setMeetingToRecordsWithoutMeeting(DisciplinaryMeeting disciplinaryMeeting) {
+        List<DisciplinaryRecord> recordList = this.reportRepository.findAllByMeetingIsNull();
+        for(DisciplinaryRecord record : recordList){
+            record.setMeeting(disciplinaryMeeting);
+            record.setStatus(DisciplinaryStatus.SCHEDULED);
+            this.reportRepository.save(record);
+        }
     }
 
     private Result getResult(String professorUsername, String studentIndex, String joinedSubjectId, String categoryId) throws ProfessorNotFoundException, JoinedSubjectNotFoundException, StudentNotFoundException, DisciplinaryTypeNotFoundException {
