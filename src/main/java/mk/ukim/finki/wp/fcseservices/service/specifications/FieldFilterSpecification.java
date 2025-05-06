@@ -5,6 +5,7 @@ import jakarta.persistence.criteria.JoinType;
 import jakarta.persistence.criteria.Path;
 import jakarta.persistence.criteria.Root;
 import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyCycle;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle;
 import mk.ukim.finki.wp.fcseservices.model.base.SemesterType;
 import mk.ukim.finki.wp.fcseservices.model.projects.ScientificProject;
@@ -13,6 +14,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 
 public class FieldFilterSpecification {
+
+
+
+
+
 
     public static <T> Specification<T> filterEquals(Class<T> clazz, String field, StudyCycle value) {
         return (root, query, criteriaBuilder) -> {
