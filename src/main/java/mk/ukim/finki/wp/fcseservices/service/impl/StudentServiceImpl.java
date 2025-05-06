@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 import lombok.AllArgsConstructor;
+import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryRecord;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryStatus;
 import mk.ukim.finki.wp.fcseservices.model.base.Student;
 import mk.ukim.finki.wp.fcseservices.model.dto.StudentDto;
@@ -25,6 +26,7 @@ public class StudentServiceImpl implements StudentService {
 
     private final StudentRepository studentRepository;
     private final StudyProgramRepository studyProgramRepository;
+    private final DisciplinaryRecordRepository disciplinaryRecordRepository;
 
 
     @Override
@@ -39,7 +41,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<Student> findStudentByStatus(DisciplinaryStatus status) {
-        return Collections.emptyList();
+        return disciplinaryRecordRepository.findAllByStatus(status)
+                .stream()
+                .map(DisciplinaryRecord::getStudent)
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @Override
