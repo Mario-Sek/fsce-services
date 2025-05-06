@@ -36,10 +36,11 @@
         <h5>The report was successfully updated.</h5>
     </div>
 
-        <form th:method="POST" th:action="@{'/add/{id}'(id=${report?.getId()})}">
+    <form th:method="POST" th:action="@{${report != null ? '/reports/add/' + report.id : '/reports/add/'}}">
 
 
-            <div class="form-group">
+
+    <div class="form-group">
                 <label>Student Index</label>
                 <input type="text" name="student_index"
                        th:value="${report?.getStudent()?.getIndex()}"

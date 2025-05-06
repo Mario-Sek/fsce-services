@@ -102,7 +102,8 @@ public class ReportController {
     }
 
     @GetMapping("/add-report")
-    public String showAdd(Model model,
+    public String showAdd(@AuthenticationPrincipal FacultyUserDetails userDetails,
+                          Model model,
                           HttpServletRequest request) {
         List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
         List<DisciplinaryType> categories = this.categoryService.findAllCategories();
@@ -110,6 +111,10 @@ public class ReportController {
         model.addAttribute("subjects", subjects);
         model.addAttribute("categories", categories);
         model.addAttribute("statuses", DisciplinaryStatus.values());
+
+        if (userDetails != null && userDetails.getUsername() != null) {
+            model.addAttribute("username", userDetails.getUsername());
+        }
 
         return "dosie/add-form";
     }
