@@ -9,6 +9,9 @@
     <li sec:authorize="hasAnyRole('ROLE_PROFESSOR','ROLE_ADMIN')">
       <a href="/professors/my" class="nav-link px-3 text-white">Прикачување резултати</a>
     </li>
+    <li sec:authorize="hasAnyRole('ROLE_PROFESSOR','ROLE_ADMIN')">
+      <a href="/admin/results/wall-of-shame" class="nav-link px-3 text-white">Wall of Shame</a>
+    </li>
     <li sec:authorize="hasRole('ROLE_STUDENT')">
       <a href="/student/my" class="nav-link px-3 text-white">Погледни Резултати</a>
     </li>

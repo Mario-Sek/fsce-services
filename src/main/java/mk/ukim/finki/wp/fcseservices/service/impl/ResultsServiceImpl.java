@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.service.impl;
 
 import mk.ukim.finki.wp.fcseservices.model.base.Professor;
+import mk.ukim.finki.wp.fcseservices.model.dto.LateResultDto;
 import mk.ukim.finki.wp.fcseservices.model.examschedule.YearExamSession;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.CourseNotFoundException;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.ResultNotFoundException;
@@ -24,9 +25,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @Service
@@ -36,6 +39,7 @@ public class ResultsServiceImpl implements ResultsService {
     private final CourseRepository courseRepository;
     private final YearExamSessionRepository yearExamSessionRepository;
     private final ProfessorService professorService;
+
     public Optional<Results> findById(Long id) {
         return this.resultsRepository.findById(id);
     }
@@ -56,8 +60,8 @@ public class ResultsServiceImpl implements ResultsService {
     public Page<Results> filterAndPaginateResultsAll(String professorId, String semesterExamSessionName, List<Course> courses, String examType, String hasResults,
                                                      Integer page, Integer size) {
 
-        Specification<Results> filters = ResultSpecifications.filterAll(professorId, semesterExamSessionName, courses, hasResults,examType);
-        PageRequest pageRequest = PageRequest.of(page -1,size,Sort.by(Sort.Direction.DESC,"uploadedAt"));
+        Specification<Results> filters = ResultSpecifications.filterAll(professorId, semesterExamSessionName, courses, hasResults, examType);
+        PageRequest pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "uploadedAt"));
         return resultsRepository.findAll(filters, pageRequest);
     }
 
@@ -68,16 +72,16 @@ public class ResultsServiceImpl implements ResultsService {
     }
 
     @Override
-    public Page<Results> filterAndPaginateResultsStudent(String studentId, String professorId,String yearExamSessionName, String hasResults,String examType,Integer page, Integer size) {
-        Pageable pageRequest = PageRequest.of(page -1,size,Sort.by(Sort.Direction.DESC, "uploadedAt"));
-        Specification<Results> filters = ResultSpecifications.filterByStudent(studentId, yearExamSessionName, hasResults,examType,professorId);
+    public Page<Results> filterAndPaginateResultsStudent(String studentId, String professorId, String yearExamSessionName, String hasResults, String examType, Integer page, Integer size) {
+        Pageable pageRequest = PageRequest.of(page - 1, size, Sort.by(Sort.Direction.DESC, "uploadedAt"));
+        Specification<Results> filters = ResultSpecifications.filterByStudent(studentId, yearExamSessionName, hasResults, examType, professorId);
         return resultsRepository.findAll(filters, pageRequest);
     }
 
 
     public void createResultForExamSessionAndCourseGroup(YearExamSession session, Course course) {
 
-        boolean exists = this.resultsRepository.findBySessionAndJoinedSubject(session,course.getJoinedSubject())
+        boolean exists = this.resultsRepository.findBySessionAndJoinedSubject(session, course.getJoinedSubject())
                 .isPresent();
 
         if (!exists) {
@@ -90,7 +94,7 @@ public class ResultsServiceImpl implements ResultsService {
     }
 
 
-    public Results uploadResults(Long courseId, String sessionName, MultipartFile pdfFile, String note,String examType,String profId) throws IOException {
+    public Results uploadResults(Long courseId, String sessionName, MultipartFile pdfFile, String note, String examType, String profId) throws IOException {
         Course course = this.courseRepository.findCourseById(courseId).orElseThrow(() -> new CourseNotFoundException(String
                 .format("Course with id %d does not exist", courseId)));
         YearExamSession session = this.yearExamSessionRepository.findByName(sessionName)
@@ -102,7 +106,7 @@ public class ResultsServiceImpl implements ResultsService {
         byte[] pdfBytes = pdfFile.getBytes();
 
         Results results;
-        Optional<Results> resultsOpt = resultsRepository.findByJoinedSubjectAbbreviationAndSessionNameAndResultTypeAndUploadedBy(course.getJoinedSubject().getAbbreviation(),sessionName,examType,professor);
+        Optional<Results> resultsOpt = resultsRepository.findByJoinedSubjectAbbreviationAndSessionNameAndResultTypeAndUploadedBy(course.getJoinedSubject().getAbbreviation(), sessionName, examType, professor);
 
         results = resultsOpt.orElseGet(Results::new);
         results.setUploadedAt(LocalDateTime.now());
@@ -127,4 +131,27 @@ public class ResultsServiceImpl implements ResultsService {
                 .forEach(courseGroup -> this.createResultForExamSessionAndCourseGroup(yearExamSession, courseGroup));
     }
 
+    public List<Professor> findProfessorsWithNoResults() {
+        return resultsRepository.findProfessorsWithNoResults();
+    }
+
+    public List<LateResultDto> getLateResults() {
+        List<Object[]> results = resultsRepository.findProfessorsWithLateResults();
+        return results.stream()
+                .map(row -> new LateResultDto(
+                        (String) row[0],  // professorId
+                        (String) row[1],  // professorName
+                        (String) row[2],  // subjectName
+                        convertTimestampToLocalDateTime((Timestamp) row[3]),  // examDate
+                        convertTimestampToLocalDateTime((Timestamp) row[4]),  // uploadDate
+                        (String) row[5]   // sessionName
+                ))
+                .collect(Collectors.toList());
+    }
+
+    private LocalDateTime convertTimestampToLocalDateTime(Timestamp timestamp) {
+
+        return timestamp != null ? timestamp.toLocalDateTime() : null;
+
+    }
 }
