@@ -103,7 +103,8 @@ public class MeetingController {
 
             errorThrown = true;
 
-            return "dosie/meeting-form";
+            //return "dosie/meeting-form";
+            return "redirect:/meetings";
         }
 
         if (!errorThrown) {
