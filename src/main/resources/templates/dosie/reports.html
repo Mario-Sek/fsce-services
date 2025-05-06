@@ -88,9 +88,18 @@
             <td th:text="${report.getDescription()}"></td>
             <td th:text="${report.getReportingDate()}"></td>
             <td th:text="${report.getStatus()}"></td>
-            <td></td>
-            <td></td>
-            <td></td>
+            <td th:text="${report.getMeeting() != null ? report.getMeeting().getDisciplinaryMeetingDate() : ''}"></td>
+            <td>
+                <a th:href="@{'/disciplinary/' + ${report.getId()} + '/decision'}" class="btn btn-primary btn-sm">
+                    <span th:if="${report.getDecision() == null}">Set<br>Decision</span>
+                    <span th:if="${report.getDecision() != null}">View<br>Decision</span>
+                </a>
+            </td>
+            <td th:text="${report.getDecision() != null and report.getDecision().getSanction() != null
+              ? report.getDecision().getSanction().getName() : ''}">
+            </td>
+
+
         </tr>
         </tbody>
     </table>
