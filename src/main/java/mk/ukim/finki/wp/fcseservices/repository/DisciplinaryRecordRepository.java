@@ -2,10 +2,7 @@ package mk.ukim.finki.wp.fcseservices.repository;
 
 
 import mk.ukim.finki.wp.fcseservices.model.base.Student;
-import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryRecord;
-import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryStatus;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import mk.ukim.finki.wp.fcseservices.model.disciplinary.*;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,6 +14,5 @@ public interface DisciplinaryRecordRepository extends JpaSpecificationRepository
 
     List<DisciplinaryRecord> findAllByMeetingIsNull();
 
-
-
+    List<DisciplinaryRecord> findAllByMeeting(DisciplinaryMeeting meeting);
 }

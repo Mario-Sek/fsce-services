@@ -12,6 +12,7 @@ import mk.ukim.finki.wp.fcseservices.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -111,6 +112,8 @@ public class ReportController {
     @GetMapping("/add-report")
     public String showAdd(Model model,
                           HttpServletRequest request) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("username", username);
         List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
         List<DisciplinaryType> categories = this.categoryService.findAllCategories();
 
