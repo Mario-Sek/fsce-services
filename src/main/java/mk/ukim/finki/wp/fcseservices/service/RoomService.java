@@ -5,6 +5,7 @@ import mk.ukim.finki.wp.fcseservices.model.base.RoomType;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RoomService {
     Page<Room> findAllWithPagination(Integer pageNum, Integer pageSize);
@@ -18,4 +19,9 @@ public interface RoomService {
     String toTsv(List<Room> groups);
 
 
+    Set<Room> findAllByNameIn(Set<String> roomNames);
+
+    Integer calculateTotalCapacityOfRooms(List<Room> list);
+
+    List<Room> findAllByRoomType(RoomType type);
 }

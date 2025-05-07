@@ -2,6 +2,7 @@ package mk.ukim.finki.wp.fcseservices.service.impl;
 
 import lombok.AllArgsConstructor;
 import mk.ukim.finki.wp.fcseservices.model.base.Semester;
+import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 import mk.ukim.finki.wp.fcseservices.model.teachingallocation.SubjectAllocationStats;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.SemesterNotFoundException;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.SubjectAllocationStatsNotFoundException;
@@ -168,6 +169,16 @@ public class SubjectAllocationStatsServiceImpl implements SubjectAllocationStats
     @Override
     public void deleteById(String id) {
         subjectAllocationStatsRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<SubjectAllocationStats> findBySubject(JoinedSubject joinedSubject) {
+        return subjectAllocationStatsRepository.findAllBySubject(joinedSubject).stream().findFirst();
+    }
+
+    @Override
+    public Integer getTotalStudents(SubjectAllocationStats subjectAllocationStats) {
+        return subjectAllocationStats.getTotalStudents();
     }
 
 
