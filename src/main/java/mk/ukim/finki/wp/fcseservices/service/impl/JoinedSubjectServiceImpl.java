@@ -25,13 +25,11 @@ import static mk.ukim.finki.wp.fcseservices.model.base.ProfessorTitle.TEACHING_A
 import mk.ukim.finki.wp.fcseservices.model.base.TrackedHistoryEntity;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static mk.ukim.finki.wp.fcseservices.service.specifications.FieldFilterSpecification.*;
+import static org.springframework.data.domain.Sort.by;
 import static org.springframework.data.jpa.domain.Specification.where;
 
 @Service
@@ -42,6 +40,11 @@ public class JoinedSubjectServiceImpl implements JoinedSubjectService {
     private final SubjectRepository subjectRepository;
 
     private final TeacherSubjectRequestsService teacherSubjectRequestsService;
+
+    @Override
+    public JoinedSubject findById(String id) {
+        return this.joinedSubjectRepository.findByAbbreviation(id);
+    }
 
     @Override
     public List<JoinedSubject> findAllJoinedSubjects() {
@@ -229,6 +232,12 @@ public class JoinedSubjectServiceImpl implements JoinedSubjectService {
                 .filter(Optional::isPresent)
                 .map(Optional::get)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<JoinedSubject> findPage(Integer page, Integer size, Specification<JoinedSubject> filter) {
+        return this.joinedSubjectRepository.findAll(filter, PageRequest.of(page - 1, size,
+                by("name")));
     }
 
 

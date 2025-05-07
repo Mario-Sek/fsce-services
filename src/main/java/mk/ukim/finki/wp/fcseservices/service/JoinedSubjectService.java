@@ -6,11 +6,13 @@ import mk.ukim.finki.wp.fcseservices.model.dto.JoinedSubjectProfessorsDTO;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.InvalidJoinedSubjectAbbreviationException;
 import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 import org.springframework.data.domain.Page;
+import org.springframework.data.jpa.domain.Specification;
 
 import java.time.LocalDate;
 import java.util.List;
 
 public interface JoinedSubjectService {
+    JoinedSubject findById(String id);
 
     List<JoinedSubject> findAllJoinedSubjects();
 
@@ -39,4 +41,5 @@ public interface JoinedSubjectService {
     Page<JoinedSubjectProfessorsDTO> listActivatedSubjectsWithProfessors(String name, SemesterType semesterType, int pageNum, int pageSize);
 
     List<JoinedSubjectDTO> importJoinedSubjects(List<JoinedSubjectDTO> importSubjects, String semester);
+    Page<JoinedSubject> findPage(Integer page, Integer size, Specification<JoinedSubject> filter);
 }

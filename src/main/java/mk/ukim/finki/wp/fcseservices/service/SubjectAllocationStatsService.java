@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
+import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 import mk.ukim.finki.wp.fcseservices.model.teachingallocation.SubjectAllocationStats;
 import org.springframework.data.domain.Page;
 
@@ -24,4 +25,8 @@ public interface SubjectAllocationStatsService {
     void calculate(String semester);
 
     void deleteById(String id);
+
+    Optional<SubjectAllocationStats> findBySubject(JoinedSubject joinedSubject);
+
+    public Integer getTotalStudents(SubjectAllocationStats subjectAllocationStats);
 }

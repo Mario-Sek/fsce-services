@@ -8,9 +8,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-
+import java.util.Set;
 
 
 @Service
@@ -104,6 +105,21 @@ public class RoomServiceImpl implements RoomService {
         }
         );
         return sb.toString();
+    }
+
+    @Override
+    public Set<Room> findAllByNameIn(Set<String> roomNames) {
+        return new HashSet<>(this.roomRepository.findAllByNameIn(roomNames));
+    }
+
+    @Override
+    public Integer calculateTotalCapacityOfRooms(List<Room> rooms) {
+        return rooms.stream().mapToInt(room -> Math.toIntExact(room.getCapacity())).sum();
+    }
+
+    @Override
+    public List<Room> findAllByRoomType(RoomType type) {
+        return this.roomRepository.findAllByType(type);
     }
 
     private void processRoom(StringBuilder sb, Room room) {
