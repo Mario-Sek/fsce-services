@@ -6,54 +6,92 @@
 </head>
 <body>
 <div layout:fragment="subheader" th:include="akreditacii/subheader"></div>
-<div class="container" layout:fragment="content">
 
+<div class="container mt-5" layout:fragment="content">
+    <h2 class="mb-4"
+        th:text="${professor?.name} != null ? 'Промени детали' : 'Додади Професор'">
+
+    </h2>
     <form method="POST" th:action="@{/admin/professor/add-professor}">
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <label for="name" class="form-label" th:text="#{PROFESSOR_NAME}"></label>
+                <input class="form-control" id="name" name="name" required
+                       th:value="${professor?.name}">
+            </div>
 
-        <label for="name" th:text="#{PROFESSOR_NAME}"></label>
-        <input class="form-control" id="name" name="name" required="required"
-               th:value="${professor?.name}">
+            <div class="col-md-6 mb-3">
+                <label for="id" class="form-label" th:text="#{ID}"></label>
+                <input class="form-control" id="id" name="id"
+                       th:value="${professor?.id}"
+                       th:disabled="${professor?.id != null}"
+                th:readonly="${professor?.id != null}"/>
 
-        <label for="id" th:text="#{ID}"></label>
-        <input class="form-control" id="id" name="id" required="required"
-               th:value="${professor?.id}">
+                <input type="hidden" name="id" th:value="${professor?.id}" />
 
-        <label for="dateOfBirth" th:text="#{DATE_OF_BIRTH}"></label>
-        <input class="form-control" id="dateOfBirth" name="dateOfBirth"
-               th:value="${professorDetails?.birthDay}"
-               type="date"/>
+            </div>
 
-        <label for="email" th:text="#{PROFESSOR_EMAIL}"></label>
-        <input class="form-control" id="email" name="email" required="required"
-               th:value="${professor?.email}">
+            <div class="col-md-6 mb-3">
+                <label for="dateOfBirth" class="form-label" th:text="#{DATE_OF_BIRTH}"></label>
+                <input class="form-control" id="dateOfBirth" name="dateOfBirth"
+                       type="date"
+                       th:value="${professorDetails?.birthDay}">
+            </div>
 
-        <label for="email" text="Ordering Rank"></label>
-        <input class="form-control" id="orderingRank" name="orderingRank" required="required"
-               th:value="${professor?.orderingRank}">
+            <div class="col-md-6 mb-3">
+                <label for="email" class="form-label" th:text="#{PROFESSOR_EMAIL}"></label>
+                <input class="form-control" id="email" name="email" required
+                       th:value="${professor?.email}">
+            </div>
 
-        <label for="title" th:text="#{DEGREE_TITLE}"></label>
-        <select class="form-control" id="title" name="title">
-            <option
+            <div class="col-md-6 mb-3">
+                <label for="orderingRank" class="form-label">Ordering Rank</label>
+                <input class="form-control" id="orderingRank" name="orderingRank" required
+                       th:value="${professor?.orderingRank}">
+            </div>
 
-                    th:selected="${title !=null ? professorDetails?.getProfessor()?.getTitle()?.equals(title):false}"
-                    th:each="title : ${professorTitles}"
-                    th:text="${title}"
-                    th:value="${title}">
-            </option>
-        </select>
+            <div class="col-md-6 mb-3">
+                <label for="title" class="form-label" th:text="#{DEGREE_TITLE}"></label>
+                <select class="form-control" id="title" name="title">
+                    <option th:if="${professor?.getTitle()} != null"
+                            th:selected="${professor?.getTitle() != null &&
+                          professor?.getTitle() == title}"
+                            th:each="title : ${professorTitles}"
+                            th:value="${title}"
+                            th:text="${title}">
+                    </option>
+                    <option th:if="${professor?.getTitle()} == null"
+                            th:each="title : ${professorTitles}"
+                            th:value="${title}"
+                            th:text="${title}">
+                    </option>
+                </select>
 
-        <label for="degree" th:text="#{EDUCATION_DEGREE}"></label>
-        <select class="form-control" id="degree" name="degree">
-            <option
-                    th:each="degree : ${educationDegrees}"
-                    th:selected="${professorDetails!=null ? professorDetails.getDegree().equals(degree):false}"
-                    th:text="${degree}"
-                    th:value="${degree}">
-            </option>
-        </select>
+            </div>
 
+            <div class="col-md-6 mb-3">
+                <label for="degree" class="form-label" th:text="#{EDUCATION_DEGREE}"></label>
+                <select class="form-control" id="degree" name="degree">
+                    <option th:value="${null}"
+                            th:selected="${professorDetails != null and professorDetails.degree == null}">
+                        Избери
+                    </option>
 
-        <button class="btn btn-primary " th:text="#{SUBMIT}" type="submit"></button>
+                    <!-- Options from educationDegrees -->
+                    <option th:each="degree : ${educationDegrees}"
+                            th:value="${degree}"
+                            th:text="${degree}"
+                            th:selected="${professorDetails != null and degree == professorDetails.degree}">
+                    </option>
+                </select>
+
+            </div>
+
+        </div>
+
+        <div class="mt-4">
+            <button class="btn btn-primary" type="submit" th:text="#{SUBMIT}">Поднеси</button>
+        </div>
     </form>
 </div>
 </body>
