@@ -15,6 +15,15 @@
     <li sec:authorize="hasRole('ROLE_STUDENT')">
       <a href="/student/my" class="nav-link px-3 text-white">Погледни Резултати</a>
     </li>
+    <li sec:authorize="hasRole('ROLE_ADMIN')">
+      <a href="/admin/exam-session" class="nav-link px-3 text-white">Испитна сесија</a>
+    </li>
+    <li sec:authorize="hasRole('ROLE_ADMIN')">
+      <a href="/admin/exam-definition" class="nav-link px-3 text-white">Организација на полагање</a>
+    </li>
+    <li sec:authorize="hasRole('ROLE_ADMIN')">
+      <a href="/admin/subject-exam" class="nav-link px-3 text-white">Испити</a>
+    </li>
   </ul>
 </div>
 </body>

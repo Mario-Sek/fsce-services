@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.Optional;
+
 public interface JoinedSubjectRepository extends JpaSpecificationRepository<JoinedSubject, String> {
     JoinedSubject findByName(String name);
 
@@ -51,4 +53,5 @@ public interface JoinedSubjectRepository extends JpaSpecificationRepository<Join
     Page<JoinedSubject> findActivatedSubjectsByNameAndSemesterType(Pageable pageable,
                                                                    @Param("name") String name,
                                                                    @Param("semesterType") String semesterType);
+
 }
