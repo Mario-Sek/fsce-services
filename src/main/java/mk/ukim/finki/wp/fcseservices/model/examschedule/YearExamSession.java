@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.*;
 import mk.ukim.finki.wp.fcseservices.model.accreditations.StudyCycle;
 
 import java.time.LocalDate;
@@ -44,5 +45,17 @@ public class YearExamSession {
         this.name = String.format("%s-%s", year, session.name());
         this.session = session;
         this.year = year;
+    }
+
+
+    public YearExamSession(ExamSession session, String year, LocalDate sessionStart, LocalDate sessionEnd, LocalDate enrollmentStartDate, LocalDate enrollmentEndDate, List<StudyCycle> cycle) {
+        this.name = String.format("%s-%s", year, session.name());
+        this.session = session;
+        this.year = year;
+        this.sessionStart = sessionStart;
+        this.sessionEnd = sessionEnd;
+        this.enrollmentStartDate = enrollmentStartDate;
+        this.enrollmentEndDate = enrollmentEndDate;
+        this.cycle = cycle;
     }
 }

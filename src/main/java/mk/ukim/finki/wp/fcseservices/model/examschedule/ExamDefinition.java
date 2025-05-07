@@ -1,6 +1,7 @@
 package mk.ukim.finki.wp.fcseservices.model.examschedule;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import mk.ukim.finki.wp.fcseservices.model.teachingallocation.JoinedSubject;
 @Setter
 @NoArgsConstructor
 @Entity
+@AllArgsConstructor
 public class ExamDefinition extends TrackedHistoryEntity {
 
     // WP-JUNE-LAB

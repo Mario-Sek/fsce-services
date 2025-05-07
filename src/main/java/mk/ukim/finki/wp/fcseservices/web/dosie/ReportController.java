@@ -3,6 +3,7 @@ package mk.ukim.finki.wp.fcseservices.web.dosie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import mk.ukim.finki.wp.fcseservices.config.FacultyUserDetails;
+import mk.ukim.finki.wp.fcseservices.model.base.Professor;
 import mk.ukim.finki.wp.fcseservices.model.base.Student;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.*;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
@@ -11,6 +12,7 @@ import mk.ukim.finki.wp.fcseservices.service.*;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +22,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/reports")
@@ -45,15 +48,17 @@ public class ReportController {
         this.meetingService = meetingService;
     }
 
+
     @GetMapping("")
-    public String getHomePage(@RequestParam(name = "status", required = false) String status,
+    public String getHomePage(@RequestParam(name = "status", required = false) DisciplinaryStatus status,
                               @RequestParam(name = "professor", required = false) String professor,
                               @RequestParam(name = "subject", required = false) String subject,
                               @RequestParam(name = "meeting", required = false) Long meeting,
-                              @RequestParam(name = "suggestedSanction", required = false) String suggestedSanction,
-                              @RequestParam(defaultValue = "0") int page,
-                              Model model, HttpServletRequest request) {
-        int pageSize = 10;
+                              @RequestParam(name = "suggestedSanction", required = false) Long suggestedSanction,
+                              @RequestParam(defaultValue = "1") Integer pageNum,
+                              @RequestParam(defaultValue = "10") Integer pageSize,
+                              Model model) {
+
 
         model.addAttribute("statuses", DisciplinaryStatus.values());
         model.addAttribute("professors", professorService.findAll());
@@ -62,17 +67,19 @@ public class ReportController {
         model.addAttribute("sanctions", disciplinarySanctionService.findAllSanctions());
 
         try {
-            Page<DisciplinaryRecord> reportsPage = this.reportService.findAllReports(status, professor, subject, meeting, suggestedSanction, page, pageSize);
-            model.addAttribute("allReports", reportsPage.getContent());
-            model.addAttribute("currentPage", page);
-            model.addAttribute("totalPages", reportsPage.getTotalPages());
-            model.addAttribute("previousPage", page - 1);
-            model.addAttribute("nextPage", page + 1);
-            List<Integer> pageNumbers = new ArrayList<>();
-            for (int i = 0; i < reportsPage.getTotalPages(); i++) {
-                pageNumbers.add(i);
-            }
-            model.addAttribute("pageNumbers", pageNumbers);
+            Page<DisciplinaryRecord> reportsPage = this.reportService.findAllReports(
+                    status, professor, subject, meeting, suggestedSanction,
+                    pageNum - 1, pageSize);
+
+            model.addAttribute("page", reportsPage);
+
+
+            model.addAttribute("currentStatus", status);
+            model.addAttribute("currentProfessor", professor);
+            model.addAttribute("currentSubject", subject);
+            model.addAttribute("currentMeeting", meeting);
+            model.addAttribute("currentSuggestedSanction", suggestedSanction);
+
         } catch (ProfessorNotFoundException e) {
             model.addAttribute("errorMessage", "Professor not found.");
         } catch (JoinedSubjectNotFoundException e) {
@@ -81,6 +88,7 @@ public class ReportController {
 
         return "dosie/reports";
     }
+
 
     @PostMapping("/showReports")
     public String showReports(@RequestParam(required = false) String index,
@@ -105,6 +113,8 @@ public class ReportController {
     public String showAdd(@AuthenticationPrincipal FacultyUserDetails userDetails,
                           Model model,
                           HttpServletRequest request) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        model.addAttribute("username", username);
         List<JoinedSubject> subjects = this.joinedSubjectService.findAllJoinedSubjects();
         List<DisciplinaryType> categories = this.categoryService.findAllCategories();
 
@@ -269,7 +279,7 @@ public class ReportController {
             DisciplinaryRecord disciplinaryRecord = reportService.findReportById(id);
             Student student = userDetails.getStudent();
 
-            if(student != null && student.equals(disciplinaryRecord.getStudent())) {
+            if (student != null && student.equals(disciplinaryRecord.getStudent())) {
                 model.addAttribute("record", disciplinaryRecord);
             } else {
 
@@ -288,8 +298,8 @@ public class ReportController {
 
     @PostMapping("/review/{id}/add-note")
     public String addNoteToReport(@PathVariable String id,
-                                  @RequestParam(name="admit_report") Boolean admitReport,
-                                  @RequestParam(name="student_note") String studentNote,
+                                  @RequestParam(name = "admit_report") Boolean admitReport,
+                                  @RequestParam(name = "student_note") String studentNote,
                                   RedirectAttributes redirectAttributes) {
         try {
 
@@ -300,5 +310,27 @@ public class ReportController {
             redirectAttributes.addFlashAttribute("recordError", e.getMessage());
         }
         return "redirect:/reports/review/" + id;
+    }
+
+    @GetMapping("/edit-meeting/{recordId}")
+    public String showMeetingUpdateForm(@PathVariable String recordId, Model model)
+            throws DisciplinaryRecordNotFoundException {
+
+        DisciplinaryRecord record = reportService.findReportById(recordId);
+        List<DisciplinaryMeeting> allMeetings = meetingService.getAllMeetings();
+
+        model.addAttribute("record", record);
+        model.addAttribute("meetings", allMeetings);
+        return "dosie/update-meeting-form";
+    }
+
+    @PostMapping("/edit-meeting/{recordId}")
+    public String updateMeetingForRecord(@PathVariable String recordId,
+                                         @RequestParam Long meetingId,
+                                         Model model)
+            throws DisciplinaryRecordNotFoundException {
+
+        reportService.updateMeetingForRecord(recordId, meetingId);
+        return "redirect:/reports";
     }
 }

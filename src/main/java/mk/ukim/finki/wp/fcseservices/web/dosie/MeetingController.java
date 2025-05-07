@@ -11,9 +11,11 @@ import mk.ukim.finki.wp.fcseservices.model.exceptions.DisciplinaryMeetingNotFoun
 import mk.ukim.finki.wp.fcseservices.model.exceptions.ProfessorNotFoundException;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.StudentNotFoundException;
 import mk.ukim.finki.wp.fcseservices.repository.DisciplinaryMeetingParticipantRepository;
+import mk.ukim.finki.wp.fcseservices.service.DisciplinaryRecordService;
 import mk.ukim.finki.wp.fcseservices.service.MeetingService;
 import mk.ukim.finki.wp.fcseservices.service.ProfessorService;
 import mk.ukim.finki.wp.fcseservices.service.StudentService;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,6 +24,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,17 +37,45 @@ public class MeetingController {
     private final ProfessorService professorService;
     private final StudentService studentService;
     private final DisciplinaryMeetingParticipantRepository participantRepository;
+    private final DisciplinaryRecordService disciplinaryRecordService;
 
     public boolean errorThrown = false;
     public boolean errorThrownOnUpdate = false;
 
     @GetMapping("/meetings")
-    public String getMeetings(Model model, HttpServletRequest request) {
+    public String getMeetings(@RequestParam(name = "professor", required = false) String professor,
+                              @RequestParam(name = "date", required = false) LocalDate date,
+                              @RequestParam(name = "record", required = false) Long record,
+                              @RequestParam(defaultValue = "0") int page,
+                              Model model, HttpServletRequest request) {
+
+        int pageSize = 10;
+
+        model.addAttribute("professors", professorService.findAll());
+        model.addAttribute("records", disciplinaryRecordService.findAll());
+
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         model.addAttribute("username", username);
 
-        List<DisciplinaryMeeting> meetings = meetingService.getAllMeetings();
-        model.addAttribute("allMeetings", meetings);
+        try{
+            Page<DisciplinaryMeeting> meetingsPage = this.meetingService.findAllMeetings(professor, date, record, page, pageSize);
+            //model.addAttribute("allMeetings", meetingsPage.getContent());
+            model.addAttribute("meetingsPage", meetingsPage);
+            model.addAttribute("currentPage", page);
+            model.addAttribute("totalPages", meetingsPage.getTotalPages());
+            model.addAttribute("previousPage", page - 1);
+            model.addAttribute("nextPage", page + 1);
+            List<Integer> pageNumbers = new ArrayList<>();
+            for (int i = 0; i < meetingsPage.getTotalPages(); i++) {
+                pageNumbers.add(i);
+            }
+            model.addAttribute("pageNumbers", pageNumbers);
+        } catch (ProfessorNotFoundException e) {
+            model.addAttribute("errorMessage", "Professor not found.");
+        }
+
+        /*List<DisciplinaryMeeting> meetings = meetingService.getAllMeetings();
+        model.addAttribute("allMeetings", meetings);*/
 
         return "dosie/meetings";
     }
@@ -70,7 +102,6 @@ public class MeetingController {
 
     @PostMapping("/meeting/add/")
     public String addMeeting(@RequestParam String meetingDate,
-                             @RequestParam String students,
                              @RequestParam String professors,
                              Model model,
                              HttpServletRequest request,
@@ -89,14 +120,16 @@ public class MeetingController {
                 return "dosie/meeting-form";
             }
 
-            if (students != null && !students.isEmpty()) {
+            /*if (students != null && !students.isEmpty()) {
                 meetingService.addParticipants(students, meeting);
             } else {
                 model.addAttribute("username", username);
                 model.addAttribute("studentsError", "Participants are required.");
                 errorThrown = true;
                 return "dosie/meeting-form";
-            }
+            }*/
+
+            this.disciplinaryRecordService.setMeetingToRecordsWithoutMeeting(meeting);
         } catch (ProfessorNotFoundException professorNotFoundException) {
             model.addAttribute("username", username);
             model.addAttribute("professorError", professorNotFoundException.getMessage());
@@ -113,6 +146,7 @@ public class MeetingController {
 
             return "dosie/meeting-form";
         }
+
         return "redirect:/meetings";
     }
 
@@ -120,9 +154,9 @@ public class MeetingController {
     @PostMapping("/meeting/add/{id}")
     public String editMeeting(
             @PathVariable Long id,
-            @RequestParam("meetingDate") String meetingDate,
-            @RequestParam("students") List<String> studentIds,
-            @RequestParam("professors") List<String> professorIds,
+            @RequestParam(name = "meetingDate") String meetingDate,
+            @RequestParam(name="students", required = false) List<String> studentIds,
+            @RequestParam(name = "professors") List<String> professorIds,
             Model model,
             HttpServletRequest request,
             HttpServletResponse response) throws DisciplinaryMeetingNotFound, StudentNotFoundException {
@@ -131,7 +165,7 @@ public class MeetingController {
         errorThrownOnUpdate = false;
 
         try {
-            DisciplinaryMeeting meeting = meetingService.editMeeting(id, meetingDate, studentIds, professorIds);
+            DisciplinaryMeeting meeting = meetingService.editMeeting(id, meetingDate, professorIds);
             model.addAttribute("username", username);
             model.addAttribute("date", meeting.getDisciplinaryMeetingDate().toString());
             model.addAttribute("selectedStudents", studentIds);
@@ -158,15 +192,17 @@ public class MeetingController {
                            Model model) throws DisciplinaryMeetingNotFound {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         DisciplinaryMeeting meeting = meetingService.getMeetingById(id);
-        List<Student> students = studentService.findStudentByStatus(DisciplinaryStatus.REPORTED);
+        List<DisciplinaryRecord> records = disciplinaryRecordService.findAll().stream()
+                .filter(record -> record.getMeeting() == meeting).toList();
         List<Professor> professors = professorService.findAll();
 
         List<DisciplinaryMeetingParticipant> participants = participantRepository.findAllByMeeting(meeting);
 
-//        List<String> selectedStudents = participants.stream()
-//                .filter(participant -> participant.getStudent() != null)
-//                .map(participant -> participant.getStudent().getIndex())
-//                .collect(Collectors.toList());
+       List<Student> students = studentService.findAllStudents();
+       List<String> selectedStudents = new ArrayList<>();
+       for(DisciplinaryRecord record : records){
+           selectedStudents.add(record.getStudent().getIndex());
+       }
 
         List<String> selectedProfessors = participants.stream()
                 .filter(participant -> participant.getProfessor() != null)
@@ -177,7 +213,7 @@ public class MeetingController {
         model.addAttribute("date", meeting.getDisciplinaryMeetingDate().toString());
         model.addAttribute("students", students);
         model.addAttribute("professors", professors);
-        //model.addAttribute("selectedStudents", selectedStudents);
+        model.addAttribute("selectedStudents", selectedStudents);
         model.addAttribute("selectedProfessors", selectedProfessors);
         model.addAttribute("username", username);
 

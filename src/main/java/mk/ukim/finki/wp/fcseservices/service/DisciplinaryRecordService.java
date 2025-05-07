@@ -1,5 +1,6 @@
 package mk.ukim.finki.wp.fcseservices.service;
 
+import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryMeeting;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryRecord;
 import mk.ukim.finki.wp.fcseservices.model.disciplinary.DisciplinaryStatus;
 import mk.ukim.finki.wp.fcseservices.model.exceptions.*;
@@ -14,11 +15,11 @@ public interface DisciplinaryRecordService {
                                        String CourseId, String categoryId, DisciplinaryStatus status, LocalDate date)
             throws StudentNotFoundException, ProfessorNotFoundException, DisciplinaryTypeNotFoundException, JoinedSubjectNotFoundException;
 
-    Page<DisciplinaryRecord> findAllReports(String status, String professor, String subject, Long meeting, String suggestedSanction, int pageNumber, int pageSize) throws ProfessorNotFoundException, JoinedSubjectNotFoundException;
+    Page<DisciplinaryRecord> findAllReports(DisciplinaryStatus status, String professor, String subject, Long meeting, Long suggestedSanction, int pageNumber, int pageSize) throws ProfessorNotFoundException, JoinedSubjectNotFoundException;
 
     List<DisciplinaryRecord> findAllReportsForStudent(String index) throws StudentNotFoundException;
 
-
+    List<DisciplinaryRecord> findAll();
 
     DisciplinaryRecord findReportById(String id) throws DisciplinaryRecordNotFoundException;
 
@@ -32,5 +33,12 @@ public interface DisciplinaryRecordService {
     DisciplinaryRecord setSanctionForRecord(String id, String decisionName, String decisionDescription) throws DisciplinaryRecordNotFoundException;
 
     DisciplinaryRecord updateStudentNotification(String reportId) throws DisciplinaryRecordNotFoundException;
+
+    void setMeetingToRecordsWithoutMeeting(DisciplinaryMeeting disciplinaryMeeting);
+
+    DisciplinaryRecord updateMeetingForRecord(String recordId, Long meetingId) throws DisciplinaryRecordNotFoundException ;
+
+
+
 
 }

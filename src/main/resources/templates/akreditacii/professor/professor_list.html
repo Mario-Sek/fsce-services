@@ -23,6 +23,15 @@
 <div layout:fragment="subheader" th:include="akreditacii/subheader">
 </div>
 <div class="view-content my-5" layout:fragment="content">
+    <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <span th:text="${param.success}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+    <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <span th:text="${param.error}"></span>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <h3 th:text="#{PROFESSORS}"></h3>
 
     <div id="filters">
@@ -106,10 +115,42 @@
                         </a>
                     </div>
                     <div class="col-3">
-                        <a class="btn btn-sm btn-danger m-1"
-                           th:href="@{'/admin/professor/{id}/delete' (id=${professor.getId()})}">
+                        <button type="button" class="btn btn-sm btn-danger m-1"
+                                data-bs-toggle="modal"
+                                th:attr="data-bs-target='#delete_' + ${professor.getId()}">
                             <i th:text="#{DELETE}"></i>
-                        </a>
+                        </button>
+                        <div class="modal fade"
+                             th:id="'delete_' + ${professor.getId()}"
+                             tabindex="-1"
+                             role="dialog"
+                             th:aria-labelledby="'confirmDeleteModalLabel_' + ${professor.getId()}"
+                             aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title"
+                                            th:id="'confirmDeleteModalLabel_' + ${professor.getId()}">
+                                            Потврда за бришење
+                                        </h5>
+                                        <button type="button" class="close btn-close" data-bs-dismiss="modal" aria-label="Close">
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Дали сте сигурни дека сакате да го избришете професорот:
+                                        <strong th:text="${professor.getName()}"></strong>?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-sm m-1 btn-secondary" data-bs-dismiss="modal">Откажи</button>
+                                        <a class="btn btn-sm btn-danger m-1"
+                                           th:href="@{'/admin/professor/{id}/delete' (id=${professor.getId()})}">
+                                            <i th:text="#{DELETE}"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
                 </td>
             </tr>
@@ -126,6 +167,10 @@
         </div>
     </div>
 </div>
+
+
+
+
 
 </body>
 </html>

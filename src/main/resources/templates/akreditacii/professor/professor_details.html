@@ -10,39 +10,50 @@
 <h3 th:text="#{PROFESSOR_DETAILS}"></h3>
 <div class="container" layout:fragment="content">
     <div class="d-flex flex-wrap justify-content-between">
-        <div class=" col-6 form-group p-1">
-            <label for="name" th:text="#{PROFESSOR_NAME}"></label>
-            <input class="form-control" id="name" name="name" th:value="${professor?.name}">
+        <div class="col-6 form-group p-1">
+            <p class="fw-bold" th:text="#{PROFESSOR_NAME}"></p>
+            <div class="form-control-plaintext" th:text="${professor?.name}"></div>
         </div>
 
-        <div class=" col-6 form-group p-1">
-            <label for="email" th:text="#{PROFESSOR_EMAIL}"></label>
-            <input class="form-control" id="email" name="email" th:value="${professor?.email}">
+        <div class="col-6 form-group p-1">
+            <p class="fw-bold" th:text="#{PROFESSOR_EMAIL}"></p>
+            <div class="form-control-plaintext" th:text="${professor?.email}"></div>
         </div>
-        <div class=" col-6 form-group p-1">
-            <label for="title" th:text="#{PROFESSOR_TITLE}"></label>
-            <input class="form-control" id="title" name="title" th:value="${professor?.title}">
+
+        <div class="col-6 form-group p-1">
+            <p  class="fw-bold" th:text="#{PROFESSOR_TITLE}"></p>
+            <div class="form-control-plaintext" th:text="${professor?.title}"></div>
         </div>
-        <div class=" col-6 form-group p-1">
-            <label for="birthDay" th:text="#{DATE_OF_BIRTH}"></label>
-            <input class="form-control" id="birthDay" name="birthDay" th:value="${professorDetails?.birthDay}">
+
+        <div class="col-6 form-group p-1">
+            <p class="fw-bold" th:text="#{DATE_OF_BIRTH}"></p>
+            <div class="form-control-plaintext" th:text="${professorDetails?.birthDay}"></div>
         </div>
-        <div class=" col-6 form-group p-1">
-            <label for="degree" th:text="#{EDUCATION_DEGREE}"></label>
-            <input class="form-control" id="degree" name="degree" th:value="${professorDetails?.degree}">
+
+        <div class="col-6 form-group p-1">
+            <p class="fw-bold" th:text="#{EDUCATION_DEGREE}"></p>
+            <div class="form-control-plaintext" th:text="${professorDetails?.degree}"></div>
+        </div>
+        <div>
+            <a class="btn btn-sm btn-warning m-1"
+               th:href="@{'/admin/professor/{id}/edit' (id=${professor.getId()})}">
+                <i th:text="#{EDIT}"></i>
+            </a>
         </div>
     </div>
 
     <div class="d-flex container justify-content-evenly" style="margin-top: 50px">
         <h4 class="text-center" th:text="#{ACADEMIC_TITLE}"></h4>
-        <div>
-            <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-primary"
+        <div th:if="${professorDetails != null}">
+            <a class="text-decoration-none text-white d-inline-block btn btn-sm btn-primary"
                th:href="@{'/admin/professor/{id}/titles' (id=${professor.getId()})}"
                th:text="${academicTitle== null ? 'Додади': 'Измени'}"></a>
-            <a class="text-decoration-none text-reset d-inline-block btn btn-sm btn-danger"
-               th:href="@{'/admin/professor/{professorId}/titles/{titleId}/delete'(professorId=${professor.getId()}, titleId=${academicTitle?.getId()})}"
+            <a class="text-deco.ration-none text-reset d-inline-block btn btn-sm btn-danger"
+               th:href="@{'/admin/professor/{professorId}/tit les/{titleId}/delete'(professorId=${professor.getId()}, titleId=${academicTitle?.getId()})}"
                th:if="${academicTitle!= null}" th:text="#{DELETE}"></a>
-
+        </div>
+        <div th:if="${professorDetails == null}" class="alert alert-warning mt-2">
+            Потребно е прво да се додадат детали за професорот пред да се додадат академски титули.
         </div>
     </div>
 
@@ -72,12 +83,16 @@
     </div>
     <div class="d-flex container justify-content-evenly mt-5 mb-2">
         <h4 class="text-center">Образование</h4>
-        <form th:action="@{'/admin/professor/{id}/education/add' (id=${professor.getId()})}"
-              method="get">
-            <button class="btn btn-md btn-primary" type="submit" title="Додади">
-                <i class="fas fa-plus"></i>
-            </button>
-        </form>
+        <div th:if="${professorDetails != null}">
+            <form th:action="@{'/admin/professor/{id}/education/add'(id=${professor.getId()})}" method="get">
+                <button class="btn btn-md btn-primary" type="submit" title="Додади">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </form>
+        </div>
+        <div th:if="${professorDetails == null}" class="alert alert-warning mt-2">
+            Потребно е прво да се додадат детали за професорот пред да се додаде образование.
+        </div>
     </div>
 
     <div class="item-list">

@@ -43,7 +43,7 @@
 
         <!-- Students Selection -->
         <label for="students">Reported Students:</label>
-        <select multiple class="form-control" id="students" name="students">
+        <select multiple class="form-control" id="students" name="students" disabled>
             <option th:each="student : ${students}" th:value="${student.index}"
                     th:text="${student.name + ' ' + student.lastName}"
                     th:selected="${selectedStudents != null and selectedStudents.contains(student.index)}">
