@@ -18,8 +18,8 @@
                 <label for="status" class="col-sm-2 col-form-label">Status:</label><x></x>
                 <select id="status" name="status" class="form-control col-sm-2">
                     <option value="">Select Status</option>
-                    <option th:each="stat : ${status}"
-                            th:value="${stat}" th:text="${stat}">
+                    <option th:each="stat : ${statuses}"
+                            th:value="${stat}" th:text="${stat}" th:selected="${stat == currentStatus}">
                     </option>
                 </select>
             </div>
@@ -27,8 +27,8 @@
                 <label for="professor" class="col-sm-3 col-form-label">Professor:</label>
                 <select id="professor" name="professor" class="form-control col-sm-2">
                     <option value="">Select Professor</option>
-                    <option th:each="prof : ${professor}"
-                            th:value="${prof.id}" th:text="${prof.name}">
+                    <option th:each="prof : ${professors}"
+                            th:value="${prof.id}" th:text="${prof.name}" th:selected="${prof.id == currentProfessor}">
                     </option>
                 </select>
             </div>
@@ -36,27 +36,36 @@
                 <label for="subject" class="col-sm-2 col-form-label">Subject:</label>
                 <select id="subject" name="subject" class="form-control col-sm-2">
                     <option value="">Select Subject</option>
-                    <option th:each="subj : ${subject}"
-                            th:value="${subj.id}" th:text="${subj.name}">
+                    <option th:each="subj : ${subjects}"
+                            th:value="${subj.name}" th:text="${subj.name}" th:selected="${subj.name == currentSubject}">
                     </option>            </select>
             </div>
             <div class="form-group col-sm-2">
                 <label for="meeting" class="col-sm-2 col-form-label">Meeting:</label>
                 <select id="meeting" name="meeting" class="form-control col-sm-2">
                     <option value="">Select Meeting</option>
-                    <option th:each="meet : ${meeting}"
-                            th:value="${meet.id}" th:text="${meet.title}">
-                    </option>            </select>
+                    <option th:each="meet : ${meetings}"
+                            th:value="${meet.id}"
+                            th:text="${#temporals.format(meet.disciplinaryMeetingDate, 'yyyy-MM-dd')}"
+                            th:selected="${meet.id == currentMeeting}">
+                        >
+                    </option>
+                </select>
             </div>
             <div class="form-group col-sm-3">
                 <label for="suggestedSanction" class="col-sm-12 col-form-label">Suggested Sanction:</label>
                 <select id="suggestedSanction" name="suggestedSanction" class="form-control">
                     <option value="">Select Suggested Sanction</option>
+                    <option th:each="sanction : ${sanctions}"
+                            th:value="${sanction.id}" th:text="${sanction.name}"
+                            th:selected="${sanction.id == currentSuggestedSanction}">"
+                        >
+                    </option>
                 </select>
             </div>
         </div>
-        <div class="h-200 mt-4 d-flex align-items-center justify-content-center">
-            <button type="submit" class=" col-sm-2 btn btn-primary">Apply Filters</button>
+        <div class="h-200 mt-4 d-flex align-items-center justify-content-between">
+            <button type="submit" class="btn btn-primary col-sm-2">Apply Filters</button>
         </div>
         <br>
         <br>
@@ -76,10 +85,11 @@
             <th>Meeting</th>
             <th>Decision</th>
             <th>Sanction</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="report : ${allReports}" class="text-center align-middle">
+        <tr th:each="report : ${page.getContent()}" class="text-center align-middle">
             <td th:text="${report.getStudent().getIndex()}+' '+${report.getStudent().getName()}+' '+${report.getStudent().getLastName()}"></td>
             <td th:text="${report.getJoinedSubject().getAbbreviation()}"></td>
             <td th:text="${report.getReporter().getName()}"></td>
@@ -98,11 +108,16 @@
             <td th:text="${report.getDecision() != null and report.getDecision().getSanction() != null
               ? report.getDecision().getSanction().getName() : ''}">
             </td>
-
+            <td>
+                <a th:href="@{'/reports/edit-meeting/' + ${report.id}}"
+                   class="btn btn-sm btn-outline-primary">Change meeting</a>
+            </td>
 
         </tr>
         </tbody>
     </table>
+
+    <div th:include="fragments/paging :: pageSection(${page})"></div>
 
     <form method="get" th:action="@{'/'}">
         <button class="btn btn-secondary" style="margin-left: 10px">Back</button>
