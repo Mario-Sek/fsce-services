@@ -39,20 +39,29 @@ public class DisciplinaryDecisionServiceImpl implements DisciplinaryDecisionServ
 
         if (record.getDecision() != null) {
             decision = record.getDecision();
-            decision.setSanction(sanction);
+            if (sanction != null) {
+                decision.setSanction(sanction);
+                record.setSuggestedDisciplinarySanction(sanction);
+            }
             decision.setDescription(description);
         } else {
             decision = new DisciplinaryDecision();
             decision.setRecord(record);
-            decision.setSanction(sanction);
+            if (sanction != null) {
+                decision.setSanction(sanction);
+                record.setSuggestedDisciplinarySanction(sanction);
+            }
             decision.setDescription(description);
             decision = disciplinaryDecisionRepository.save(decision);
             record.setDecision(decision);
+
         }
 
         record.setStatus(DisciplinaryStatus.PROCESSED);
 
         return disciplinaryRecordRepository.save(record);
     }
+
+
 }
 
