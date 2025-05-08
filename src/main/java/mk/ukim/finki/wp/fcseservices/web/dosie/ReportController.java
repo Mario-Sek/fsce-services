@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 @Controller
 @RequestMapping("/reports")
 public class ReportController {
@@ -63,7 +64,9 @@ public class ReportController {
         model.addAttribute("statuses", DisciplinaryStatus.values());
         model.addAttribute("professors", professorService.findAll());
         model.addAttribute("subjects", joinedSubjectService.findAllJoinedSubjects());
-        model.addAttribute("meetings", meetingService.getAllMeetings());
+        model.addAttribute("meetings",meetingService.getAllUniqueMeetingsByDate());
+
+
         model.addAttribute("sanctions", disciplinarySanctionService.findAllSanctions());
 
         try {
@@ -198,6 +201,7 @@ public class ReportController {
             model.addAttribute("categories", categories);
             return "dosie/add-form";
         }
+
 
         return "redirect:/reports";
     }

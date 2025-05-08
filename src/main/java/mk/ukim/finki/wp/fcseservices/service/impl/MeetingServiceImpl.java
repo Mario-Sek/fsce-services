@@ -180,4 +180,17 @@ public class MeetingServiceImpl implements MeetingService {
         return new PageImpl<>(filteredMeetings);
     }
 
+    @Override
+    public List<DisciplinaryMeeting> getAllUniqueMeetingsByDate() {
+        return meetingRepository.findAll().stream()
+                .collect(Collectors.toMap(
+                        DisciplinaryMeeting::getDisciplinaryMeetingDate,
+                        meeting -> meeting,
+                        (existing, replacement) -> existing
+                ))
+                .values()
+                .stream()
+                .toList();
+    }
+
 }

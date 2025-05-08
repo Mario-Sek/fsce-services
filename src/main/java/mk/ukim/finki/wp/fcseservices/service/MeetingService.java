@@ -25,4 +25,8 @@ public interface MeetingService {
     DisciplinaryMeeting editMeeting(Long id, String meetingDate, List<String> professorIds) throws ProfessorNotFoundException;
 
     Page<DisciplinaryMeeting> findAllMeetings(String professor, LocalDate date, Long recordId, int pageNumber, int pageSize) throws ProfessorNotFoundException;
+
+    List<DisciplinaryMeeting> getAllUniqueMeetingsByDate();
+
+
 }
