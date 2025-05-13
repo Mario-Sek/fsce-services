@@ -14,10 +14,10 @@
 <div class="mt-4" layout:fragment="content">
 
     <form th:action="@{'/meetings'}" method="get">
-        <div class="row">
-            <div class="form-group col-sm-3">
-                <label for="professor" class="col-sm-3 col-form-label">Professor:</label>
-                <select id="professor" name="professor" class="form-control col-sm-2">
+        <div class="row justify-content-center">
+            <div class="form-group col-sm-2">
+                <label for="professor" class="col-form-label">Professor:</label>
+                <select id="professor" name="professor" class="form-control">
                     <option value="">Select Professor</option>
                     <option th:each="prof : ${professors}"
                             th:value="${prof.id}" th:text="${prof.name}">
@@ -25,16 +25,16 @@
                 </select>
             </div>
             <div class="form-group col-sm-2">
-                <label for="record" class="col-sm-2 col-form-label">Record:</label>
-                <select id="record" name="record" class="form-control col-sm-2">
+                <label for="record" class="col-form-label">Record:</label>
+                <select id="record" name="record" class="form-control">
                     <option value="">Select Record</option>
                     <option th:each="record : ${records}"
                             th:value="${record.id}" th:text="${record.id}">
                     </option>            </select>
             </div>
             <div class="form-group col-sm-2">
-                <label for="date" class="col-sm-2 col-form-label">Date:</label>
-                <input type="date" id="date" name="date">
+                <label for="date" class="col-form-label">Date:</label>
+                <input type="date" id="date" name="date" class="form-control">
             </div>
         </div>
         <div class="h-200 mt-4 d-flex align-items-center justify-content-center">
