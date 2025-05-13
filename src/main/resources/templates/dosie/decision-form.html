@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Disciplinary Decision</title>
@@ -8,7 +9,11 @@
 </head>
 <body>
 
-<div class="container-sm border border-secondary rounded p-3 mt-2">
+<div layout:fragment="subheader" th:include="dosie/subheader"></div>
+
+<div layout:fragment="content">
+
+<div class="container-sm border border-secondary rounded p-3 mt-4">
 
     <div class="container-sm d-flex justify-content-center align-items-center">
         <h2 th:if="${decision == null}">Set Disciplinary Decision</h2>
@@ -78,6 +83,8 @@
         </div>
 
     </form>
+
+    </div>
 
 </div>
 </body>

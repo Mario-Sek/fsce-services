@@ -1,6 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
 <head>
     <meta charset="UTF-8">
     <title>Meeting Form</title>
@@ -9,7 +11,11 @@
 </head>
 <body>
 
-<div class="container-sm border border-secondary rounded p-3 mt-2 ">
+<div layout:fragment="subheader" th:include="dosie/subheader"></div>
+
+<div layout:fragment="content">
+
+    <div class="container-sm border border-secondary rounded p-3 mt-4">
 
     <div class="container-sm d-flex justify-content-center align-items-center">
         <h2 th:if="${meeting?.disciplinaryMeetingDate == null}">Add a new meeting</h2>
@@ -74,6 +80,7 @@
         <input type="hidden" name="username" th:value="${username}">
     </form>
 
+    </div>
 </div>
 </body>
 </html>
