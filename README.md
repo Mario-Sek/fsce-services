@@ -22,9 +22,8 @@ The original branch was deleted after merging, so this GitHub repository serves 
 - Improved user interface using **Bootstrap** components
 - Refactored existing code for clarity and maintainability
 - Resolved multiple **merge conflicts** to integrate new features with the existing codebase
-
- **Video demonstration of the final task**:  
-[Watch on AwesomeScreenshot](https://www.awesomescreenshot.com/video/39598897?key=1e853b7be7d9d08ddb9a25a242680162)
+  
+[Video demonstration of the final task](https://www.awesomescreenshot.com/video/39598897?key=1e853b7be7d9d08ddb9a25a242680162)
 
 
 ---
