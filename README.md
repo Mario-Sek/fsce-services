@@ -26,6 +26,13 @@ The original branch was deleted after merging, so this GitHub repository serves 
  **Video demonstration of the final task**:  
 [Watch on AwesomeScreenshot](https://www.awesomescreenshot.com/video/39598897?key=1e853b7be7d9d08ddb9a25a242680162)
 
+
+---
+
+## Viewing My Commits
+
+To view the exact commits I made in this snapshot, filter the commit history by author: **Mario-Sek**
+
 ---
 
 ## Original Repository
